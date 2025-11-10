@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { type LucideProps } from "lucide-react";
+import Card from '../Cards/Card';
 
 
 interface DashboardCardProps {
@@ -11,22 +12,20 @@ interface DashboardCardProps {
 
 const DashboardCard = (props: DashboardCardProps) => {
     return (
-        <div className='w-1/5 h-1/8 p-8 rounded-3xl border border-solid border-gray-300 bg-white hover:bg-(--color-hover-light)'>
-            <div className='flex justify-between'>
-                <span className='text-xl font-medium text-gray-400'>
-                    {props.description}
-                </span>
-                <span>
-                    <props.icon color={props.color} />
-                </span>
-            </div>
-            <div className='pt-2'>
-                <span className='text-3xl font-bold'>
-                    {props.value}
-                </span>
-            </div>
-    </div>
-  );
+      <Card className="w-1/5 h-1/8 p-8 hover:bg-(--color-hover-light)">
+        <div className="flex justify-between">
+          <span className="text-xl font-medium text-gray-400">
+            {props.description}
+          </span>
+          <span>
+            <props.icon color={props.color} />
+          </span>
+        </div>
+        <div className="pt-2">
+          <span className="text-3xl font-bold">{props.value}</span>
+        </div>
+      </Card>
+    );
 }
 
 export default DashboardCard;
