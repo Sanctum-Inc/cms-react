@@ -1,6 +1,7 @@
 import { BriefcaseBusiness, CalendarDays, FolderOpenDot, House, LogOut, Wallet } from 'lucide-react';
 import NavigationItem from './NavigationItem';
 import NavigationItemProfile from './NavigationItemProfile';
+import brandLogo from "../assets/crest-removebg-cropped.png";
 
 
 const Navigation = () => {
@@ -14,7 +15,7 @@ const Navigation = () => {
           </div>
           <img
             id="brand-logo"
-            src="src/assets/crest-removebg-cropped.png"
+            src={brandLogo}
             alt="Brand Logo"
             className="w-16 h-16 mx-auto mb-2"
           />
