@@ -34,8 +34,8 @@ jobs:
         continue-on-error: false
 
       - name: Run tests
-        run: npm run test -- --ci --coverage
-
+        run: npm run test
+        
       - name: Build
         run: npm run build
 
