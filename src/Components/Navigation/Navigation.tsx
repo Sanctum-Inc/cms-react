@@ -1,7 +1,7 @@
 import { BriefcaseBusiness, CalendarDays, FolderOpenDot, House, LogOut, Wallet } from 'lucide-react';
 import NavigationItem from './NavigationItem';
 import NavigationItemProfile from './NavigationItemProfile';
-import brandLogo from "../assets/crest-removebg-cropped.png";
+import brandLogo from "../../assets/crest-removebg-cropped.png";
 
 
 const Navigation = () => {
