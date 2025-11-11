@@ -2,6 +2,7 @@ import { type LucideProps } from "lucide-react";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import PrimaryButton from "../Buttons/PrimaryButton";
 import * as React from "react";
+import defaultIcon from "../../assets/default-profile-icon.jpg";
 
 interface ImageWithFallbackProps {
     src: string;
@@ -30,9 +31,9 @@ const NavigationItemProfile = (props: NavigationItemProfileProps) => {
                 <span>
                     <ImageWithFallback
                         /*src={ props.profileImage }*/
-                        src="src/assets/default-profile-icon.jpg"
+                        src={defaultIcon}
                         alt="profile-image"
-                        fallbackSrc="src/assets/default-profile-icon.jpg"
+                        fallbackSrc={defaultIcon}
                     />
                 </span>
                 <span className='flex flex-col ml-2'>
