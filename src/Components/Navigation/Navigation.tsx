@@ -1,5 +1,4 @@
 import { BriefcaseBusiness, CalendarDays, FolderOpenDot, House, LogOut, Wallet } from 'lucide-react';
-import * as React from 'react';
 import NavigationItem from './NavigationItem';
 import NavigationItemProfile from './NavigationItemProfile';
 
