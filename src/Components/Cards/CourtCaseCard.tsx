@@ -1,6 +1,4 @@
-import { ArrowUp } from "lucide-react";
 import Card from "./Card";
-import { useState } from "react";
 
 interface courtCaseCardProps {
     caseNumber: string;

@@ -1,7 +1,5 @@
 import {
   ArrowUp,
-  BriefcaseBusiness,
-  CrossIcon,
   FilterIcon,
   Plus,
   SearchIcon,
@@ -11,7 +9,6 @@ import Card from "../Components/Cards/Card";
 import CourtCaseCard from "../Components/Cards/CourtCaseCard";
 import { useState, useMemo } from "react";
 import PillInput from "../Components/Inputs/PillInput";
-import type { JSX } from "react/jsx-runtime";
 
 const CourtCasePage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -89,8 +86,8 @@ const CourtCasePage = () => {
       key: keyof (typeof courtCases)[number],
       desc: boolean
     ) => {
-      let av: string | number = (a as any)[key] ?? "";
-      let bv: string | number = (b as any)[key] ?? "";
+      let av: string | number = a[key] ?? "";
+      let bv: string | number = b[key] ?? "";
       // handle nextDate as date
       if (key === "nextDate") {
         const da = Date.parse(String(av));
@@ -112,7 +109,7 @@ const CourtCasePage = () => {
     // apply primary sort by `sortBy` with direction `sortDesc` and then
     // fall back to the other columns in a fixed order for stable results.
     filtered.sort((a, b) => {
-      let res = compare(a, b, sortBy, sortDesc);
+      const res = compare(a, b, sortBy, sortDesc);
       if (res !== 0) return res;
       const order: (keyof (typeof courtCases)[number])[] = [
         "caseNumber",
