@@ -2,20 +2,29 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import CourtCasePage from "../Pages/CourtCasePage";
 import { vi, describe, it, expect } from "vitest";
+import type { ReactNode, MouseEventHandler } from "react";
 
 // --- MOCK CHILD COMPONENTS ---
 vi.mock("../Components/Buttons/PrimaryButton", () => ({
-  default: ({ children, onClick }: any) => (
-    <button onClick={onClick}>{children}</button>
-  ),
+    default: ({
+        children,
+        onClick,
+    }: {
+        children?: ReactNode;
+        onClick?: MouseEventHandler<HTMLButtonElement>;
+    }) => <button onClick={onClick}>{children}</button>,
 }));
 
 vi.mock("../Components/Cards/Card", () => ({
-  default: ({ children }: any) => <div>{children}</div>,
+  default: ({ children }: { children: ReactNode }) => <div>{children}</div>,
 }));
 
 vi.mock("../Components/Cards/CourtCaseCard", () => ({
-  default: (props: any) => (
+  default: (props: {
+    caseNumber: string;
+    location: string;
+    status: string;
+  }) => (
     <div data-testid="court-case-card">
       {props.caseNumber} | {props.location} | {props.status}
     </div>
@@ -23,7 +32,7 @@ vi.mock("../Components/Cards/CourtCaseCard", () => ({
 }));
 
 vi.mock("../Components/Inputs/PillInput", () => ({
-  default: ({ label }: any) => <div data-testid="pill-input">{label}</div>,
+  default: ({ label }: { label: string }) => <div data-testid="pill-input">{label}</div>,
 }));
 
 describe("CourtCasePage", () => {

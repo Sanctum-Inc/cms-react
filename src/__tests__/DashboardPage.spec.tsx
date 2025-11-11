@@ -1,9 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import { vi, describe, it, expect } from "vitest";
 import DashboardPage from "../Pages/DashboardPage";
+import type { LucideProps } from "lucide-react";
 
 vi.mock("../Components/Dashboard/DashboardCard", () => ({
-  default: ({ description, value, color, icon }: any) => (
+  default: ({ description, value, color, icon }: {
+    description: string;
+    value: string;
+    color: string;
+    icon?: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>;
+  }) => (
     <div data-testid="dashboard-card">
       <span>{description}</span>
       <span>{value}</span>
@@ -14,7 +20,18 @@ vi.mock("../Components/Dashboard/DashboardCard", () => ({
 }));
 
 vi.mock("../Components/Dashboard/DashBoardActivityCard", () => ({
-  default: ({ title, items, clickable }: any) => (
+  default: ({ title, items, clickable }: {
+    title: string;
+    items: {
+        color: string;
+        title: string;
+        description: string;
+        time: string;
+        icon?: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>;
+        type: string;
+    }[];
+    clickable?: boolean;
+  }) => (
     <div data-testid="dashboard-activity-card">
       <h2>{title}</h2>
       <div>{items.length} items</div>
