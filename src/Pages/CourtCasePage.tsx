@@ -7,8 +7,9 @@ import {
 import PrimaryButton from "../Components/Buttons/PrimaryButton";
 import Card from "../Components/Cards/Card";
 import CourtCaseCard from "../Components/Cards/CourtCaseCard";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
 import PillInput from "../Components/Inputs/PillInput";
+import NavigationContext from "../Contexts/NavigationContext";
 
 const CourtCasePage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -54,6 +55,10 @@ const CourtCasePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
+  const context = useContext<{
+    isGreyed: boolean;
+    setGreyed: (val: boolean) => void;
+  }>(NavigationContext);
 
   // Compute filtered + sorted cases
   const filteredCases = useMemo(() => {
@@ -149,7 +154,7 @@ const CourtCasePage = () => {
           <div className="w-full text-xl font-bold text-(--color-primary)">New Court Case</div>
           <div
             className="w-full flex justify-end"
-            onClick={() => setShowModal(false)}
+            onClick={() => handleShowModal(false)}
           >
             <div className="w-10 cursor-pointer flex justify-center">x</div>
           </div>
@@ -219,6 +224,11 @@ const CourtCasePage = () => {
     );
   };
 
+  const handleShowModal = (show: boolean) => {
+    context.setGreyed(show);
+    setShowModal(show);
+  }
+
   return (
     <>
       <div className={showModal ? "opacity-30 pointer-events-none" : ""} >
@@ -230,9 +240,7 @@ const CourtCasePage = () => {
           </span>
           <span className="text-lg text-gray-400 font-bold">
             <PrimaryButton
-              onClick={() => {
-                setShowModal(true);
-              }}
+              onClick={() => handleShowModal(true)}
             >
               <div className="flex">
                 <span className="m-auto">
