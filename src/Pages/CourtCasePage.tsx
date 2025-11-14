@@ -7,7 +7,7 @@ import {
 import PrimaryButton from "../Components/Buttons/PrimaryButton";
 import Card from "../Components/Cards/Card";
 import CourtCaseCard from "../Components/Cards/CourtCaseCard";
-import { useState, useMemo, useContext } from "react";
+import { useState, useMemo } from "react";
 import PillInput from "../Components/Inputs/PillInput";
 
 const CourtCasePage = () => {
@@ -25,31 +25,31 @@ const CourtCasePage = () => {
     nextDate: string;
     internalStatus: "open" | "closed" | "pending";
   }[] = [
-    {
-      caseNumber: "2023-CR-12345",
-      location: "New York",
-      status: "Open",
-      type: "Criminal",
-      nextDate: "2023-12-01",
-      internalStatus: "open",
-    },
-    {
-      caseNumber: "2023-CV-67890",
-      location: "Los Angeles",
-      status: "Closed",
-      type: "Civil",
-      nextDate: "2023-11-15",
-      internalStatus: "closed",
-    },
-    {
-      caseNumber: "2023-FM-54321",
-      location: "Chicago",
-      status: "Pending",
-      type: "Family",
-      nextDate: "2023-10-30",
-      internalStatus: "pending",
-    },
-  ];
+      {
+        caseNumber: "2023-CR-12345",
+        location: "New York",
+        status: "Open",
+        type: "Criminal",
+        nextDate: "2023-12-01",
+        internalStatus: "open",
+      },
+      {
+        caseNumber: "2023-CV-67890",
+        location: "Los Angeles",
+        status: "Closed",
+        type: "Civil",
+        nextDate: "2023-11-15",
+        internalStatus: "closed",
+      },
+      {
+        caseNumber: "2023-FM-54321",
+        location: "Chicago",
+        status: "Pending",
+        type: "Family",
+        nextDate: "2023-10-30",
+        internalStatus: "pending",
+      },
+    ];
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -145,81 +145,81 @@ const CourtCasePage = () => {
     if (!showModal) return null;
     return (
       <>
-        <div className="w-4/5 h-full fixed top-0 left-0 bg-black opacity-30">
+        <div className="w-4/5 h-full fixed top-0 left-0 bg-black opacity-30" onClick={() => setShowModal(false)}>
 
-      </div>
-      <div className="w-1/5 border-2 border-red-300 h-full  fixed top-0 right-0 bg-white">
-        <div className="flex justify-between border-b-solid border-b-2 border-solid border-gray-300 py-5 px-10">
-          <div className="w-full text-xl font-bold text-(--color-primary)">New Court Case</div>
-          <div
-            className="w-full flex justify-end"
-            onClick={() => handleShowModal(false)}
-          >
-            <div className="w-10 cursor-pointer flex justify-center">x</div>
+        </div>
+        <div className="w-1/5 border-2 border-gray-300 h-full  fixed top-0 right-0 bg-white">
+          <div className="flex justify-between border-b-solid border-b-2 border-solid border-gray-300 py-5 px-10">
+            <div className="w-full text-xl font-bold text-(--color-primary)">New Court Case</div>
+            <div
+              className="w-full flex justify-end"
+              onClick={() => handleShowModal(false)}
+            >
+              <div className="w-10 cursor-pointer flex justify-center">x</div>
+            </div>
+          </div>
+          <div className="justify-center px-10">
+            <PillInput
+              className="h-13"
+              type="text"
+              name="case-number"
+              value=""
+              label="Case Number:"
+              placeholder="Enter case number"
+            />
+            <PillInput
+              className="h-13"
+              type="text"
+              name="location"
+              value=""
+              label="Location:"
+              placeholder="City, State"
+            />
+            <PillInput
+              className="h-13"
+              type="text"
+              name="plaintiff"
+              value=""
+              label="Plaintiff:"
+              placeholder="Enter plaintiff name"
+            />
+            <PillInput
+              className="h-13"
+              type="text"
+              name="defendant"
+              value=""
+              label="Defendant:"
+              placeholder="Enter defendant name"
+            />
+            <PillInput
+              className="h-13"
+              type="text"
+              name="status"
+              value=""
+              label="Status:"
+              placeholder="Enter status"
+            />
+            <PillInput
+              className="h-13"
+              type="text"
+              name="type"
+              value=""
+              label="Type:"
+              placeholder="Enter type"
+            />
+            <PillInput
+              className="h-13"
+              type="text"
+              name="outcome"
+              value=""
+              label="Outcome:"
+              placeholder="Enter outcome"
+            />
+          </div>
+          <div className="flex px-10 py-5">
+            <PrimaryButton>Add Case</PrimaryButton>
           </div>
         </div>
-        <div className="justify-center px-10">
-          <PillInput
-            className="h-13"
-            type="text"
-            name="case-number"
-            value=""
-            label="Case Number:"
-            placeholder="Enter case number"
-          />
-          <PillInput
-            className="h-13"
-            type="text"
-            name="location"
-            value=""
-            label="Location:"
-            placeholder="City, State"
-          />
-          <PillInput
-            className="h-13"
-            type="text"
-            name="plaintiff"
-            value=""
-            label="Plaintiff:"
-            placeholder="Enter plaintiff name"
-          />
-          <PillInput
-            className="h-13"
-            type="text"
-            name="defendant"
-            value=""
-            label="Defendant:"
-            placeholder="Enter defendant name"
-          />
-          <PillInput
-            className="h-13"
-            type="text"
-            name="status"
-            value=""
-            label="Status:"
-            placeholder="Enter status"
-          />
-          <PillInput
-            className="h-13"
-            type="text"
-            name="type"
-            value=""
-            label="Type:"
-            placeholder="Enter type"
-          />
-          <PillInput
-            className="h-13"
-            type="text"
-            name="outcome"
-            value=""
-            label="Outcome:"
-            placeholder="Enter outcome"
-          />
-        </div>
-        <div className="flex px-10 py-5">
-          <PrimaryButton>Add Case</PrimaryButton>
-        </div>
-      </div>
       </>
     );
   };

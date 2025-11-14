@@ -39,3 +39,7 @@
 .text-dark {
     color: var(--color-text);
 }
+
+.app-border{
+    border: 1px solid #d1d5dc;
+}
