@@ -2,7 +2,7 @@ import { createContext } from "react";
 
 const NavigationContext = createContext({
     isGreyed: false,
-    setGreyed: (val: boolean) => {}
+    setGreyed: (_: boolean) => {}
 });
 
 export default NavigationContext;
