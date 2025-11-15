@@ -1,14 +1,13 @@
 import {
   ArrowUp,
-  FilterIcon,
   Plus,
-  SearchIcon,
 } from "lucide-react";
 import PrimaryButton from "../Components/Buttons/PrimaryButton";
-import Card from "../Components/Cards/Card";
 import CourtCaseCard from "../Components/Cards/CourtCaseCard";
 import { useState, useMemo } from "react";
-import PillInput from "../Components/Inputs/PillInput";
+import Modal from "../Components/Modal/Modal";
+import SortBar from "../Components/Inputs/SortBar";
+import type { InputItem } from "../Models/InputItem";
 
 const CourtCasePage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -50,6 +49,69 @@ const CourtCasePage = () => {
         internalStatus: "pending",
       },
     ];
+
+  const inputItems: InputItem[] = [
+    {
+      label: "Case Number:",
+      name: "case-number",
+      type: "text",
+      placeholder: "Enter case number",
+      value: "",
+    },
+    {
+      label: "Location:",
+      name: "location",
+      type: "text",
+      placeholder: "City, State",
+      value: "",
+    },
+    {
+      label: "Plaintiff:",
+      name: "plaintiff",
+      type: "text",
+      placeholder: "Enter plaintiff name",
+      value: "",
+    },
+    {
+      label: "Defendant:",
+      name: "defendant",
+      type: "text",
+      placeholder: "Enter defendant names",
+      value: "",
+      icon: Plus,
+      addEnterHint: true,
+    },
+    {
+      label: "Lawyer:",
+      name: "lawyer",
+      type: "text",
+      placeholder: "Enter lawyer names",
+      value: "",
+      icon: Plus,
+      addEnterHint: true,
+    },
+    {
+      label: "Status:",
+      name: "status",
+      type: "text",
+      placeholder: "Enter status",
+      value: "",
+    },
+    {
+      label: "Type:",
+      name: "type",
+      type: "text",
+      placeholder: "Enter type",
+      value: "",
+    },
+    {
+      label: "Outcome:",
+      name: "outcome",
+      type: "text",
+      placeholder: "Enter outcome",
+      value: "",
+    },
+  ];
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -141,88 +203,19 @@ const CourtCasePage = () => {
     }
   };
 
+
   const returnModal = () => {
     if (!showModal) return null;
     return (
-      <>
-        <div className="w-4/5 h-full fixed top-0 left-0 bg-black opacity-30" onClick={() => setShowModal(false)}>
-
-        </div>
-        <div className="w-1/5 border-2 border-gray-300 h-full  fixed top-0 right-0 bg-white">
-          <div className="flex justify-between border-b-solid border-b-2 border-solid border-gray-300 py-5 px-10">
-            <div className="w-full text-xl font-bold text-(--color-primary)">New Court Case</div>
-            <div
-              className="w-full flex justify-end"
-              onClick={() => handleShowModal(false)}
-            >
-              <div className="w-10 cursor-pointer flex justify-center">x</div>
-            </div>
-          </div>
-          <div className="justify-center px-10">
-            <PillInput
-              className="h-13"
-              type="text"
-              name="case-number"
-              value=""
-              label="Case Number:"
-              placeholder="Enter case number"
-            />
-            <PillInput
-              className="h-13"
-              type="text"
-              name="location"
-              value=""
-              label="Location:"
-              placeholder="City, State"
-            />
-            <PillInput
-              className="h-13"
-              type="text"
-              name="plaintiff"
-              value=""
-              label="Plaintiff:"
-              placeholder="Enter plaintiff name"
-            />
-            <PillInput
-              className="h-13"
-              type="text"
-              name="defendant"
-              value=""
-              label="Defendant:"
-              placeholder="Enter defendant name"
-            />
-            <PillInput
-              className="h-13"
-              type="text"
-              name="status"
-              value=""
-              label="Status:"
-              placeholder="Enter status"
-            />
-            <PillInput
-              className="h-13"
-              type="text"
-              name="type"
-              value=""
-              label="Type:"
-              placeholder="Enter type"
-            />
-            <PillInput
-              className="h-13"
-              type="text"
-              name="outcome"
-              value=""
-              label="Outcome:"
-              placeholder="Enter outcome"
-            />
-          </div>
-          <div className="flex px-10 py-5">
-            <PrimaryButton>Add Case</PrimaryButton>
-          </div>
-        </div>
-      </>
+      <Modal setShowModal={setShowModal} handleShowModal={handleShowModal} title="New Court Case" inputItems={inputItems} buttonCaption="Add Case" buttonOnClick={handleButtonClick}/>
     );
   };
+
+  const handleButtonClick = () => {
+    // Logic to add the new court case goes here
+    // For now, we'll just close the modal
+    setShowModal(false);
+  }
 
   const handleShowModal = (show: boolean) => {
     setShowModal(show);
@@ -251,59 +244,14 @@ const CourtCasePage = () => {
           </span>
         </div>
         <div>
-          <Card className="m-6 p-6 mt-5 flex gap-5">
-            <Card className="w-6/8 flex focus-within:ring-1 focus-within:ring-inset focus-within:ring-(--color-primary) h-10">
-              <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">
-                <SearchIcon size={15} />
-              </div>
-              <input
-                id="search-court-case"
-                type="search"
-                name="search-court-case"
-                placeholder="Search all case details..."
-                className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </Card>
-            <div>
-              <FilterIcon />
-            </div>
-            <div>
-              <label className="" htmlFor="status-filter">
-                Status:{" "}
-              </label>
-              <select
-                className="border border-gray-300 rounded-2xl p-2 focus-within:ring-1 focus-within:ring-inset focus-within:ring-(--color-primary) focus:outline-none cursor-pointer"
-                id="status-filter"
-                name="status-filter"
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                <option value="all">All Status</option>
-                <option value="open">Open</option>
-                <option value="closed">Closed</option>
-                <option value="pending">Pending</option>
-              </select>
-            </div>
-            <div>
-              <label className="" htmlFor="type-filter">
-                Type:{" "}
-              </label>
-              <select
-                className="border border-gray-300 rounded-2xl p-2 focus-within:ring-1 focus-within:ring-inset focus-within:ring-(--color-primary) focus:outline-none cursor-pointer"
-                id="type-filter"
-                name="type-filter"
-                value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value)}
-              >
-                <option value="all">All Types</option>
-                <option value="Criminal">Criminal</option>
-                <option value="Civil">Civil</option>
-                <option value="Family">Family</option>
-              </select>
-            </div>
-          </Card>
+          <SortBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+            typeFilter={typeFilter}
+            setTypeFilter={setTypeFilter}
+          ></SortBar>
           <div className="m-6 p-6 mt-5 font-bold text-gray-500 border-b border-gray-300 pb-3">
             <div>Case Information</div>
             <div className="grid grid-cols-5 gap-4 mt-4">
