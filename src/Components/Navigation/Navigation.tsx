@@ -3,13 +3,9 @@ import NavigationItem from './NavigationItem';
 import NavigationItemProfile from './NavigationItemProfile';
 import brandLogo from "../../assets/crest-removebg-cropped.png";
 
-interface NavigationProps {
-  isGreyed: boolean;
-}
-
-const Navigation = ({isGreyed} : NavigationProps) => {
+const Navigation = () => {
     return (
-      <div className={`w-1/8 h-screen flex flex-col px-3 border-r-2 border-solid border-gray-300 ${isGreyed ? "opacity-30 pointer-events-none" : ""}`}>
+      <div className="w-1/8 h-screen flex flex-col px-3 border-r-2 border-solid border-gray-300">
         <div id="brand-information-container" className="p-2">
           <div className="flex justify-center">
             {/* <span className="text-5xl text-(--color-primary) font-bold">
