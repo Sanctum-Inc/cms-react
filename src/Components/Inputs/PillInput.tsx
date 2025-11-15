@@ -18,6 +18,10 @@ const PillInput = (props: PillInputProps) => {
       setValues([...getValues, inputValue]);
       setInputValue("");
     }
+    
+    if (e.key === "Enter" && props.onKeyDown) {
+      props.onKeyDown(e);
+    }
   }
 
   const handleSetValues = (e: React.ChangeEvent<HTMLInputElement>) => {

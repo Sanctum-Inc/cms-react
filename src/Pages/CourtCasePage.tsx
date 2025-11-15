@@ -214,7 +214,7 @@ const CourtCasePage = () => {
   const handleButtonClick = () => {
     // Logic to add the new court case goes here
     // For now, we'll just close the modal
-    setShowModal(false);
+    //setShowModal(false);
   }
 
   const handleShowModal = (show: boolean) => {
