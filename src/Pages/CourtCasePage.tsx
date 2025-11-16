@@ -251,6 +251,8 @@ const CourtCasePage = () => {
             setStatusFilter={setStatusFilter}
             typeFilter={typeFilter}
             setTypeFilter={setTypeFilter}
+            statusOptions={["all", "open", "closed", "pending"]}
+            typeOptions={["all", "criminal", "civil", "family"]}
           ></SortBar>
           <div className="m-6 p-6 mt-5 font-bold text-gray-500 border-b border-gray-300 pb-3">
             <div>Case Information</div>

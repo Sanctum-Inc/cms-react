@@ -7,6 +7,8 @@ interface InputItem {
     valueArray?: string[];
     icon?: React.ForwardRefExoticComponent<Omit<import("lucide-react").LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>;
     addEnterHint?: boolean;
+    width?: string;
+    height?: string;
 }
 
 export type { InputItem };

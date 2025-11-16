@@ -6,8 +6,10 @@ interface SortBarProps {
     setSearchQuery: (query: string) => void;
     statusFilter: string;
     setStatusFilter: (status: string) => void;
-    typeFilter: string;
-    setTypeFilter: (type: string) => void;
+    statusOptions: string[];
+    typeFilter?: string;
+    setTypeFilter?: (type: string) => void;
+    typeOptions?: string[];
 }
     
 const SortBar = ({
@@ -15,8 +17,10 @@ const SortBar = ({
   setSearchQuery,
   statusFilter,
   setStatusFilter,
+  statusOptions,
   typeFilter,
   setTypeFilter,
+  typeOptions,
 }: SortBarProps) => {
   return (
     <>
@@ -49,12 +53,14 @@ const SortBar = ({
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
-            <option value="all">All Status</option>
-            <option value="open">Open</option>
-            <option value="closed">Closed</option>
-            <option value="pending">Pending</option>
+            {statusOptions.map((statusOption) => (
+              <option key={statusOption} value={statusOption}>
+                {statusOption.charAt(0).toUpperCase() + statusOption.slice(1)}
+              </option>
+            ))}
           </select>
         </div>
+        {typeFilter !== undefined && setTypeFilter !== undefined && 
         <div>
           <label className="" htmlFor="type-filter">
             Type:{" "}
@@ -66,12 +72,13 @@ const SortBar = ({
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
           >
-            <option value="all">All Types</option>
-            <option value="Criminal">Criminal</option>
-            <option value="Civil">Civil</option>
-            <option value="Family">Family</option>
+            {typeOptions?.map((typeOption) => (
+              <option key={typeOption} value={typeOption}>
+                {typeOption.charAt(0).toUpperCase() + typeOption.slice(1)}
+              </option>
+            ))}
           </select>
-        </div>
+        </div>}
       </Card>
     </>
   );

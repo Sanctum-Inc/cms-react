@@ -79,6 +79,8 @@ const Modal = ({
               placeholder={item.placeholder}
               icon={item.icon}
               addEnterHint={item.addEnterHint}
+              width={item.width}
+              height={item.height}
               onChange={(e) => {
                 item.value = e.target.value;
               }}
