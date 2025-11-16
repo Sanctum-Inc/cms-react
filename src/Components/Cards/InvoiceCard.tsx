@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import type { Invoice, InvoiceItemEntry } from "../../Models/Invoices";
 import Card from "./Card";
-import { useEffect, useRef, useState, type MouseEventHandler, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 interface InvoiceCardProps {
   invoices: Invoice;
