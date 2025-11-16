@@ -5,6 +5,7 @@ import Modal from "../Components/Modal/Modal";
 import type { InputItem } from "../Models/InputItem";
 import SortBar from "../Components/Inputs/SortBar";
 import InvoiceCard from "../Components/Cards/InvoiceCard";
+import Header from "../Components/Header/Header";
 
 const InvoicePage = () => {
     const [sortBy, setSortBy] = useState<
@@ -340,21 +341,7 @@ const InvoicePage = () => {
 
     return (
       <>
-        <div className="flex justify-between border-b-solid border-b-2 border-solid border-gray-300 py-5 px-3 bg-white">
-          <span className="text-3xl text-black font-bold">
-            Invoice Management
-          </span>
-          <span className="text-lg text-gray-400 font-bold">
-            <PrimaryButton onClick={() => handleShowModal(true)}>
-              <div className="flex">
-                <span className="m-auto">
-                  <Plus className="pr-1" />
-                </span>
-                Add New Invoice Item
-              </div>
-            </PrimaryButton>
-          </span>
-        </div>
+        <Header showButton={true} title="Invoice Management" buttonCaption="Add New Invoice" handleShowModal={handleShowModal}/>
         <SortBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}

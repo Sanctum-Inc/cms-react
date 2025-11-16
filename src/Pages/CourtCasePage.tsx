@@ -8,6 +8,7 @@ import { useState, useMemo } from "react";
 import Modal from "../Components/Modal/Modal";
 import SortBar from "../Components/Inputs/SortBar";
 import type { InputItem } from "../Models/InputItem";
+import Header from "../Components/Header/Header";
 
 const CourtCasePage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -223,26 +224,8 @@ const CourtCasePage = () => {
 
   return (
     <>
-      <div className={showModal ? "opacity-30 pointer-events-none" : ""} >
-        <div className="flex justify-between border-b-solid border-b-2 border-solid border-gray-300 py-5 px-3 bg-white">
-          <span
-            className="text-3xl text-black font-bold"
-          >
-            Case Management
-          </span>
-          <span className="text-lg text-gray-400 font-bold">
-            <PrimaryButton
-              onClick={() => handleShowModal(true)}
-            >
-              <div className="flex">
-                <span className="m-auto">
-                  <Plus className="pr-1" />
-                </span>
-                Add New Case
-              </div>
-            </PrimaryButton>
-          </span>
-        </div>
+      <div className={showModal ? "opacity-30 pointer-events-none" : ""}>
+        <Header handleShowModal={handleShowModal} title='Case Management' buttonCaption="Add New Case" showButton={true}/>
         <div>
           <SortBar
             searchQuery={searchQuery}

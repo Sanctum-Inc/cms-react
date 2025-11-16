@@ -3,6 +3,7 @@ import { BanknoteX, BriefcaseBusiness, CalendarCheck, Dot, FolderOpen, Users } f
 import DashBoardActivityCard from "../Components/Dashboard/DashBoardActivityCard";
 import type { CardItem } from "../Models/CardItem";
 import { useState, useEffect } from "react";
+import Header from "../Components/Header/Header";
 
 const DashboardPage = () => {
 
@@ -103,27 +104,56 @@ const DashboardPage = () => {
     }, []);
 
     return (
-        <>
-            <div className='flex justify-between border-b-solid border-b-2 border-solid border-gray-300 py-5 px-3 bg-white'>
-                <span className='text-3xl text-black font-bold'>DashBoard</span>
-                <span className='text-2xl text-gray-400 font-bold'>{getCurrentDate()} | {getTime}</span>
-
-            </div>
-            <div className='flex-col w-full bg-(--color-hover-light)'>
-                <div className='w-full flex justify-between p-3'>
-                    <DashboardCard description='Total Cases' value="25" icon={BriefcaseBusiness} color='blue'></DashboardCard>
-                    <DashboardCard description='Pending Invoices' value="R235 000" icon={BanknoteX} color='orange'></DashboardCard>
-                    <DashboardCard description='Active Lawyers' value="12" icon={Users} color='green'></DashboardCard>
-                    <DashboardCard description='Documents Stored' value="1896" icon={FolderOpen} color='purple'></DashboardCard>
-                </div>
-                <div className="w-full h-full p-3">
-                    <DashBoardActivityCard items={activityItems} title="Recent Case Activity" size='40'/>
-                </div>
-                <div className="w-full h-full p-3">
-                    <DashBoardActivityCard items={courtCaseItems} title="Upcoming Court Dates" size='25' clickable={true}/>
-                </div>
-            </div>
-        </>
+      <>
+        <Header title="Dashboard" showButton={false} >
+          <span className="text-2xl text-gray-400 font-bold">
+            {getCurrentDate()} | {getTime}
+          </span>
+        </Header>
+        <div className="flex-col w-full bg-(--color-hover-light)">
+          <div className="w-full flex justify-between p-3">
+            <DashboardCard
+              description="Total Cases"
+              value="25"
+              icon={BriefcaseBusiness}
+              color="blue"
+            ></DashboardCard>
+            <DashboardCard
+              description="Pending Invoices"
+              value="R235 000"
+              icon={BanknoteX}
+              color="orange"
+            ></DashboardCard>
+            <DashboardCard
+              description="Active Lawyers"
+              value="12"
+              icon={Users}
+              color="green"
+            ></DashboardCard>
+            <DashboardCard
+              description="Documents Stored"
+              value="1896"
+              icon={FolderOpen}
+              color="purple"
+            ></DashboardCard>
+          </div>
+          <div className="w-full h-full p-3">
+            <DashBoardActivityCard
+              items={activityItems}
+              title="Recent Case Activity"
+              size="40"
+            />
+          </div>
+          <div className="w-full h-full p-3">
+            <DashBoardActivityCard
+              items={courtCaseItems}
+              title="Upcoming Court Dates"
+              size="25"
+              clickable={true}
+            />
+          </div>
+        </div>
+      </>
     );
 }
 
