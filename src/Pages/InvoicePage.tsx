@@ -1,5 +1,4 @@
-import { ArrowUp, Plus } from "lucide-react";
-import PrimaryButton from "../Components/Buttons/PrimaryButton";
+import { ArrowUp } from "lucide-react";
 import { useMemo, useState } from "react";
 import Modal from "../Components/Modal/Modal";
 import type { InputItem } from "../Models/InputItem";

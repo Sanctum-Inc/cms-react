@@ -2,7 +2,6 @@ import {
   ArrowUp,
   Plus,
 } from "lucide-react";
-import PrimaryButton from "../Components/Buttons/PrimaryButton";
 import CourtCaseCard from "../Components/Cards/CourtCaseCard";
 import { useState, useMemo } from "react";
 import Modal from "../Components/Modal/Modal";

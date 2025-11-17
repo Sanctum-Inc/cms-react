@@ -13,7 +13,7 @@ const DatesPage = () => {
     setShowModal(show);
   };
 
-  var inputItems: InputItem[] = [
+  const inputItems: InputItem[] = [
     {
       name: "caseNumber",
       label: "Case Number:",

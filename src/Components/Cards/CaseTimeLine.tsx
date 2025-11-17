@@ -81,7 +81,9 @@ const CaseTimeLine = () => {
               item.plaintiff,
               item.icon!,
               item.backgrundColor,
-              item.color
+              item.color,
+              false,
+              index
             )
           )}
           <div className="text-xl font-semibold border-b border-gray-200 mb-4 mt-4 pb-1">
@@ -97,7 +99,9 @@ const CaseTimeLine = () => {
               item.plaintiff,
               item.icon!,
               item.backgrundColor,
-              item.color
+              item.color,
+              true,
+              index
             )
           )}
         </div>
@@ -113,10 +117,12 @@ const CaseTimeLine = () => {
     plaintiff: string,
     Icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>,
     backGroundColor: string,
-    color:string
+    color:string,
+    isPast:boolean,
+    index: number
   ) => {
     return (
-      <Card hover={false} removeBorder={true} className="hover:bg-gray-100">
+      <Card hover={false} removeBorder={true} className="hover:bg-gray-100" key={index}>
         <div className="grid grid-cols-40">
           <div className="col-span-2 m-auto">
             <div
@@ -128,7 +134,11 @@ const CaseTimeLine = () => {
 
           <div className="col-span-28">
             {/* Title / description */}
-            <div className="text-lg font-medium">{description}</div>
+            <div
+              className={`text-lg font-medium ${isPast ? "line-through text-gray-500" : ""}`}
+            >
+              {description}
+            </div>
 
             {/* Case number and date name */}
             <div className="text-gray-500">
