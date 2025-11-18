@@ -76,7 +76,7 @@ const Modal = ({
               key={index}
               {...item}
               onChange={(e) => {
-                item.value = e.target.value;
+                item.value = e.target.value[0];
               }}
               onKeyDown={handleModalEnterClick}
             />
