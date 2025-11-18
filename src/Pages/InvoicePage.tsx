@@ -19,13 +19,15 @@ const InvoicePage = () => {
         type: "text",
         placeholder: "Enter item name",
         value: "",
+        inputType: "input",
       },
       {
         label: "Description:",
         name: "description",
         type: "text",
         placeholder: "Enter a description",
-        value: ""
+        value: "",
+        inputType: "input",
       },
       {
         label: "Date of Service:",
@@ -33,6 +35,7 @@ const InvoicePage = () => {
         type: "date",
         placeholder: "",
         value: "",
+        inputType: "input",
       },
       {
         label: "Hours:",
@@ -40,6 +43,7 @@ const InvoicePage = () => {
         type: "number",
         placeholder: "0",
         value: "",
+        inputType: "input",
       },
       {
         label: "Cost Per Hour:",
@@ -47,6 +51,7 @@ const InvoicePage = () => {
         type: "number",
         placeholder: "Enter hourly cost",
         value: "",
+        inputType: "input",
       },
       {
         label: "Day Fee Amount:",
@@ -54,6 +59,7 @@ const InvoicePage = () => {
         type: "number",
         placeholder: "Enter day fee amount",
         value: "",
+        inputType: "input",
       },
       {
         label: "Is Day Fee:",
@@ -61,7 +67,8 @@ const InvoicePage = () => {
         type: "checkbox",
         value: "false",
         width: "30",
-        height: "30"
+        height: "30",
+        inputType: "input",
       },
     ];
     const Invoices = [

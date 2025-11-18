@@ -57,6 +57,7 @@ const CourtCasePage = () => {
       type: "text",
       placeholder: "Enter case number",
       value: "",
+      inputType: "input",
     },
     {
       label: "Location:",
@@ -64,6 +65,7 @@ const CourtCasePage = () => {
       type: "text",
       placeholder: "City, State",
       value: "",
+      inputType: "input",
     },
     {
       label: "Plaintiff:",
@@ -71,6 +73,7 @@ const CourtCasePage = () => {
       type: "text",
       placeholder: "Enter plaintiff name",
       value: "",
+      inputType: "input",
     },
     {
       label: "Defendant:",
@@ -80,6 +83,7 @@ const CourtCasePage = () => {
       value: "",
       icon: Plus,
       addEnterHint: true,
+      inputType: "input",
     },
     {
       label: "Lawyer:",
@@ -89,6 +93,7 @@ const CourtCasePage = () => {
       value: "",
       icon: Plus,
       addEnterHint: true,
+      inputType: "input",
     },
     {
       label: "Status:",
@@ -96,6 +101,7 @@ const CourtCasePage = () => {
       type: "text",
       placeholder: "Enter status",
       value: "",
+      inputType: "input",
     },
     {
       label: "Type:",
@@ -103,6 +109,7 @@ const CourtCasePage = () => {
       type: "text",
       placeholder: "Enter type",
       value: "",
+      inputType: "input",
     },
     {
       label: "Outcome:",
@@ -110,6 +117,7 @@ const CourtCasePage = () => {
       type: "text",
       placeholder: "Enter outcome",
       value: "",
+      inputType: "input",
     },
   ];
 

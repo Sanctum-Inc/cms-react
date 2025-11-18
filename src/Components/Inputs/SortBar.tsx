@@ -4,9 +4,9 @@ import Card from "../Cards/Card";
 interface SortBarProps {
     searchQuery: string;
     setSearchQuery: (query: string) => void;
-    statusFilter: string;
-    setStatusFilter: (status: string) => void;
-    statusOptions: string[];
+    statusFilter?: string;
+    setStatusFilter?: (status: string) => void;
+    statusOptions?: string[];
     typeFilter?: string;
     setTypeFilter?: (type: string) => void;
     typeOptions?: string[];
@@ -25,7 +25,16 @@ const SortBar = ({
   return (
     <>
       <Card className="m-6 p-6 mt-5 flex gap-5">
-        <Card className="w-6/8 flex focus-within:ring-1 focus-within:ring-inset focus-within:ring-(--color-primary) h-10">
+        <Card
+          className={`${
+            statusOptions == undefined &&
+            setStatusFilter == undefined &&
+            typeFilter == undefined &&
+            setTypeFilter == undefined
+              ? "w-8/8"
+              : "w-6/8"
+          }  flex focus-within:ring-1 focus-within:ring-inset focus-within:ring-(--color-primary) h-10`}
+        >
           <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">
             <SearchIcon size={15} />
           </div>
@@ -39,46 +48,54 @@ const SortBar = ({
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </Card>
-        <div>
-          <FilterIcon />
-        </div>
-        <div>
-          <label className="" htmlFor="status-filter">
-            Status:{" "}
-          </label>
-          <select
-            className="border border-gray-300 rounded-2xl p-2 focus-within:ring-1 focus-within:ring-inset focus-within:ring-(--color-primary) focus:outline-none cursor-pointer"
-            id="status-filter"
-            name="status-filter"
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            {statusOptions.map((statusOption) => (
-              <option key={statusOption} value={statusOption}>
-                {statusOption.charAt(0).toUpperCase() + statusOption.slice(1)}
-              </option>
-            ))}
-          </select>
-        </div>
-        {typeFilter !== undefined && setTypeFilter !== undefined && 
-        <div>
-          <label className="" htmlFor="type-filter">
-            Type:{" "}
-          </label>
-          <select
-            className="border border-gray-300 rounded-2xl p-2 focus-within:ring-1 focus-within:ring-inset focus-within:ring-(--color-primary) focus:outline-none cursor-pointer"
-            id="type-filter"
-            name="type-filter"
-            value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
-          >
-            {typeOptions?.map((typeOption) => (
-              <option key={typeOption} value={typeOption}>
-                {typeOption.charAt(0).toUpperCase() + typeOption.slice(1)}
-              </option>
-            ))}
-          </select>
-        </div>}
+        {statusOptions !== undefined &&
+          setStatusFilter !== undefined &&
+          typeFilter !== undefined &&
+          setTypeFilter !== undefined && (
+            <div>
+              <FilterIcon />
+            </div>
+          )}
+        {statusOptions !== undefined && setStatusFilter !== undefined && (
+          <div>
+            <label className="" htmlFor="status-filter">
+              Status:{" "}
+            </label>
+            <select
+              className="border border-gray-300 rounded-2xl p-2 focus-within:ring-1 focus-within:ring-inset focus-within:ring-(--color-primary) focus:outline-none cursor-pointer"
+              id="status-filter"
+              name="status-filter"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              {statusOptions.map((statusOption) => (
+                <option key={statusOption} value={statusOption}>
+                  {statusOption.charAt(0).toUpperCase() + statusOption.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+        {typeFilter !== undefined && setTypeFilter !== undefined && (
+          <div>
+            <label className="" htmlFor="type-filter">
+              Type:{" "}
+            </label>
+            <select
+              className="border border-gray-300 rounded-2xl p-2 focus-within:ring-1 focus-within:ring-inset focus-within:ring-(--color-primary) focus:outline-none cursor-pointer"
+              id="type-filter"
+              name="type-filter"
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value)}
+            >
+              {typeOptions?.map((typeOption) => (
+                <option key={typeOption} value={typeOption}>
+                  {typeOption.charAt(0).toUpperCase() + typeOption.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </Card>
     </>
   );

@@ -24,6 +24,7 @@ const Modal = ({
     // For now, we'll just close the modal
     console.log("Button clicked");
     inputItems.forEach((element) => {
+      console.log(element);
       if (element.valueArray && element.valueArray.length > 0) 
       {
         element.value = element.valueArray.reduce((acc, curr) => acc + ", " + curr);
@@ -58,8 +59,8 @@ const Modal = ({
         onClick={() => setShowModal(false)}
       ></div>
       <div className="w-1/5 border-2 border-gray-300 h-full  fixed top-0 right-0 bg-white">
-        <div className="flex justify-between border-b-solid border-b-2 border-solid border-gray-300 py-5 px-10">
-          <div className="w-full text-xl font-bold text-(--color-primary)">
+        <div className="grid grid-cols-10 border-b-solid border-b-2 border-solid border-gray-300 py-5 px-10">
+          <div className="col-span-9 text-xl font-bold text-(--color-primary)">
             {title}
           </div>
           <div
@@ -73,14 +74,7 @@ const Modal = ({
           {inputItems.map((item, index) => (
             <PillInput
               key={index}
-              label={item.label}
-              name={item.name}
-              type={item.type}
-              placeholder={item.placeholder}
-              icon={item.icon}
-              addEnterHint={item.addEnterHint}
-              width={item.width}
-              height={item.height}
+              {...item}
               onChange={(e) => {
                 item.value = e.target.value;
               }}

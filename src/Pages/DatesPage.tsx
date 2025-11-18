@@ -15,31 +15,59 @@ const DatesPage = () => {
 
   const inputItems: InputItem[] = [
     {
+      name: "eventTitle",
+      label: "Event Title:",
+      type: "text",
+      addEnterHint: false,
+      placeholder: "eg. Final Pre-Trial Hearing",
+      value: "",
+      inputType: "input",
+    },
+    {
       name: "caseNumber",
       label: "Case Number:",
       type: "text",
       addEnterHint: false,
-      placeholder: "Enter Case Number...",
       value: "",
+      inputType: "select",
+      selectOptions: ["C00001", "C00002", "C00003", "C00004", "C00005"],
+    },
+    {
+      name: "date",
+      label: "Date:",
+      type: "date",
+      inputType: "input",
+    },
+    {
+      name: "eventType",
+      label: "Event Type & Icon:",
+      type: "text",
+      inputType: "select",
+      selectOptions: ["Deadline", "Hearing", "Filing", "Court Day"],
     },
   ];
 
   const handleAddNewDate = () => {
-    console.log()
-  }
+    console.log();
+  };
 
   const renderModal = () => {
     if (showModal == false) return null;
     else
       return (
-        <Modal
-          buttonCaption="Add Date"
-          title="Add New Date"
-          setShowModal={setShowModal}
-          handleShowModal={handleShowModal}
-          inputItems={inputItems}
-          buttonOnClick={handleAddNewDate}
-        />
+        <>
+          <Modal
+            buttonCaption="Add Date"
+            title="Schedule New Event"
+            setShowModal={setShowModal}
+            handleShowModal={handleShowModal}
+            inputItems={inputItems}
+            buttonOnClick={handleAddNewDate}
+          />
+          <div>
+            test
+          </div>
+        </>
       );
   };
 
