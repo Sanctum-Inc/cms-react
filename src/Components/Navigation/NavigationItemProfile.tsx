@@ -10,11 +10,14 @@ interface ImageWithFallbackProps {
     fallbackSrc: string;
 }
 interface NavigationItemProfileProps {
-    name: string;
-    surname: string;
-    email: string;
-    profileImage: string
-    icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
+  name: string;
+  surname: string;
+  email: string;
+  profileImage: string;
+  href: string;
+  icon: ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+  >;
 }
 
 const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ src, alt, fallbackSrc }) => {
@@ -24,9 +27,9 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ src, alt, fallbac
 
     return <img src={src} alt={alt} onError={handleError} className='w-10' />;
 };
-const NavigationItemProfile = (props: NavigationItemProfileProps) => {
+const NavigationItemProfile = ({name, surname, email, href: url}: NavigationItemProfileProps) => {
     return (
-        <div className='py-3 mt-auto'>
+        <a className='py-3 mt-auto' href={url}>
             <div className='flex items-center hover:text-(--color-primary)'>
                 <span>
                     <ImageWithFallback
@@ -38,10 +41,10 @@ const NavigationItemProfile = (props: NavigationItemProfileProps) => {
                 </span>
                 <span className='flex flex-col ml-2'>
                     <span>
-                        {props.name} {props.surname}
+                        {name} {surname}
                     </span>
                     <span>
-                        {props.email}
+                        {email}
                     </span>
                 </span>
             </div>
@@ -52,7 +55,7 @@ const NavigationItemProfile = (props: NavigationItemProfileProps) => {
                     </PrimaryButton>
                 </div>
             </div>
-        </div>
+        </a>
     )
 }
 

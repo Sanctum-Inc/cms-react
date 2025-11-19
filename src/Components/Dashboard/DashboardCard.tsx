@@ -12,7 +12,7 @@ interface DashboardCardProps {
 
 const DashboardCard = (props: DashboardCardProps) => {
     return (
-      <Card className="w-1/5 h-1/8 p-8 hover:bg-(--color-hover-light)">
+      <Card className="w-1/5 h-1/8 p-8 hover:bg-(--color-hover-light) bg-white">
         <div className="flex justify-between">
           <span className="text-xl font-medium text-gray-400">
             {props.description}

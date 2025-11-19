@@ -58,6 +58,7 @@ const Navigation = () => {
             surname="Doe"
             email="johndoe@example.com"
             profileImage=""
+            href='/profile'
           ></NavigationItemProfile>
         </div>
       </div>

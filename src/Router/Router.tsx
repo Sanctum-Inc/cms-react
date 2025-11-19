@@ -5,6 +5,7 @@ import CourtCasePage from '../Pages/CourtCasePage';
 import InvoicePage from '../Pages/InvoicePage';
 import DocumentsPage from '../Pages/DocumentsPage';
 import DatesPage from '../Pages/DatesPage';
+import ProfilePage from '../Pages/ProfilePage';
 
 
 const router = createBrowserRouter([
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
             { path: '/invoices', element: <InvoicePage/> },
             { path: '/documents', element: <DocumentsPage/> },
             { path: '/dates', element: <DatesPage/> },
+            { path: '/profile', element: <ProfilePage/> },
 
         ]
     },
