@@ -1,79 +1,76 @@
+import { Briefcase, User } from "lucide-react";
 import PrimaryButton from "../Components/Buttons/PrimaryButton";
 import Card from "../Components/Cards/Card";
 import Header from "../Components/Header/Header";
-import PillInput from "../Components/Inputs/PillInput";
-import type { InputItem } from "../Models/InputItem";
+import { useState } from "react";
+import UserProfile from "../Components/Profile/UserProfile";
+import CompanyProfile from "../Components/Profile/CompanyProfile";
 
 const ProfilePage = () => {
-  const inputs: InputItem[] = [
+  const [selectedMenu, setSelectedMenu] = useState("User Profile");
+
+  const profileMenus = [
     {
-      inputType: "input",
-      name: "userId",
-      label: "User ID (Non-Editable):",
-      type: "text",
+      label: "User Profile",
+      icon: User,
     },
     {
-      inputType: "input",
-      name: "password",
-      label: "Password:",
-      type: "Password",
-    },
-    {
-      inputType: "input",
-      name: "firstname",
-      label: "First Name:",
-      type: "text",
-    },
-    {
-      inputType: "input",
-      name: "surname",
-      label: "Surname:",
-      type: "text",
-    },
-    {
-      inputType: "input",
-      name: "emailAddress",
-      label: "Email Address:",
-      type: "email",
-    },
-    {
-      inputType: "input",
-      name: "mobileNumber",
-      label: "Mobile Number:",
-      type: "text",
+      label: "Company Profile",
+      icon: Briefcase,
     },
   ];
+
+  const renderProfileMenu = () => {
+    return profileMenus.map((menu, index) => {
+      return (
+        <div
+          className={`pt-7 rounded-t-2xl ml-2 cursor-pointer ${
+            selectedMenu === menu.label ? "bg-white" : ""
+          }`}
+          key={index}
+          onClick={() => setSelectedMenu(menu.label)}
+        >
+          <div
+            className={`flex items-center  pb-2 pb-2 px-4 ${
+              selectedMenu === menu.label ? "border-b-4 border-blue-500" : ""
+            }`}
+          >
+            <span>
+              <menu.icon />
+            </span>
+            <span className="px-2">{menu.label}</span>
+          </div>
+        </div>
+      );
+    });
+  };
+
+  const renderProfileInputs = () => {
+    if (selectedMenu === "User Profile") {
+      return <UserProfile/>;
+    }
+    else if (selectedMenu === "Company Profile") {
+      return <CompanyProfile/>;
+    }
+  };
 
   return (
     <>
       <Header showButton={false} title="Profile Management" />
-      <div className="m-6 p-6">
-        <div className="grid grid-cols-10">
-          <div className="col-span-2">
-            <span className="border-b px-2">User Profile</span>
-          </div>
-          <div className="col-span-2">
-            <span>Firm Settings</span>
-          </div>
+      <div className="m-6 p-6 text-2xl font-semibold">
+        <div className="flex border-b border-gray-200">
+          {renderProfileMenu()}
         </div>
       </div>
-      <Card className="m-6 p-6">
-        <div className="text-2xl font-semibold">Profile Details</div>
-        <div className="grid grid-cols-10 gap-5">
-          {inputs.map((item, index) => (
-            <>
-              <div className="col-span-5" key={index}>
-                <PillInput {...item} />
-              </div>
-            </>
-          ))}
+      <Card className="mx-48 p-6">
+        <div className="text-3xl font-semibold border-b border-gray-200 mb-8 pb-3">
+          {selectedMenu}
         </div>
+        <div className="">{renderProfileInputs()}</div>
         <div className="mt-5 flex justify-end">
-            <div className="w-1/4">
-            <PrimaryButton >
-                Save Profile Changes
-            </PrimaryButton>
-            </div>
+          <div className="w-1/6">
+            <PrimaryButton>Save Profile Changes</PrimaryButton>
+          </div>
         </div>
       </Card>
     </>
