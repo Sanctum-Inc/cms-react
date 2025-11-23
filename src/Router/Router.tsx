@@ -7,6 +7,7 @@ import DocumentsPage from '../Pages/DocumentsPage';
 import DatesPage from '../Pages/DatesPage';
 import ProfilePage from '../Pages/ProfilePage';
 import CourtCaseInformation from '../Pages/CourtCaseInformation';
+import Login from '../Pages/Login';
 
 
 const router = createBrowserRouter([
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
             { path: '/court-case-information', element: <CourtCaseInformation/> },
         ]
     },
+    { path: '/login', element: <Login/> },
 ]);
 
 export default router;
