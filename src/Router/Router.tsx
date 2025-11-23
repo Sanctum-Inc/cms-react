@@ -7,7 +7,6 @@ import DocumentsPage from '../Pages/DocumentsPage';
 import DatesPage from '../Pages/DatesPage';
 import ProfilePage from '../Pages/ProfilePage';
 import CourtCaseInformation from '../Pages/CourtCaseInformation';
-import Test from '../Pages/test';
 
 
 const router = createBrowserRouter([
@@ -23,7 +22,6 @@ const router = createBrowserRouter([
             { path: '/dates', element: <DatesPage/> },
             { path: '/profile', element: <ProfilePage/> },
             { path: '/court-case-information', element: <CourtCaseInformation/> },
-            { path: '/test', element: <Test/> },
         ]
     },
 ]);
