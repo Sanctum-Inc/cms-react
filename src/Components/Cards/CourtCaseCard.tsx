@@ -26,7 +26,8 @@ const CourtCaseCard = ({caseNumber, location, status, type, nextDate, internalSt
 
   return (
     <>
-      <Card className="mx-6 my-3 p-6" hover={true}>
+      <Card className="mx-6 my-3 p-6">
+        <a href="/court-case-information">
         <div className="grid grid-cols-5 gap-4">
             <div>{caseNumber}</div>
             <div>{location}</div>
@@ -37,6 +38,7 @@ const CourtCaseCard = ({caseNumber, location, status, type, nextDate, internalSt
                 <span className={getStatusStyles()}>{internalStatus}</span>
             </div>
         </div>
+        </a>
       </Card>
     </>
   );
