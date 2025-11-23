@@ -85,7 +85,7 @@ const CompanyProfile = () => {
         </div>
         <PillInput {...inputs[0]} />
         <PillInput {...inputs[1]} />
-        <div className="text-xl font-semibold text-(--color-primary) mt-4 pt-5 mb-2 border-t border-gray-200">
+        <div className="text-xl font-semibold text-(--color-primary) pt-5 mb-2 border-t border-gray-200">
           Contact Information
         </div>
         <div className="grid grid-cols-10 gap-5">
@@ -102,7 +102,7 @@ const CompanyProfile = () => {
             <PillInput {...inputs[5]} />
           </div>
         </div>
-        <div className="text-xl font-semibold text-(--color-primary) mt-4 pt-5 mb-2 border-t border-gray-200">
+        <div className="text-xl font-semibold text-(--color-primary) pt-5 mb-2 border-t border-gray-200">
           Professional Dates
         </div>
         <div className="grid grid-cols-10 gap-5">
@@ -113,7 +113,7 @@ const CompanyProfile = () => {
             <PillInput {...inputs[7]} />
           </div>
         </div>
-        <div className="text-xl font-semibold text-(--color-primary) mt-4 pt-5 mb-2 border-t border-gray-200">
+        <div className="text-xl font-semibold text-(--color-primary) pt-5 mb-2 border-t border-gray-200">
           Banking Details
         </div>
         <div className="grid grid-cols-10 gap-5">

@@ -5,6 +5,7 @@ import Header from "../Components/Header/Header";
 import { useState } from "react";
 import UserProfile from "../Components/Profile/UserProfile";
 import CompanyProfile from "../Components/Profile/CompanyProfile";
+import TabNavigation from "../Components/Navigation/TabNavigation";
 
 const ProfilePage = () => {
   const [selectedMenu, setSelectedMenu] = useState("User Profile");
@@ -23,24 +24,13 @@ const ProfilePage = () => {
   const renderProfileMenu = () => {
     return profileMenus.map((menu, index) => {
       return (
-        <div
-          className={`pt-7 rounded-t-2xl ml-2 cursor-pointer ${
-            selectedMenu === menu.label ? "bg-white" : ""
-          }`}
-          key={index}
-          onClick={() => setSelectedMenu(menu.label)}
-        >
-          <div
-            className={`flex items-center  pb-2 pb-2 px-4 ${
-              selectedMenu === menu.label ? "border-b-4 border-blue-500" : ""
-            }`}
-          >
-            <span>
-              <menu.icon />
-            </span>
-            <span className="px-2">{menu.label}</span>
-          </div>
-        </div>
+        <TabNavigation
+          selectedMenu={selectedMenu}
+          setSelectedMenu={setSelectedMenu}
+          menu={menu}
+          index={index}
+          className="pt-7"
+        />
       );
     });
   };

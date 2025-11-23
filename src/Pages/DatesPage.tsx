@@ -73,12 +73,14 @@ const DatesPage = () => {
 
   return (
     <>
+    
       <Header
         title="Date Management"
         showButton={true}
         buttonCaption="Add New Date"
         handleShowModal={handleShowModal}
-      />
+        />
+    <div className="p-6">
       <Calendar renderModal={renderModal} />
       <Card className="my-5 mx-3">
         <div className="flex text-2xl items-center mb-4">
@@ -89,7 +91,8 @@ const DatesPage = () => {
         </div>
         <CaseTimeLine />
       </Card>
-    </>
+    </div>
+        </>
   );
 };
 
