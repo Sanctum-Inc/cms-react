@@ -13,8 +13,7 @@ type PillInputChangeEvent = {
   };
 };
 
-interface PillInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+interface PillInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   className?: string;
   icon?: ForwardRefExoticComponent<
@@ -26,12 +25,15 @@ interface PillInputProps
   inputType: "input" | "select" | "file";
   selectOptions?: string[];
   customOnChange?: (e: PillInputChangeEvent) => void;
+  error?: boolean;
 }
 
 const PillInput = (props: PillInputProps) => {
   const [getValues, setValues] = useState<string[]>([]);
   const [getFiles, setFiles] = useState<File[]>([]);
-  const [inputValue, setInputValue] = useState("");
+
+  // Use props.value if provided (controlled), otherwise use internal state
+  const inputValue = props.value !== undefined ? String(props.value) : "";
 
   const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && props.addEnterHint) {
@@ -48,7 +50,12 @@ const PillInput = (props: PillInputProps) => {
         return updated;
       });
 
-      setInputValue("");
+      // Clear by calling parent's onChange with empty value
+      if (props.onChange) {
+        props.onChange({
+          target: { name: props.name!, value: "" },
+        } as any);
+      }
     }
 
     if (e.key === "Enter" && props.onKeyDown) {
@@ -57,7 +64,11 @@ const PillInput = (props: PillInputProps) => {
   };
 
   const handleSetValues = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    // For regular input mode, just pass through to parent's onChange
+    if (props.onChange) {
+      props.onChange(e);
+    }
+
     if (props.customOnChange) {
       // Pass as array with one element for consistency
       props.customOnChange({
@@ -84,8 +95,6 @@ const PillInput = (props: PillInputProps) => {
 
       return updated;
     });
-
-    setInputValue(newValue);
   };
 
   const handleFileOpen = () => {
@@ -119,13 +128,15 @@ const PillInput = (props: PillInputProps) => {
           <input
             {...{
               ...props,
-              value: undefined,
               onChange: undefined,
               height: undefined,
               width: undefined,
               inputType: undefined,
+              customOnChange: undefined,
             }}
-            className={`border border-gray-300 rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
+            className={`border ${
+              props.error ? "border-red-500" : "border-gray-300"
+            } rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
               props.className ?? ""
             } ${props.icon ? "pr-10" : ""} ${
               props.width ? "w-" + props.width : "w-full"
@@ -138,7 +149,9 @@ const PillInput = (props: PillInputProps) => {
       case "select":
         return (
           <select
-            className={`border border-gray-300 rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
+            className={`border ${
+              props.error ? "border-red-500" : "border-gray-300"
+            } rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
               props.className ?? ""
             } ${props.icon ? "pr-10" : ""} ${
               props.width ? "w-" + props.width : "w-full"
@@ -157,7 +170,7 @@ const PillInput = (props: PillInputProps) => {
         return (
           <>
             <div
-              className="border-2 border-dashed border-gray-300 h-50 hover:border-blue-500 flex items-center justify-center hover:text-blue-500"
+              className="border-2 border-dashed border-gray-300 h-50 hover:border-blue-500 flex items-center justify-center hover:text-blue-500 cursor-pointer"
               onClick={handleFileOpen}
             >
               <Plus size={72} />

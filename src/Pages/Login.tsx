@@ -38,26 +38,29 @@ const Login = () => {
       case "lastName":
         if (!value.trim()) return "This field is required.";
         return "";
+
       case "email":
         if (!value.trim()) return "Email is required.";
         if (!/^\S+@\S+\.\S+$/.test(value)) return "Email is invalid.";
         return "";
-      case "mobileNumber": {
+
+      case "mobileNumber":
         if (!value.trim()) return "Mobile number is required.";
-        // Remove any spaces or special characters for validation
         const cleanNumber = value.replace(/[\s()-]/g, "");
         if (!/^\+27\d{9}$/.test(cleanNumber))
           return "Mobile number must be in format +27XXXXXXXXX (9 digits after +27).";
         return "";
-      }
+
       case "password":
         if (!value) return "Password is required.";
         if (value.length < 6) return "Password must be at least 6 characters.";
         return "";
+
       case "confirmPassword":
         if (!value) return "Please confirm your password.";
         if (value !== user.password) return "Passwords do not match.";
         return "";
+
       default:
         return "";
     }
@@ -87,18 +90,22 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
+    const email = user.email.trim();
+    const password = user.password;
+
     // Mark fields as touched
     setTouched({ email: true, password: true });
 
     // Validate login fields
-    const emailError = validateField("email", user.email);
-    const passwordError = validateField("password", user.password);
+    const emailError = validateField("email", email);
+    const passwordError = validateField("password", password);
 
     setErrors({
       email: emailError,
       password: passwordError,
     });
 
+    console.log("Validating login:", { email, password });
     if (emailError || passwordError) return;
 
     console.log(user.email, user.password);
