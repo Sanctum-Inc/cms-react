@@ -23,7 +23,7 @@ const router = createBrowserRouter([
             { path: '/dates', element: <DatesPage/> },
             { path: '/profile', element: <ProfilePage/> },
             { path: '/court-case-information', element: <CourtCaseInformation/> },
-        ]
+        ],
     },
     { path: '/login', element: <Login/> },
 ]);

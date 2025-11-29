@@ -1,0 +1,73 @@
+import { Plus } from "lucide-react";
+import type { InputItem } from "../Models/InputItem";
+
+export const courtCaseInputs: InputItem[] = [
+    {
+      label: "Case Number:",
+      name: "case-number",
+      type: "text",
+      placeholder: "Enter case number",
+      value: "",
+      inputType: "input",
+    },
+    {
+      label: "Location:",
+      name: "location",
+      type: "text",
+      placeholder: "City, State",
+      value: "",
+      inputType: "input",
+    },
+    {
+      label: "Plaintiff:",
+      name: "plaintiff",
+      type: "text",
+      placeholder: "Enter plaintiff name",
+      value: "",
+      inputType: "input",
+    },
+    {
+      label: "Defendant:",
+      name: "defendant",
+      type: "text",
+      placeholder: "Enter defendant names",
+      value: "",
+      icon: Plus,
+      addEnterHint: true,
+      inputType: "input",
+    },
+    {
+      label: "Lawyer:",
+      name: "lawyer",
+      type: "text",
+      placeholder: "Enter lawyer names",
+      value: "",
+      icon: Plus,
+      addEnterHint: true,
+      inputType: "input",
+    },
+    {
+      label: "Status:",
+      name: "status",
+      type: "text",
+      placeholder: "Enter status",
+      value: "",
+      inputType: "input",
+    },
+    {
+      label: "Type:",
+      name: "type",
+      type: "text",
+      placeholder: "Enter type",
+      value: "",
+      inputType: "input",
+    },
+    {
+      label: "Outcome:",
+      name: "outcome",
+      type: "text",
+      placeholder: "Enter outcome",
+      value: "",
+      inputType: "input",
+    },
+  ];

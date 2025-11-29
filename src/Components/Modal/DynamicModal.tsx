@@ -76,7 +76,7 @@ const DynamicModal = ({
             <PillInput
               key={index}
               {...item}
-              onChange={(e) => {
+              customOnChange={(e) => {
                 item.value = e.target.value[0];
               }}
               onKeyDown={handleModalEnterClick}

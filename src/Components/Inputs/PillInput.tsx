@@ -14,7 +14,7 @@ type PillInputChangeEvent = {
 };
 
 interface PillInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   className?: string;
   icon?: ForwardRefExoticComponent<
@@ -25,7 +25,7 @@ interface PillInputProps
   height?: string;
   inputType: "input" | "select" | "file";
   selectOptions?: string[];
-  onChange?: (e: PillInputChangeEvent) => void;
+  customOnChange?: (e: PillInputChangeEvent) => void;
 }
 
 const PillInput = (props: PillInputProps) => {
@@ -38,7 +38,7 @@ const PillInput = (props: PillInputProps) => {
       setValues((prev) => {
         const updated = [...prev, inputValue];
 
-        props.onChange?.({
+        props.customOnChange?.({
           target: {
             name: props.name!,
             value: updated,
@@ -58,9 +58,9 @@ const PillInput = (props: PillInputProps) => {
 
   const handleSetValues = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
-    if (props.onChange) {
+    if (props.customOnChange) {
       // Pass as array with one element for consistency
-      props.onChange({
+      props.customOnChange({
         target: {
           name: props.name!,
           value: [e.target.value],
@@ -75,7 +75,7 @@ const PillInput = (props: PillInputProps) => {
     setValues((prev) => {
       const updated = [...prev, newValue];
 
-      props.onChange?.({
+      props.customOnChange?.({
         target: {
           name: props.name!,
           value: updated,
@@ -101,7 +101,7 @@ const PillInput = (props: PillInputProps) => {
       setValues(updated);
       setFiles((prev) => [...prev, file]);
 
-      props.onChange?.({
+      props.customOnChange?.({
         target: {
           name: props.name!,
           value: updated,
@@ -123,6 +123,7 @@ const PillInput = (props: PillInputProps) => {
               onChange: undefined,
               height: undefined,
               width: undefined,
+              inputType: undefined,
             }}
             className={`border border-gray-300 rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
               props.className ?? ""

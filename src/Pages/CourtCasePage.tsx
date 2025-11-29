@@ -1,125 +1,25 @@
 import {
   ArrowUp,
-  Plus,
 } from "lucide-react";
 import CourtCaseCard from "../Components/Cards/CourtCaseCard";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Modal from "../Components/Modal/Modal";
 import SortBar from "../Components/Inputs/SortBar";
-import type { InputItem } from "../Models/InputItem";
 import Header from "../Components/Header/Header";
+import { CourtCaseService, type AddCourtCaseRequest } from "../api";
+import type { CourtCases } from "../Models/CourtCases";
+import { courtCaseInputs } from "../data/CourtCaseInputs";
 
 const CourtCasePage = () => {
   const [showModal, setShowModal] = useState(false);
   const [sortBy, setSortBy] = useState<
-    "caseNumber" | "location" | "status" | "type" | "nextDate"
+    "caseNumber" | "location" | "plaintiff" | "type" | "nextDate"
   >("caseNumber");
   const [sortDesc, setSortDesc] = useState(true);
 
-  const courtCases: {
-    caseNumber: string;
-    location: string;
-    status: string;
-    type: string;
-    nextDate: string;
-    internalStatus: "open" | "closed" | "pending";
-  }[] = [
-      {
-        caseNumber: "2023-CR-12345",
-        location: "New York",
-        status: "Open",
-        type: "Criminal",
-        nextDate: "2023-12-01",
-        internalStatus: "open",
-      },
-      {
-        caseNumber: "2023-CV-67890",
-        location: "Los Angeles",
-        status: "Closed",
-        type: "Civil",
-        nextDate: "2023-11-15",
-        internalStatus: "closed",
-      },
-      {
-        caseNumber: "2023-FM-54321",
-        location: "Chicago",
-        status: "Pending",
-        type: "Family",
-        nextDate: "2023-10-30",
-        internalStatus: "pending",
-      },
-    ];
+  const [courtCases, setCourtCases] = useState<CourtCases[]>([]);
+  const [newCourtCases, setNewCourtCases] = useState<AddCourtCaseRequest>();
 
-  const inputItems: InputItem[] = [
-    {
-      label: "Case Number:",
-      name: "case-number",
-      type: "text",
-      placeholder: "Enter case number",
-      value: "",
-      inputType: "input",
-    },
-    {
-      label: "Location:",
-      name: "location",
-      type: "text",
-      placeholder: "City, State",
-      value: "",
-      inputType: "input",
-    },
-    {
-      label: "Plaintiff:",
-      name: "plaintiff",
-      type: "text",
-      placeholder: "Enter plaintiff name",
-      value: "",
-      inputType: "input",
-    },
-    {
-      label: "Defendant:",
-      name: "defendant",
-      type: "text",
-      placeholder: "Enter defendant names",
-      value: "",
-      icon: Plus,
-      addEnterHint: true,
-      inputType: "input",
-    },
-    {
-      label: "Lawyer:",
-      name: "lawyer",
-      type: "text",
-      placeholder: "Enter lawyer names",
-      value: "",
-      icon: Plus,
-      addEnterHint: true,
-      inputType: "input",
-    },
-    {
-      label: "Status:",
-      name: "status",
-      type: "text",
-      placeholder: "Enter status",
-      value: "",
-      inputType: "input",
-    },
-    {
-      label: "Type:",
-      name: "type",
-      type: "text",
-      placeholder: "Enter type",
-      value: "",
-      inputType: "input",
-    },
-    {
-      label: "Outcome:",
-      name: "outcome",
-      type: "text",
-      placeholder: "Enter outcome",
-      value: "",
-      inputType: "input",
-    },
-  ];
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -134,7 +34,7 @@ const CourtCasePage = () => {
       return (
         c.caseNumber.toLowerCase().includes(q) ||
         c.location.toLowerCase().includes(q) ||
-        c.status.toLowerCase().includes(q) ||
+        c.plaintiff.toLowerCase().includes(q) ||
         c.type.toLowerCase().includes(q) ||
         c.nextDate.toLowerCase().includes(q)
       );
@@ -184,7 +84,7 @@ const CourtCasePage = () => {
       const order: (keyof (typeof courtCases)[number])[] = [
         "caseNumber",
         "location",
-        "status",
+        "plaintiff",
         "type",
         "nextDate",
       ];
@@ -197,11 +97,11 @@ const CourtCasePage = () => {
     });
 
     return filtered;
-  }, [searchQuery, statusFilter, typeFilter, sortBy, sortDesc]);
+  }, [searchQuery, statusFilter, typeFilter, sortBy, sortDesc, courtCases]);
 
   // handle header clicks to set primary sort column and toggle direction
   const handleSort = (
-    col: "caseNumber" | "location" | "status" | "type" | "nextDate"
+    col: "caseNumber" | "location" | "plaintiff" | "type" | "nextDate"
   ) => {
     if (sortBy === col) {
       setSortDesc((s) => !s);
@@ -211,11 +111,17 @@ const CourtCasePage = () => {
     }
   };
 
-
   const returnModal = () => {
     if (!showModal) return null;
     return (
-      <Modal setShowModal={setShowModal} handleShowModal={handleShowModal} title="New Court Case" inputItems={inputItems} buttonCaption="Add Case" buttonOnClick={handleButtonClick}/>
+      <Modal
+        setShowModal={setShowModal}
+        handleShowModal={handleShowModal}
+        title="New Court Case"
+        inputItems={courtCaseInputs}
+        buttonCaption="Add Case"
+        buttonOnClick={handleButtonClick}
+      />
     );
   };
 
@@ -223,16 +129,50 @@ const CourtCasePage = () => {
     // Logic to add the new court case goes here
     // For now, we'll just close the modal
     //setShowModal(false);
-  }
+    setNewCourtCases({
+      caseNumber: courtCaseInputs[0].value || "",
+      location: courtCaseInputs[1].value || "",
+      plaintiff: courtCaseInputs[2].value || "",
+      defendant: courtCaseInputs[3].value || "",
+      status : courtCaseInputs[5].value || "open",
+      type: courtCaseInputs[6].value || "",
+      outcome: courtCaseInputs[7].value || "",
+    })
+
+    console.log("New Court Case:", newCourtCases);
+  };
 
   const handleShowModal = (show: boolean) => {
     setShowModal(show);
-  }
+  };
+
+  useEffect(() => {
+    CourtCaseService.getAllCourtCases().then((response) => {
+      const mapped = response.map((courtCase) => ({
+        caseNumber: courtCase.caseNumber,
+        location: courtCase.location,
+        plaintiff: courtCase.plaintiff,
+        type: courtCase.type!,
+        nextDate: courtCase.courtCaseDates?.length
+          ? courtCase.courtCaseDates[0].date! //ToDO: find next upcoming date
+          : "",
+        internalStatus: courtCase.status as "open" | "closed" | "pending",
+      }));
+
+      setCourtCases(mapped);
+      console.log("Fetched court cases:", mapped);
+    });
+  }, []); // <-- empty dependency (runs once)
 
   return (
     <>
-      <div className={showModal ? "opacity-30 pointer-events-none" : ""}>
-        <Header handleShowModal={handleShowModal} title='Case Management' buttonCaption="Add New Case" showButton={true}/>
+      <div>
+        <Header
+          handleShowModal={handleShowModal}
+          title="Case Management"
+          buttonCaption="Add New Case"
+          showButton={true}
+        />
         <div>
           <SortBar
             searchQuery={searchQuery}
@@ -282,12 +222,12 @@ const CourtCasePage = () => {
                 </span>
               </div>
               <div className="flex align-center">
-                <span>Status</span>
+                <span>Plaintiff</span>
                 <span
                   className="my-auto cursor-pointer"
-                  onClick={() => handleSort("status")}
+                  onClick={() => handleSort("plaintiff")}
                 >
-                  {sortBy === "status" ? (
+                  {sortBy === "plaintiff" ? (
                     sortDesc ? (
                       <ArrowUp size={12} />
                     ) : (
