@@ -21,12 +21,12 @@ export class CourtCaseService {
     }
     /**
      * @param requestBody
-     * @returns boolean Created
+     * @returns string Created
      * @throws ApiError
      */
     public static createCourtCases(
         requestBody: AddCourtCaseRequest,
-    ): CancelablePromise<boolean> {
+    ): CancelablePromise<string> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/CourtCase',

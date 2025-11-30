@@ -9,7 +9,6 @@ import type { CourtCases } from "../Models/CourtCases";
 import { courtCaseInputs } from "../data/CourtCaseInputs";
 import SuccessAlert from "../Components/Alerts/SuccessAlert";
 import ErrorAlert from "../Components/Alerts/ErrorAlert";
-import { ValidateField } from "../Utils/InputValidator";
 
 const CourtCasePage = () => {
   
@@ -169,21 +168,13 @@ const CourtCasePage = () => {
         courtCaseInputs.find((item) => item.name === "outcome")?.value || "",
     });
 
-    const caseNumberError = ValidateField(
-      "caseNumber",
-      newCourtCases.caseNumber
-    );
-
-    setErrors({
-      caseNumber: caseNumberError,
-    });
-
     CourtCaseService.createCourtCases(newCourtCases)
-      .then(() => {
-        console.log("Court case added");
+      .then((response) => {
+        console.log("Court case added" + response);
         setShowModal(false);
         setSuccessAlertMessage("Court case added successfully.");
         filteredCases.push({
+          id: response,
           caseNumber: newCourtCases.caseNumber,
           location: newCourtCases.location,
           plaintiff: newCourtCases.plaintiff,
@@ -358,7 +349,7 @@ const CourtCasePage = () => {
             </div>
           </div>
           {filteredCases.map((courtCase) => (
-            <CourtCaseCard key={courtCase.caseNumber} {...courtCase} />
+            <CourtCaseCard key={courtCase.id} {...courtCase} />
           ))}
         </div>
         {renderSuccessmessage()}

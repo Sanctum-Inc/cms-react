@@ -63,6 +63,7 @@ const DatesPage = () => {
             handleShowModal={handleShowModal}
             inputItems={inputItems}
             buttonOnClick={handleAddNewDate}
+            
           />
           <div>
             test

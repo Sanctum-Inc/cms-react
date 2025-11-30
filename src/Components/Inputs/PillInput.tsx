@@ -180,7 +180,7 @@ const PillInput = (props: PillInputProps) => {
   return (
     <div className="flex flex-col w-full mt-3">
       {label && (
-        <label htmlFor={name} className="mb-1 ml-3.5">
+        <label htmlFor={props.name} className="mb-1 ml-3.5">
           {label}
         </label>
       )}

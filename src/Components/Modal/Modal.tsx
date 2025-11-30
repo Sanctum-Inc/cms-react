@@ -9,8 +9,8 @@ interface ModalProps {
   inputItems: InputItem[];
   buttonCaption: string;
   buttonOnClick: () => void;
-  handleChange: (name: string, value: string) => void;
-  values: Record<string, string | undefined>;
+  handleChange?: (name: string, value: string) => void;
+  values?: any;
 }
 
 const Modal = ({
@@ -82,7 +82,9 @@ const Modal = ({
               {...item}
               value={values[item.name] || ""}
               onKeyDown={handleModalEnterClick}
-              onChange={(e) => handleChange(item.name, e.target.value)}
+              onChange={(e) =>
+                handleChange && handleChange(item.name, e.target.value)
+              }
             />
           ))}
         </div>
