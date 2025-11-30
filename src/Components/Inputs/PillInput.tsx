@@ -57,9 +57,9 @@ const PillInput = (props: PillInputProps) => {
       props.onChange(e);
     }
 
-    if (props.customOnChange) {
+    if (customOnChange) {
       // Pass as array with one element for consistency
-      props.customOnChange({
+      customOnChange({
         target: {
           name: props.name!,
           value: [e.target.value],
@@ -120,12 +120,12 @@ const PillInput = (props: PillInputProps) => {
           <input
             {...restProps}
             className={`border ${
-              props.error ? "border-red-500" : "border-gray-300"
+              error ? "border-red-500" : "border-gray-300"
             } rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
-              props.className ?? ""
-            } ${props.icon ? "pr-10" : ""} ${
-              props.width ? "w-" + props.width : "w-full"
-            } ${props.height ? "h-" + props.height : "h-13"}`}
+              className ?? ""
+            } ${icon ? "pr-10" : ""} ${
+              width ? "w-" + width : "w-full"
+            } ${height ? "h-" + height : "h-13"}`}
             onKeyDown={handleEnterKey}
             onChange={handleSetValues}
             value={inputValue}
@@ -135,16 +135,16 @@ const PillInput = (props: PillInputProps) => {
         return (
           <select
             className={`border ${
-              props.error ? "border-red-500" : "border-gray-300"
+              error ? "border-red-500" : "border-gray-300"
             } rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
-              props.className ?? ""
-            } ${props.icon ? "pr-10" : ""} ${
-              props.width ? "w-" + props.width : "w-full"
-            } ${props.height ? "h-" + props.height : "h-13"}`}
+              className ?? ""
+            } ${icon ? "pr-10" : ""} ${
+              width ? "w-" + width : "w-full"
+            } ${height ? "h-" + height : "h-13"}`}
             value={inputValue}
             onChange={handleSetValuesSelect}
           >
-            {props.selectOptions?.map((option) => (
+            {selectOptions?.map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>
@@ -179,14 +179,14 @@ const PillInput = (props: PillInputProps) => {
 
   return (
     <div className="flex flex-col w-full mt-3">
-      {props.label && (
-        <label htmlFor={props.name} className="mb-1 ml-3.5">
-          {props.label}
+      {label && (
+        <label htmlFor={name} className="mb-1 ml-3.5">
+          {label}
         </label>
       )}
       <div className="relative">
-        {renderInput(props.inputType)}
-        {props.icon && props.addEnterHint && (
+        {renderInput(inputType)}
+        {props.icon && addEnterHint && (
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none hover:text-orange-700 cursor-pointer">
             <props.icon size={16} />
           </span>
@@ -212,7 +212,7 @@ const PillInput = (props: PillInputProps) => {
           ))}
         </div>
       )}
-      {props.addEnterHint && (
+      {addEnterHint && (
         <div className="text-xs text-gray-400 mt-1">Press Enter to add</div>
       )}
     </div>

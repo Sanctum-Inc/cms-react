@@ -12,12 +12,14 @@ export const ValidateField = (name: string, value: string, password:string | und
       return "";
 
     case "mobileNumber":
-      if (!value.trim()) return "Mobile number is required.";
-      const cleanNumber = value.replace(/[\s()-]/g, "");
-      if (!/^\+27\d{9}$/.test(cleanNumber))
-        return "Mobile number must be in format +27XXXXXXXXX (9 digits after +27).";
-      return "";
+      {
 
+        if (!value.trim()) return "Mobile number is required.";
+        const cleanNumber = value.replace(/[\s()-]/g, "");
+        if (!/^\+27\d{9}$/.test(cleanNumber))
+          return "Mobile number must be in format +27XXXXXXXXX (9 digits after +27).";
+        return "";
+      }
     case "password":
       if (!value) return "Password is required.";
       if (value.length < 6) return "Password must be at least 6 characters.";
@@ -26,7 +28,7 @@ export const ValidateField = (name: string, value: string, password:string | und
     case "confirmPassword":
       {
         if (!value) return "Please confirm your password.";
-        if (password == undefined) return "";
+        if (password === undefined) return "";
         if (value !== password) return "Passwords do not match.";
         return "";
       }

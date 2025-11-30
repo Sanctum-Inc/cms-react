@@ -10,7 +10,7 @@ interface ModalProps {
   buttonCaption: string;
   buttonOnClick: () => void;
   handleChange: (name: string, value: string) => void;
-  values: any;
+  values: Record<string, string | undefined>;
 }
 
 const Modal = ({
