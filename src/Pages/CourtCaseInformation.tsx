@@ -17,6 +17,7 @@ import {
 import Card from "../Components/Cards/Card";
 import Header from "../Components/Header/Header";
 import {
+  useEffect,
   useState,
   type ForwardRefExoticComponent,
   type RefAttributes,
@@ -24,6 +25,8 @@ import {
 import TabNavigation from "../Components/Navigation/TabNavigation";
 import CourtCaseInformationTable from "../Components/Tables/CourtCaseInformationTable";
 import DynamicModal from "../Components/Modal/DynamicModal";
+import { useLocation } from "react-router-dom";
+import { CourtCaseService } from "../api";
 
 interface CaseField {
   label: string;
@@ -48,14 +51,17 @@ export interface ProfileMenu {
     Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
   >;
   headers: Items;
-  items: Items[];
+  items?: Items[];
 }
 
 const CourtCaseInformation = () => {
+  const { search } = useLocation();
+  const query = new URLSearchParams(search);
+  const caseId = query.get("id");
+
   const [selectedMenu, setSelectedMenu] = useState("Dates");
   const [showModal, setShowModal] = useState(false);
-
-  const caseFields: CaseField[] = [
+  const [caseFields, setCaseFields] = useState<CaseField[]>([
     {
       label: "Case ID",
       name: "caseId",
@@ -98,9 +104,9 @@ const CourtCaseInformation = () => {
       icon: CalendarClock,
       type: "date",
     },
-  ];
+  ]);
 
-  const keyParties: CaseField[] = [
+  const [keyParties, setKeyParties] = useState([
     {
       label: "Plaintiff",
       name: "plaintiff",
@@ -117,9 +123,9 @@ const CourtCaseInformation = () => {
       type: "text",
       color: "red",
     },
-  ];
+  ]);
 
-  const profileMenus: ProfileMenu[] = [
+  const [profileMenus, setProfileMenus] = useState<ProfileMenu[]>([
     {
       label: "Dates",
       icon: Calendar,
@@ -173,7 +179,7 @@ const CourtCaseInformation = () => {
       icon: Users,
       headers: {
         attributes1: "Name",
-        attributes2: "Role",
+        attributes2: "Mobile Number",
         attributes3: "Email",
       },
       items: [
@@ -184,7 +190,79 @@ const CourtCaseInformation = () => {
         },
       ],
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    if (!caseId) return;
+    CourtCaseService.getCourtCasesById(caseId)
+      .then((response) => {
+        console.log(response);
+        setCaseFields([
+          { ...caseFields[0], value: response.id },
+          { ...caseFields[1], value: response.location },
+          { ...caseFields[2], value: response.type! },
+          { ...caseFields[3], value: response.outcome! },
+          { ...caseFields[4], value: response.created! },
+          { ...caseFields[5], value: response.lastModified! },
+        ]);
+        // console.log(caseFields);
+        setKeyParties([
+          { ...keyParties[0], value:response.plaintiff},
+          { ...keyParties[1], value:response.defendant}
+        ])
+
+        setProfileMenus([
+          {
+            ...profileMenus[0],
+            items: response.courtCaseDates?.map((courtCaseDate) => {
+              return {
+                attributes1: courtCaseDate.date,
+                attributes2: courtCaseDate.type,
+                attributes3: courtCaseDate.title,
+              };
+            }),
+          },
+          {
+            ...profileMenus[1],
+            items: response.documents?.map((document) => {
+              return {
+                attributes1: document.fileName,
+                attributes2: document.contentType,
+                attributes3: document.created,
+              };
+            }),
+          },
+          {
+            ...profileMenus[2],
+            items: response.invoices?.map((invoice) => {
+              return {
+                attributes1: invoice.invoiceNumber,
+                attributes2: `R${invoice.totalAmount}`,
+                attributes3: invoice.isPaid ? "Paid" : "Unpaid",
+              };
+            }),
+          },
+          {
+            ...profileMenus[3],
+            items: response.lawyers?.map((lawyer) => {
+              return {
+                attributes1: lawyer.name,
+                attributes2: lawyer.mobileNumber,
+                attributes3: lawyer.email,
+              };
+            }),
+          },
+        ]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  // useEffect(() =>{
+  //   if (!caseId) return;
+    
+  // })
 
   const renderCaseSummary = () => {
     return (
@@ -196,8 +274,11 @@ const CourtCaseInformation = () => {
           <span className="text-2xl font-semibold ml-2">Case Summary</span>
         </div>
         <div className="grid grid-cols-10 gap-4">
-          {caseFields.map(({ label, value, icon: Icon }) => (
-            <Card className="col-span-5 bg-gray-50">
+          {caseFields.map(({ label, value, icon: Icon }, index) => (
+            <Card
+              className="col-span-5 bg-gray-50"
+              key={`infoCardsSummary-${index}`}
+            >
               <div className="grid grid-cols-20">
                 <div className="col-span-1 flex items-center">
                   <Icon />
@@ -206,7 +287,7 @@ const CourtCaseInformation = () => {
                   <div>{label}</div>
                 </div>
                 <div className="col-span-1"></div>
-                <div className="col-span-19">{value.toString()}</div>
+                <div className="col-span-19">{`${value}`}</div>
               </div>
             </Card>
           ))}
@@ -225,8 +306,11 @@ const CourtCaseInformation = () => {
           <span className="text-2xl font-semibold ml-2">Key Parties</span>
         </div>
         <div className="">
-          {keyParties.map(({ label, value, icon: Icon, color }) => (
-            <Card className="bg-gray-50 mb-4">
+          {keyParties.map(({ label, value, icon: Icon, color }, index) => (
+            <Card
+              className="bg-gray-50 mb-4"
+              key={`infoCardsKeyParties-${index}`}
+            >
               <div className="grid grid-cols-20">
                 <div className="col-span-1 flex items-center">
                   <Icon color={color} />
@@ -254,6 +338,7 @@ const CourtCaseInformation = () => {
         setSelectedMenu={setSelectedMenu}
         menu={menu}
         index={index}
+        key={`infoNav-${index}`}
         className="pt-2"
       />
     ));
@@ -264,27 +349,31 @@ const CourtCaseInformation = () => {
     const x = profileMenus.find((menu) => {
       return menu.label === selectedMenu;
     });
-    return (
-      <CourtCaseInformationTable
-        headers={x?.headers}
-        items={x?.items}
-      />
-    );
+    return <CourtCaseInformationTable headers={x?.headers} items={x?.items} />;
   };
 
-  const handleAddItemButtonClick = () =>{
+  const handleAddItemButtonClick = () => {
     console.log("Add Item Button Clicked");
     setShowModal(false);
-  }
+  };
 
   const handleShowModal = (show: boolean) => {
     setShowModal(show);
-  }
+  };
 
   const renderModal = () => {
     // Placeholder for future modal rendering logic
-    return <DynamicModal buttonOnClick={handleAddItemButtonClick} handleShowModal={handleShowModal} setShowModal={setShowModal} title="Add New Item" inputItems={[]} key={231} />
-  }
+    return (
+      <DynamicModal
+        buttonOnClick={handleAddItemButtonClick}
+        handleShowModal={handleShowModal}
+        setShowModal={setShowModal}
+        title="Add New Item"
+        inputItems={[]}
+        key={231}
+      />
+    );
+  };
 
   return (
     <>
@@ -292,7 +381,7 @@ const CourtCaseInformation = () => {
         title="Court Case Information"
         showButton={true}
         buttonCaption="Add New Item"
-      handleShowModal={handleShowModal}
+        handleShowModal={handleShowModal}
       />
       <div className="grid grid-cols-10 p-6 gap-4">
         <Card className="col-span-7">{renderCaseSummary()}</Card>

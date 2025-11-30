@@ -7,7 +7,7 @@ export type DocumentResponse = {
     name: string;
     fileName: string;
     size: number;
-    createdAt: string;
+    created: string;
     caseId: string;
     contentType: string;
     createdBy: string;

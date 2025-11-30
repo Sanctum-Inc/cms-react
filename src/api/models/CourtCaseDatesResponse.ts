@@ -6,6 +6,7 @@ export type CourtCaseDatesResponse = {
     id: string;
     date: string;
     title: string;
+    type: string;
     caseId: string;
 };
 

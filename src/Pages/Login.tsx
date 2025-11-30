@@ -5,6 +5,7 @@ import { UserService } from "../api/services/UserService";
 import PillInput from "../Components/Inputs/PillInput";
 import PrimaryButton from "../Components/Buttons/PrimaryButton";
 import Card from "../Components/Cards/Card";
+import { ValidateField } from "../Utils/InputValidator";
 
 type User = {
   id: string;
@@ -31,40 +32,6 @@ const Login = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  // Validation function
-  const validateField = (name: string, value: string): string => {
-    switch (name) {
-      case "firstName":
-      case "lastName":
-        if (!value.trim()) return "This field is required.";
-        return "";
-
-      case "email":
-        if (!value.trim()) return "Email is required.";
-        if (!/^\S+@\S+\.\S+$/.test(value)) return "Email is invalid.";
-        return "";
-
-      case "mobileNumber":
-        if (!value.trim()) return "Mobile number is required.";
-        const cleanNumber = value.replace(/[\s()-]/g, "");
-        if (!/^\+27\d{9}$/.test(cleanNumber))
-          return "Mobile number must be in format +27XXXXXXXXX (9 digits after +27).";
-        return "";
-
-      case "password":
-        if (!value) return "Password is required.";
-        if (value.length < 6) return "Password must be at least 6 characters.";
-        return "";
-
-      case "confirmPassword":
-        if (!value) return "Please confirm your password.";
-        if (value !== user.password) return "Passwords do not match.";
-        return "";
-
-      default:
-        return "";
-    }
-  };
 
   // Handle input change - clear error immediately when user types
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +41,7 @@ const Login = () => {
 
     // Clear error immediately when user starts typing (if field was touched)
     if (touched[name]) {
-      const error = validateField(name, value);
+      const error = ValidateField(name, value);
       setErrors({ ...errors, [name]: error });
     }
   };
@@ -85,7 +52,7 @@ const Login = () => {
 
     setTouched({ ...touched, [name]: true });
 
-    const error = validateField(name, value);
+    const error = ValidateField(name, value);
     setErrors({ ...errors, [name]: error });
   };
 
@@ -97,8 +64,8 @@ const Login = () => {
     setTouched({ email: true, password: true });
 
     // Validate login fields
-    const emailError = validateField("email", email);
-    const passwordError = validateField("password", password);
+    const emailError = ValidateField("email", email);
+    const passwordError = ValidateField("password", password);
 
     setErrors({
       email: emailError,
@@ -158,12 +125,12 @@ const Login = () => {
 
     // Validate all registration fields
     const newErrors: Record<string, string> = {
-      firstName: validateField("firstName", user.firstName),
-      lastName: validateField("lastName", user.lastName),
-      email: validateField("email", user.email),
-      mobileNumber: validateField("mobileNumber", user.mobileNumber),
-      password: validateField("password", user.password),
-      confirmPassword: validateField("confirmPassword", user.confirmPassword),
+      firstName: ValidateField("firstName", user.firstName),
+      lastName: ValidateField("lastName", user.lastName),
+      email: ValidateField("email", user.email),
+      mobileNumber: ValidateField("mobileNumber", user.mobileNumber),
+      password: ValidateField("password", user.password),
+      confirmPassword: ValidateField("confirmPassword", user.confirmPassword),
     };
 
     setErrors(newErrors);

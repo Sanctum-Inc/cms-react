@@ -4,7 +4,7 @@ import type { InputItem } from "../Models/InputItem";
 export const courtCaseInputs: InputItem[] = [
     {
       label: "Case Number:",
-      name: "case-number",
+      name: "caseNumber",
       type: "text",
       placeholder: "Enter case number",
       value: "",
@@ -52,7 +52,9 @@ export const courtCaseInputs: InputItem[] = [
       type: "text",
       placeholder: "Enter status",
       value: "",
-      inputType: "input",
+      inputType: "select",
+      selectOptions: ["Open", "Closed", "Pending", "Appealed", "Dismissed", "Settled"],
+      addEnterHint: false,
     },
     {
       label: "Type:",
@@ -60,7 +62,8 @@ export const courtCaseInputs: InputItem[] = [
       type: "text",
       placeholder: "Enter type",
       value: "",
-      inputType: "input",
+      inputType: "select",
+      selectOptions: ["Criminal", "Civil", "Family", "Labor", "Commercial", "Road Accident Fund"],
     },
     {
       label: "Outcome:",
@@ -68,6 +71,7 @@ export const courtCaseInputs: InputItem[] = [
       type: "text",
       placeholder: "Enter outcome",
       value: "",
-      inputType: "input",
+      inputType: "select",
+      selectOptions: ["Guilty", "Not Guilty", "Settled", "Withdrawn", "Ongoing", "N/A"],
     },
   ];

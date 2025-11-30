@@ -1,6 +1,4 @@
-import {
-  ArrowUp,
-} from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import CourtCaseCard from "../Components/Cards/CourtCaseCard";
 import { useState, useMemo, useEffect } from "react";
 import Modal from "../Components/Modal/Modal";
@@ -9,17 +7,34 @@ import Header from "../Components/Header/Header";
 import { CourtCaseService, type AddCourtCaseRequest } from "../api";
 import type { CourtCases } from "../Models/CourtCases";
 import { courtCaseInputs } from "../data/CourtCaseInputs";
+import SuccessAlert from "../Components/Alerts/SuccessAlert";
+import ErrorAlert from "../Components/Alerts/ErrorAlert";
+import { ValidateField } from "../Utils/InputValidator";
 
 const CourtCasePage = () => {
+  
   const [showModal, setShowModal] = useState(false);
+  const [successAlertMessage, setSuccessAlertMessage] = useState<string | null>(
+    null
+  );
+  const [errorAlertMessage, setErrorAlertMessage] = useState<string | null>(
+    null
+  );
   const [sortBy, setSortBy] = useState<
     "caseNumber" | "location" | "plaintiff" | "type" | "nextDate"
   >("caseNumber");
   const [sortDesc, setSortDesc] = useState(true);
 
   const [courtCases, setCourtCases] = useState<CourtCases[]>([]);
-  const [newCourtCases, setNewCourtCases] = useState<AddCourtCaseRequest>();
-
+  const [newCourtCases, setNewCourtCases] = useState<AddCourtCaseRequest>({
+    caseNumber: "",
+    location: "",
+    plaintiff: "",
+    defendant: "",
+    status: "open",
+    type: "",
+    outcome: "",
+  });
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -111,7 +126,7 @@ const CourtCasePage = () => {
     }
   };
 
-  const returnModal = () => {
+  const renderModal = () => {
     if (!showModal) return null;
     return (
       <Modal
@@ -121,6 +136,13 @@ const CourtCasePage = () => {
         inputItems={courtCaseInputs}
         buttonCaption="Add Case"
         buttonOnClick={handleButtonClick}
+        values={newCourtCases}
+        handleChange={(name, value) => {
+          setNewCourtCases((prev) => ({
+            ...prev,
+            [name]: value,
+          }));
+        }}
       />
     );
   };
@@ -129,15 +151,53 @@ const CourtCasePage = () => {
     // Logic to add the new court case goes here
     // For now, we'll just close the modal
     //setShowModal(false);
+
     setNewCourtCases({
-      caseNumber: courtCaseInputs[0].value || "",
-      location: courtCaseInputs[1].value || "",
-      plaintiff: courtCaseInputs[2].value || "",
-      defendant: courtCaseInputs[3].value || "",
-      status : courtCaseInputs[5].value || "open",
-      type: courtCaseInputs[6].value || "",
-      outcome: courtCaseInputs[7].value || "",
-    })
+      caseNumber:
+        courtCaseInputs.find((item) => item.name === "case-number")?.value ||
+        "",
+      location:
+        courtCaseInputs.find((item) => item.name === "location")?.value || "",
+      plaintiff:
+        courtCaseInputs.find((item) => item.name === "plaintiff")?.value || "",
+      defendant:
+        courtCaseInputs.find((item) => item.name === "defendant")?.value || "",
+      status:
+        courtCaseInputs.find((item) => item.name === "status")?.value || "open",
+      type: courtCaseInputs.find((item) => item.name === "type")?.value || "",
+      outcome:
+        courtCaseInputs.find((item) => item.name === "outcome")?.value || "",
+    });
+
+    const caseNumberError = ValidateField(
+      "caseNumber",
+      newCourtCases.caseNumber
+    );
+
+    setErrors({
+      caseNumber: caseNumberError,
+    });
+
+    CourtCaseService.createCourtCases(newCourtCases)
+      .then(() => {
+        console.log("Court case added");
+        setShowModal(false);
+        setSuccessAlertMessage("Court case added successfully.");
+        filteredCases.push({
+          caseNumber: newCourtCases.caseNumber,
+          location: newCourtCases.location,
+          plaintiff: newCourtCases.plaintiff,
+          type: newCourtCases.type!,
+          nextDate: "",
+          internalStatus: newCourtCases.status,
+        });
+      })
+      .catch(() => {
+        //Log error somewhere
+        setErrorAlertMessage(
+          "There was an error processing your request, please try again later."
+        );
+      });
 
     console.log("New Court Case:", newCourtCases);
   };
@@ -149,6 +209,7 @@ const CourtCasePage = () => {
   useEffect(() => {
     CourtCaseService.getAllCourtCases().then((response) => {
       const mapped = response.map((courtCase) => ({
+        id: courtCase.id,
         caseNumber: courtCase.caseNumber,
         location: courtCase.location,
         plaintiff: courtCase.plaintiff,
@@ -156,13 +217,35 @@ const CourtCasePage = () => {
         nextDate: courtCase.courtCaseDates?.length
           ? courtCase.courtCaseDates[0].date! //ToDO: find next upcoming date
           : "",
-        internalStatus: courtCase.status as "open" | "closed" | "pending",
+        internalStatus: courtCase.status,
       }));
 
       setCourtCases(mapped);
       console.log("Fetched court cases:", mapped);
     });
-  }, []); // <-- empty dependency (runs once)
+  }, []);
+
+  useEffect(() => {
+    if (!successAlertMessage) return;
+    const timer = setTimeout(() => setSuccessAlertMessage(null), 5000);
+    return () => clearTimeout(timer);
+  }, [successAlertMessage]);
+
+  useEffect(() => {
+    if (!errorAlertMessage) return;
+    const timer = setTimeout(() => setErrorAlertMessage(null), 5000);
+    return () => clearTimeout(timer);
+  }, [errorAlertMessage]);
+
+  const renderSuccessmessage = () => {
+    return (
+      successAlertMessage && <SuccessAlert message={successAlertMessage} />
+    );
+  };
+
+  const renderErrorMessage = () => {
+    return errorAlertMessage && <ErrorAlert message={errorAlertMessage} />;
+  };
 
   return (
     <>
@@ -278,8 +361,10 @@ const CourtCasePage = () => {
             <CourtCaseCard key={courtCase.caseNumber} {...courtCase} />
           ))}
         </div>
+        {renderSuccessmessage()}
+        {renderErrorMessage()}
       </div>
-      {returnModal()}
+      {renderModal()}
     </>
   );
 };

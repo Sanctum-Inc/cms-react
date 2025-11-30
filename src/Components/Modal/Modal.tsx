@@ -9,6 +9,8 @@ interface ModalProps {
   inputItems: InputItem[];
   buttonCaption: string;
   buttonOnClick: () => void;
+  handleChange: (name: string, value: string) => void;
+  values: any;
 }
 
 const Modal = ({
@@ -18,18 +20,19 @@ const Modal = ({
   inputItems,
   buttonCaption,
   buttonOnClick,
+  handleChange,
+  values,
 }: ModalProps) => {
   const handleButtonClick = () => {
     // Logic to add the new court case goes here
     // For now, we'll just close the modal
     console.log("Button clicked");
     inputItems.forEach((element) => {
-      console.log(element);
-      if (element.valueArray && element.valueArray.length > 0) 
-      {
-        element.value = element.valueArray.reduce((acc, curr) => acc + ", " + curr);
+      if (element.valueArray && element.valueArray.length > 0) {
+        element.value = element.valueArray.reduce(
+          (acc, curr) => acc + ", " + curr
+        );
       }
-      console.log(element.label + " " + element.value);
     });
     buttonOnClick();
   };
@@ -39,7 +42,9 @@ const Modal = ({
       console.log("Enter key pressed in modal");
       console.log((e.target as HTMLInputElement).getAttribute("name"));
       inputItems.forEach((element) => {
-        if (element.name === (e.target as HTMLInputElement).getAttribute("name")) {
+        if (
+          element.name === (e.target as HTMLInputElement).getAttribute("name")
+        ) {
           element.valueArray = (element.valueArray ?? []).concat(
             (e.target as HTMLInputElement).value
           );
@@ -75,10 +80,9 @@ const Modal = ({
             <PillInput
               key={index}
               {...item}
-              customOnChange={(e) => {
-                item.value = e.target.value[0];
-              }}
+              value={values[item.name] || ""}
               onKeyDown={handleModalEnterClick}
+              onChange={(e) => handleChange(item.name, e.target.value)}
             />
           ))}
         </div>

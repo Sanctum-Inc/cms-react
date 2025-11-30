@@ -6,5 +6,6 @@ export type AddCourtCaseDateRequest = {
     date: string;
     title: string;
     caseId: string;
+    type: string;
 };
 

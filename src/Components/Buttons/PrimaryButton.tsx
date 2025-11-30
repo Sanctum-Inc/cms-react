@@ -8,7 +8,6 @@ const colorMap = {
 
 interface PrimaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     color?: keyof typeof colorMap;
-    hoverColor?: string | undefined
     centerText?: boolean;
 }
 
@@ -19,11 +18,13 @@ const PrimaryButton = ({ color = 'blue', centerText = true, ...props }: PrimaryB
     const colorClasses = colorMap[color];
 
     return (
-        <button
-            className={`${base} ${colorClasses} ${alignment}`}
-            type='button'
-            {...props}
-        />
+      <button
+        className={`${base} ${colorClasses} ${alignment}`}
+        type="button"
+        {...{
+          ...props,
+        }}
+      />
     );
 }
 

@@ -19,7 +19,7 @@ const CourtCaseInformationTable = ({
       </div>
       {items?.map((item, index) => (
         <div
-          key={index}
+          key={`infoTable-${index}`}
           className="grid grid-cols-3 gap-4 bg-white p-2 py-4 border-b border-gray-200"
         >
           <div className="font-semibold">{item.attributes1}</div>

@@ -4,21 +4,22 @@
 /* eslint-disable */
 import type { CourtCaseDatesResponse } from './CourtCaseDatesResponse';
 import type { DocumentResponse } from './DocumentResponse';
-import type { InvoiceItemResponse } from './InvoiceItemResponse';
+import type { InvoiceResponse } from './InvoiceResponse';
 import type { LawyerResponse } from './LawyerResponse';
 export type CourtCasesResponse = {
-    id?: string;
+    id: string;
     caseNumber: string;
     location: string;
     plaintiff: string;
     defendant: string;
     status: string;
-    type?: string | null;
+    type: string | null;
     outcome?: string | null;
     created?: string;
+    lastModified?: string;
     courtCaseDates?: Array<CourtCaseDatesResponse>;
     documents?: Array<DocumentResponse>;
-    invoiceItems?: Array<InvoiceItemResponse>;
+    invoices?: Array<InvoiceResponse>;
     lawyers?: Array<LawyerResponse>;
 };
 

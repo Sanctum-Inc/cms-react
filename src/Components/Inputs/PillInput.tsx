@@ -36,30 +36,18 @@ const PillInput = (props: PillInputProps) => {
   const inputValue = props.value !== undefined ? String(props.value) : "";
 
   const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && props.addEnterHint) {
-      setValues((prev) => {
-        const updated = [...prev, inputValue];
+    if (e.key !== "Enter") return; // Ignore non-Enter keys
+    if (!props.addEnterHint) return; // Only run if allowed
 
-        props.customOnChange?.({
-          target: {
-            name: props.name!,
-            value: updated,
-          },
-        });
+    e.preventDefault(); // Prevent form submit / blur
 
-        return updated;
-      });
+    if (inputValue.trim() === "") return; // Ignore empty input
 
-      // Clear by calling parent's onChange with empty value
-      if (props.onChange) {
-        props.onChange({
-          target: { name: props.name!, value: "" },
-        } as any);
-      }
-    }
+    // Clear input field after adding 
+    setValues((prev) => [...prev, inputValue]);
 
-    if (e.key === "Enter" && props.onKeyDown) {
-      props.onKeyDown(e);
+    if (props.onChange) {
+      props.onChange(e as unknown as React.ChangeEvent<HTMLInputElement>);
     }
   };
 
@@ -81,20 +69,10 @@ const PillInput = (props: PillInputProps) => {
   };
 
   const handleSetValuesSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-    const newValue = e.target.value;
 
-    setValues((prev) => {
-      const updated = [...prev, newValue];
-
-      props.customOnChange?.({
-        target: {
-          name: props.name!,
-          value: updated,
-        },
-      });
-
-      return updated;
-    });
+    if (props.onChange) {
+      props.onChange(e as unknown as React.ChangeEvent<HTMLInputElement>);
+    }
   };
 
   const handleFileOpen = () => {
@@ -121,19 +99,26 @@ const PillInput = (props: PillInputProps) => {
     console.log(getFiles);
   };
 
+  const {
+    label,
+    icon,
+    addEnterHint,
+    width,
+    height,
+    inputType,
+    selectOptions,
+    customOnChange,
+    error,
+    className,
+    ...restProps
+  } = props;
+
   const renderInput = (inputType: "input" | "select" | "file") => {
     switch (inputType) {
       case "input":
         return (
           <input
-            {...{
-              ...props,
-              onChange: undefined,
-              height: undefined,
-              width: undefined,
-              inputType: undefined,
-              customOnChange: undefined,
-            }}
+            {...restProps}
             className={`border ${
               props.error ? "border-red-500" : "border-gray-300"
             } rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
@@ -201,7 +186,7 @@ const PillInput = (props: PillInputProps) => {
       )}
       <div className="relative">
         {renderInput(props.inputType)}
-        {props.icon && (
+        {props.icon && props.addEnterHint && (
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none hover:text-orange-700 cursor-pointer">
             <props.icon size={16} />
           </span>

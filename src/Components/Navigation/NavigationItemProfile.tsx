@@ -74,7 +74,6 @@ const NavigationItemProfile = ({
           <PrimaryButton
             centerText={false}
             color="red"
-            hoverColor="darkred"
             onClick={handleLogout}
           >
             Logout

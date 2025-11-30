@@ -14,5 +14,6 @@ export type InvoiceResponse = {
     bank: string;
     branchCode: string;
     accountNumber: string;
+    isPaid: boolean;
 };
 
