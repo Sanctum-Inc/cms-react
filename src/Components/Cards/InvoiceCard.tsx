@@ -12,10 +12,11 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 
 interface InvoiceCardProps {
   invoices: Invoice;
-  openModal: (show: boolean) => void;
+  openModal: (show: boolean, caseNumber:string ) => void;
+  caseNumber: string;
 }
 
-const InvoiceCard = ({ invoices, openModal }: InvoiceCardProps) => {
+const InvoiceCard = ({ invoices, openModal, caseNumber }: InvoiceCardProps) => {
   const [showItems, setShowItems] = useState(false);
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -63,12 +64,12 @@ const InvoiceCard = ({ invoices, openModal }: InvoiceCardProps) => {
             key={index}
             className="grid grid-cols-5 gap-4 odd:bg-white even:bg-gray-50 p-2 py-4 border-b border-gray-200"
           >
-            <div className="font-semibold">{item.date}</div>
+            <div className="font-semibold">{item.date.toDateString()}</div>
             <div className="text-gray-500">{item.description}</div>
             <div className="text-gray-500">{item.hours}</div>
             <div className="text-gray-500">
               <span>R</span>
-              <span>{formatMoney(item.rate)}</span>
+              <span>{formatMoney(item.rate || 0)}</span>
             </div>
             <div className="font-semibold">
               <span>R</span>
@@ -80,9 +81,10 @@ const InvoiceCard = ({ invoices, openModal }: InvoiceCardProps) => {
     );
   };
 
-    const handleOpenModal =() => {
+    const handleOpenModal =(caseNumber: string) => {
         setOpen(false);
-        openModal(true);
+        console.log(`1. ${caseNumber}`)
+        openModal(true, caseNumber);
     }
 
   return (
@@ -98,13 +100,13 @@ const InvoiceCard = ({ invoices, openModal }: InvoiceCardProps) => {
               {invoices.invoiceNumber}
             </span>
             <span className="text-gray-500 text-sm">
-              Case: {invoices.caseNumber}
+              Case: {caseNumber}
             </span>
           </div>
           <div className="flex flex-col">
             <span>
               <Users className="inline-block mr-2 h-5 w-5 text-gray-400" />
-              {invoices.clientName}
+              {invoices.plaintiff} vs {invoices.defendant}
             </span>
             <span className="text-gray-500 text-sm">Client</span>
           </div>
@@ -114,7 +116,7 @@ const InvoiceCard = ({ invoices, openModal }: InvoiceCardProps) => {
               <span>R</span>
               <span>
                 {formatMoney(
-                  invoices.Items.reduce((total, item) => total + item.amount, 0)
+                  invoices.total
                 )}
               </span>
             </span>
@@ -166,7 +168,7 @@ const InvoiceCard = ({ invoices, openModal }: InvoiceCardProps) => {
                 <div className="absolute right-0 top-7 mt-2 w-40 bg-white border rounded shadow-lg z-50">
                   <button
                     className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                    onClick={handleOpenModal}
+                    onClick={() => handleOpenModal(caseNumber)}
                   >
                     Add new Item
                   </button>

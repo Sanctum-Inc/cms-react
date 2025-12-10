@@ -5,6 +5,7 @@ import {
   type ForwardRefExoticComponent,
   type RefAttributes,
 } from "react";
+import type { KeyValue } from "../../Models/InputItem";
 
 type PillInputChangeEvent = {
   target: {
@@ -23,7 +24,7 @@ interface PillInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   width?: string;
   height?: string;
   inputType: "input" | "select" | "file";
-  selectOptions?: string[];
+  selectOptions?: KeyValue[];
   customOnChange?: (e: PillInputChangeEvent) => void;
   error?: boolean;
 }
@@ -138,15 +139,19 @@ const PillInput = (props: PillInputProps) => {
               error ? "border-red-500" : "border-gray-300"
             } rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
               className ?? ""
-            } ${icon ? "pr-10" : ""} ${
-              width ? "w-" + width : "w-full"
-            } ${height ? "h-" + height : "h-13"}`}
+            } ${icon ? "pr-10" : ""} ${width ? "w-" + width : "w-full"} ${
+              height ? "h-" + height : "h-13"
+            }`}
             value={inputValue}
             onChange={handleSetValuesSelect}
           >
+            <option disabled value="">
+              Select an option
+            </option>
+
             {selectOptions?.map((option) => (
-              <option key={option} value={option}>
-                {option}
+              <option key={option.key} value={option.key}>
+                {option.value}
               </option>
             ))}
           </select>

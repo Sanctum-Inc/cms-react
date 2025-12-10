@@ -13,7 +13,12 @@ interface InputItem {
   width?: string;
   height?: string;
   inputType: "input" | "select" | "file";
-  selectOptions?: string[];
+  selectOptions?: KeyValue[];
 }
 
-export type { InputItem };
+interface KeyValue{
+  key: string;
+  value: string;
+}
+
+export type { InputItem, KeyValue };

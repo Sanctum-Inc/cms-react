@@ -11,7 +11,8 @@
     "test": "vitest",
     "build:production": "tsc -b && vite build --mode production",
     "build:staging": "tsc -b && vite build --mode staging",
-    "generate:client": "npx openapi -c axios -i schema/cms-api.json -o src/api"
+    "generate:client": "npx openapi -c axios -i schema/cms-api.json -o src/api",
+    "generate:client-live": "npx openapi -c axios -i https://localhost:8080/openapi/v1.json -o src/api"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.16",

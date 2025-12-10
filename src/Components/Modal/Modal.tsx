@@ -1,6 +1,7 @@
 import PrimaryButton from "../Buttons/PrimaryButton";
 import PillInput from "../Inputs/PillInput";
 import type { InputItem } from "../../Models/InputItem";
+import type { Invoice } from "../../Models/Invoices";
 
 interface ModalProps {
   handleShowModal: (show: boolean) => void;
@@ -57,6 +58,7 @@ const Modal = ({
     }
   };
 
+
   return (
     <>
       <div
@@ -78,13 +80,11 @@ const Modal = ({
         <div className="justify-center px-10">
           {inputItems.map((item, index) => (
             <PillInput
-              key={index}
+              key={`${index}-modalpillInput`}
               {...item}
-              value={values[item.name] || ""}
+              value={item.value}
               onKeyDown={handleModalEnterClick}
-              onChange={(e) =>
-                handleChange && handleChange(item.name, e.target.value)
-              }
+              onChange={(e) => handleChange?.(item.name, e.target.value)}
             />
           ))}
         </div>

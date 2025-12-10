@@ -1,16 +1,19 @@
 export interface InvoiceItemEntry {
-  date: string;
+  date: Date;
   description: string;
   hours: number;
-  rate: number;
+  rate: number | null;
   amount: number;
 }
 
 export interface Invoice {
+  id: string;
+  caseId: string;
   invoiceNumber: string;
-  clientName: string;
   caseNumber: string;
   status: string;
   Items: InvoiceItemEntry[];
   total: number;
+  plaintiff: string;
+  defendant: string;
 }
