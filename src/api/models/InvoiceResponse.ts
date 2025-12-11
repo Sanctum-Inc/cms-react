@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { InvoiceItemResponse } from './InvoiceItemResponse';
+import type { InvoiceStatus } from './InvoiceStatus';
 export type InvoiceResponse = {
     id: string;
     invoiceNumber: string;
@@ -14,7 +15,7 @@ export type InvoiceResponse = {
     bank: string;
     branchCode: string;
     accountNumber: string;
-    isPaid: boolean;
+    status: InvoiceStatus;
     caseNumber: string;
     plaintiff: string;
     defendant: string;

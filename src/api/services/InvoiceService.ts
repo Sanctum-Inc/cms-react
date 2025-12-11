@@ -3,8 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { AddInvoiceRequest } from '../models/AddInvoiceRequest';
+import type { FileContentResult } from '../models/FileContentResult';
 import type { InvoiceResponse } from '../models/InvoiceResponse';
 import type { UpdateInvoiceRequest } from '../models/UpdateInvoiceRequest';
+import type { UpdateInvoiceStatusRequest } from '../models/UpdateInvoiceStatusRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
@@ -93,6 +95,48 @@ export class InvoiceService {
             path: {
                 'id': id,
             },
+            errors: {
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
+     * @param id
+     * @returns FileContentResult OK
+     * @throws ApiError
+     */
+    public static generatePdf(
+        id: string,
+    ): CancelablePromise<FileContentResult> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Invoice/pdf/{id}',
+            path: {
+                'id': id,
+            },
+            errors: {
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
+     * @param id
+     * @param requestBody
+     * @returns void
+     * @throws ApiError
+     */
+    public static updateInvoicesStatus(
+        id: string,
+        requestBody: UpdateInvoiceStatusRequest,
+    ): CancelablePromise<void> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/Invoice/status/{id}',
+            path: {
+                'id': id,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 404: `Not Found`,
             },

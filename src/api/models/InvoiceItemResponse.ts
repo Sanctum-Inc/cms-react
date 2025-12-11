@@ -7,9 +7,7 @@ export type InvoiceItemResponse = {
     date: string;
     name: string;
     hours: number;
-    costPerHour: number | null;
-    isDayFee: boolean;
-    dayFeeAmount: number | null;
+    costPerHour: number;
     total: number;
 };
 

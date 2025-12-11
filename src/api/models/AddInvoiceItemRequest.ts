@@ -6,9 +6,7 @@ export type AddInvoiceItemRequest = {
     invoiceId: string;
     name: string;
     hours: number;
-    costPerHour: number | null;
-    dayFeeAmount: number | null;
+    costPerHour: number;
     caseId: string;
-    isDayFee: boolean;
 };
 

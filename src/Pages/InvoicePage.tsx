@@ -5,29 +5,37 @@ import type { InputItem, KeyValue } from "../Models/InputItem";
 import SortBar from "../Components/Inputs/SortBar";
 import InvoiceCard from "../Components/Cards/InvoiceCard";
 import Header from "../Components/Header/Header";
-import { CourtCaseService, InvoiceService, type AddInvoiceItemRequest } from "../api";
-import type { Invoice } from "../Models/Invoices";
+import {
+  CourtCaseService,
+  InvoiceItemService,
+  InvoiceService,
+} from "../api";
+import { statusLabels, type Invoice, type InvoiceItemEntry, type InvoiceStatus } from "../Models/Invoices";
+import SuccessAlert from "../Components/Alerts/SuccessAlert";
+import ErrorAlert from "../Components/Alerts/ErrorAlert";
 
 const InvoicePage = () => {
   const [sortBy, setSortBy] = useState<
     "invoiceNumber" | "total" | "status" | "caseNumber"
   >("invoiceNumber");
   const [sortDesc, setSortDesc] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [newInvoice, setNewInvoice] = useState<AddInvoiceItemRequest>({
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showUpdatemodal, setShowUpdateModal] = useState(false);
+  const [newInvoice, setNewInvoice] = useState<InvoiceItemEntry>({
     caseId: "",
-    costPerHour: 0,
-    dayFeeAmount: 0,
+    rate: 0,
     hours: 0,
     invoiceId: "",
-    isDayFee: false,
-    name: ""
+    description: "",
+    amount: 0,
+    date: new Date(),
+    id: ""
   });
 
   const [inputItems, setInputItems] = useState<InputItem[]>([
     {
       label: "Case Number:",
-      name: "CaseId",
+      name: "caseId",
       type: "text",
       placeholder: "Enter case number",
       value: "",
@@ -36,16 +44,22 @@ const InvoicePage = () => {
     },
     {
       label: "Invoice Number:",
-      name: "InvoiceId",
+      name: "invoiceId",
       type: "text",
-      placeholder: "Enter invoice number",
       value: "",
       inputType: "select",
       selectOptions: [],
     },
     {
+      label: "Description:",
+      name: "description",
+      type: "text",
+      value: "",
+      inputType: "input",
+    },
+    {
       label: "Date of Service:",
-      name: "dateOfService",
+      name: "date",
       type: "date",
       placeholder: "",
       value: "",
@@ -61,27 +75,10 @@ const InvoicePage = () => {
     },
     {
       label: "Cost Per Hour:",
-      name: "costPerHour",
+      name: "rate",
       type: "number",
       placeholder: "Enter hourly cost",
       value: "",
-      inputType: "input",
-    },
-    {
-      label: "Day Fee Amount:",
-      name: "dayFeeAmount",
-      type: "number",
-      placeholder: "Enter day fee amount",
-      value: "",
-      inputType: "input",
-    },
-    {
-      label: "Is Day Fee:",
-      name: "isDayFee",
-      type: "checkbox",
-      value: "false",
-      width: "30",
-      height: "30",
       inputType: "input",
     },
   ]);
@@ -90,6 +87,12 @@ const InvoicePage = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [successAlertMessage, setSuccessAlertMessage] = useState<string | null>(
+    null
+  );
+  const [errorAlertMessage, setErrorAlertMessage] = useState<string | null>(
+    null
+  );
 
   // Compute filtered + sorted cases
   const filteredInvoices = useMemo(() => {
@@ -100,7 +103,7 @@ const InvoicePage = () => {
       return (
         c.caseNumber.toLowerCase().includes(q) ||
         c.invoiceNumber.toLowerCase().includes(q) ||
-        c.status.toLowerCase().includes(q) ||
+        statusLabels[c.status].toLowerCase().includes(q) ||
         c.Items.toString().toLowerCase().includes(q) ||
         c.total.toString().toLowerCase().includes(q)
       );
@@ -108,7 +111,9 @@ const InvoicePage = () => {
 
     const matchesStatus = (c: (typeof invoices)[number]) => {
       if (statusFilter === "all") return true;
-      return c.status.toLowerCase() === statusFilter.toLowerCase();
+      return (
+        statusLabels[c.status].toLowerCase() === statusFilter.toLowerCase()
+      );
     };
 
     const compare = (
@@ -175,40 +180,59 @@ const InvoicePage = () => {
 
     setNewInvoice((prev) => ({
       ...prev,
-      [name]: value,
+      [name]:
+        name === "hours" || name === "costPerHour" || name === "rate"
+          ? Number(value)
+          : value,
     }));
   };
 
 
   const returnModal = () => {
-    if (!showModal) return null;
-    return (
-      <Modal
-        setShowModal={setShowModal}
-        handleShowModal={() => handleShowModal(true, "", "")}
-        title="New Invoice Item"
-        inputItems={inputItems}
-        buttonCaption="Add Item"
-        buttonOnClick={handleButtonClick}
-        values={newInvoice}
-        handleChange={handleChange}
-      />
-    );
+    if (showAddModal)
+      return (
+        <Modal
+          setShowModal={setShowAddModal}
+          handleShowModal={() => handleShowAddModal(true, "", "")}
+          title="New Invoice Item"
+          inputItems={inputItems}
+          buttonCaption="Add Item"
+          buttonOnClick={handleAddButtonClick}
+          values={newInvoice}
+          handleChange={handleChange}
+        />
+      );
+    else if (showUpdatemodal)
+      return (
+        <Modal
+          setShowModal={setShowUpdateModal}
+          handleShowModal={() =>
+            handleShowUpdateModal({} as InvoiceItemEntry, "", "")
+          }
+          title="Update Invoice Item"
+          inputItems={inputItems}
+          buttonCaption="Update Item"
+          buttonOnClick={handleUpdateButtonClick}
+          values={newInvoice}
+          handleChange={handleChange}
+        />
+      );
   };
 
-  const handleShowModal = (
-    show: boolean,
-    caseId: string,
-    invoiceId: string
+  const handleShowUpdateModal = (
+    invoice: InvoiceItemEntry,
+    invoiceId: string,
+    caseId: string
   ) => {
     setNewInvoice({
       caseId: caseId,
-      costPerHour: 0,
-      dayFeeAmount: 0,
-      hours: 0,
+      rate: invoice.rate,
+      hours: invoice.hours,
       invoiceId: invoiceId,
-      isDayFee: false,
-      name: "",
+      description: invoice.description,
+      date: invoice.date,
+      amount: invoice.amount,
+      id: invoice.id,
     });
 
     setInputItems((prev) => {
@@ -216,25 +240,174 @@ const InvoicePage = () => {
       updated[0] = {
         ...updated[0],
         // whatever you want to change
-        value: caseId
+        value: caseId,
       };
       updated[1] = {
         ...updated[1],
-        value: invoiceId
-      }
+        value: invoiceId,
+      };
+      updated[2] = {
+        ...updated[2],
+        value: invoice.description,
+      };
+      updated[3] = {
+        ...updated[3],
+        value: invoice.date.toISOString().split("T")[0],
+      };
+      updated[4] = {
+        ...updated[4],
+        value: invoice.hours.toString(),
+      };
+      updated[5] = {
+        ...updated[5],
+        value: invoice.rate.toString(),
+      };
       return updated;
     });
 
-    setShowModal(show);
+    setShowUpdateModal(true);
+  };
+
+  const handleShowAddModal = (
+    show: boolean,
+    caseId: string,
+    invoiceId: string
+  ) => {
+    setNewInvoice({
+      caseId: caseId,
+      rate: 0,
+      hours: 0,
+      invoiceId: invoiceId,
+      description: "",
+      amount: 0,
+      date: new Date(),
+    id: ""
+    });
+
+    setInputItems((prev) => {
+      const updated = [...prev];
+      updated[0] = {
+        ...updated[0],
+        // whatever you want to change
+        value: caseId,
+      };
+      updated[1] = {
+        ...updated[1],
+        value: invoiceId,
+      };
+      updated[1] = {
+        ...updated[1],
+        value: invoiceId,
+      };
+      return updated;
+    });
+
+    setShowAddModal(show);
     console.log(inputItems);
     console.log(newInvoice);
   };
 
-  const handleButtonClick = () => {
+  const handleAddButtonClick = () => {
     // Logic to add the new court case goes here
     // For now, we'll just close the modal
     //setShowModal(false);
-    console.log(newInvoice)
+    console.log(newInvoice);
+    InvoiceItemService.createInvoiceItems({
+      caseId: newInvoice.caseId,
+      hours: newInvoice.hours,
+      costPerHour: newInvoice.rate,
+      name: newInvoice.description,
+      invoiceId: newInvoice.invoiceId,
+    })
+      .then((response) => {
+        console.log("Court case added" + response);
+        setShowAddModal(false);
+        setSuccessAlertMessage("Invoice item added successfully.");
+
+        setInvoice((prev) =>
+          prev.map((inv) =>
+            inv.id === newInvoice.invoiceId
+              ? {
+                  ...inv,
+                  Items: [
+                    ...inv.Items,
+                    {
+                      caseId: newInvoice.caseId,
+                      invoiceId: newInvoice.invoiceId,
+                      date: newInvoice.date,
+                      hours: newInvoice.hours,
+                      rate: newInvoice.rate,
+                      amount: newInvoice.hours * newInvoice.rate,
+                      description: newInvoice.description,
+                      id: newInvoice.id
+                    },
+                  ],
+                  total: inv.total + newInvoice.hours * newInvoice.rate,
+                }
+              : inv
+          )
+        );
+      })
+      .catch(() => {
+        setErrorAlertMessage(
+          "There was an error processing your request, please try again later."
+        );
+      });
+  };
+
+  const handleUpdateButtonClick = () => {
+    console.log(newInvoice);
+
+    InvoiceItemService.updateInvoiceItems(newInvoice.id, {
+      caseId: newInvoice.caseId,
+      hours: newInvoice.hours,
+      costPerHour: newInvoice.rate,
+      name: newInvoice.description,
+      invoiceId: newInvoice.invoiceId,
+    })
+      .then((response) => {
+        console.log("Court case updated" + response);
+        setShowUpdateModal(false); // <-- FIXED
+
+        setSuccessAlertMessage("Invoice item updated successfully.");
+
+        setInvoice((prev) =>
+          prev.map((inv) =>
+            inv.id === newInvoice.invoiceId
+              ? {
+                  ...inv,
+                  Items: inv.Items.map((item) =>
+                    item.id === newInvoice.id
+                      ? {
+                          ...item,
+                          caseId: newInvoice.caseId,
+                          invoiceId: newInvoice.invoiceId,
+                          date: newInvoice.date,
+                          hours: newInvoice.hours,
+                          rate: newInvoice.rate,
+                          amount: newInvoice.hours * newInvoice.rate,
+                          description: newInvoice.description,
+                        }
+                      : item
+                  ),
+                  total: inv.Items.reduce((sum, item) => {
+                    const updatedAmount =
+                      item.id === newInvoice.id
+                        ? newInvoice.hours * newInvoice.rate
+                        : item.amount;
+
+                    return sum + updatedAmount;
+                  }, 0),
+                }
+              : inv
+          )
+        );
+      })
+      .catch(() => {
+        setErrorAlertMessage(
+          "There was an error processing your request, please try again later."
+        );
+      });
   };
 
   const handleSort = (
@@ -258,16 +431,19 @@ const InvoicePage = () => {
           caseNumber: invoice.caseNumber,
           clientName: invoice.clientName,
           invoiceNumber: invoice.invoiceNumber,
-          status: invoice.isPaid ? "Paid" : "Unpaid",
+          status: invoice.status as InvoiceStatus,
           total: invoice.totalAmount,
           plaintiff: invoice.plaintiff,
           defendant: invoice.defendant,
           Items: invoice.items.map((item) => ({
             amount: item.total,
-            hours: item.isDayFee ? 8 : item.hours,
+            hours: item.hours,
             date: new Date(item.date),
             description: item.name,
-            rate: item.isDayFee ? item.dayFeeAmount : item.costPerHour,
+            rate: item.costPerHour,
+            caseId: invoice.caseId,
+            invoiceId: invoice.id,
+            id: item.id
           })),
         }));
 
@@ -275,7 +451,7 @@ const InvoicePage = () => {
         response.forEach((invoice) => {
           options.push({
             key: invoice.id,
-            value: invoice.invoiceNumber
+            value: invoice.invoiceNumber,
           });
         });
 
@@ -300,7 +476,7 @@ const InvoicePage = () => {
           options.push({
             key: courtCase.id,
             value: courtCase.caseNumber,
-          })
+          });
         });
 
         setInputItems((prev) => {
@@ -314,10 +490,22 @@ const InvoicePage = () => {
         });
       })
       .catch((error) => console.log(error));
-
   }, []);
 
+  useEffect(() => {
+    if (!successAlertMessage) return;
+    const timer = setTimeout(() => setSuccessAlertMessage(null), 5000);
+    return () => clearTimeout(timer);
+  }, [successAlertMessage]);
 
+  const renderSuccessmessage = () => {
+    return (
+      successAlertMessage && <SuccessAlert message={successAlertMessage} />
+    );
+  };
+  const renderErrorMessage = () => {
+    return errorAlertMessage && <ErrorAlert message={errorAlertMessage} />;
+  };
 
   return (
     <>
@@ -325,7 +513,7 @@ const InvoicePage = () => {
         showButton={true}
         title="Invoice Management"
         buttonCaption="Add New Invoice"
-        handleShowModal={() => handleShowModal(true, "", "")}
+        handleShowModal={() => handleShowAddModal(true, "", "")}
       />
       <SortBar
         searchQuery={searchQuery}
@@ -412,12 +600,17 @@ const InvoicePage = () => {
           key={`${index}-invoiceCard`}
           invoices={invoice}
           caseNumber={invoice.caseNumber}
-          openModal={() =>
-            handleShowModal(true, invoice.caseId, invoice.id)
+          openAddModal={() =>
+            handleShowAddModal(true, invoice.caseId, invoice.id)
+          }
+          openUpdateModal={(x) =>
+            handleShowUpdateModal(x, invoice.id, invoice.caseId)
           }
         />
       ))}
       {returnModal()}
+      {renderSuccessmessage()}
+      {renderErrorMessage()}
     </>
   );
 };

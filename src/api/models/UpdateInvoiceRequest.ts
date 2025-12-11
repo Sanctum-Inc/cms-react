@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { InvoiceStatus } from './InvoiceStatus';
 export type UpdateInvoiceRequest = {
     id: string;
     invoiceNumber: string;
@@ -13,5 +14,6 @@ export type UpdateInvoiceRequest = {
     bank: string;
     branchCode: string;
     accountNumber: string;
+    status: InvoiceStatus;
 };
 

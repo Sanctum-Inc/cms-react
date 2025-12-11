@@ -3,13 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 export type UpdateInvoiceItemRequest = {
-    id: string;
     invoiceId: string;
     name: string;
     hours: number;
-    costPerHour: number | null;
-    dayFeeAmount: number | null;
+    costPerHour: number;
     caseId: string;
-    isDayFee: boolean;
 };
 
