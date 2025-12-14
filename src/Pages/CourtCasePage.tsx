@@ -1,4 +1,4 @@
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Plus } from "lucide-react";
 import CourtCaseCard from "../Components/Cards/CourtCaseCard";
 import { useState, useMemo, useEffect } from "react";
 import Modal from "../Components/Modal/Modal";
@@ -6,9 +6,10 @@ import SortBar from "../Components/Inputs/SortBar";
 import Header from "../Components/Header/Header";
 import { CourtCaseService, type AddCourtCaseRequest } from "../api";
 import type { CourtCases } from "../Models/CourtCases";
-import { courtCaseInputs } from "../data/CourtCaseInputs";
 import SuccessAlert from "../Components/Alerts/SuccessAlert";
 import ErrorAlert from "../Components/Alerts/ErrorAlert";
+import { statusLabels } from "../Models/Invoices";
+import type { InputItem } from "../Models/InputItem";
 
 const CourtCasePage = () => {
   
@@ -38,6 +39,101 @@ const CourtCasePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [courtCaseInputs, setCourtCaseInputs] = useState<InputItem[]>([
+    {
+      label: "Case Number:",
+      name: "caseNumber",
+      type: "text",
+      placeholder: "Enter case number",
+      value: "",
+      inputType: "input",
+    },
+    {
+      label: "Location:",
+      name: "location",
+      type: "text",
+      placeholder: "City, State",
+      value: "",
+      inputType: "input",
+    },
+    {
+      label: "Plaintiff:",
+      name: "plaintiff",
+      type: "text",
+      placeholder: "Enter plaintiff name",
+      value: "",
+      inputType: "input",
+    },
+    {
+      label: "Defendant:",
+      name: "defendant",
+      type: "text",
+      placeholder: "Enter defendant names",
+      value: "",
+      icon: Plus,
+      addEnterHint: true,
+      inputType: "input",
+    },
+    {
+      label: "Lawyer:",
+      name: "lawyer",
+      type: "text",
+      placeholder: "Enter lawyer names",
+      value: "",
+      icon: Plus,
+      addEnterHint: true,
+      inputType: "input",
+    },
+    {
+      label: "Status:",
+      name: "status",
+      type: "text",
+      placeholder: "Enter status",
+      value: "",
+      inputType: "select",
+      selectOptions: [
+        { key: "0", value: "Open" },
+        { key: "1", value: "Closed" },
+        { key: "2", value: "Pending" },
+        { key: "3", value: "Appealed" },
+        { key: "4", value: "Dismissed" },
+        { key: "5", value: "Settled" },
+      ],
+      addEnterHint: false,
+    },
+    {
+      label: "Type:",
+      name: "type",
+      type: "text",
+      placeholder: "Enter type",
+      value: "",
+      inputType: "select",
+      selectOptions: [
+        { key: "0", value: "Criminal" },
+        { key: "1", value: "Civil" },
+        { key: "2", value: "Family" },
+        { key: "3", value: "Labor" },
+        { key: "4", value: "Commercial" },
+        { key: "5", value: "Road Accident Fund" },
+      ],
+    },
+    {
+      label: "Outcome:",
+      name: "outcome",
+      type: "text",
+      placeholder: "Enter outcome",
+      value: "",
+      inputType: "select",
+      selectOptions: [
+        { key: "0", value: "Guilty" },
+        { key: "1", value: "Not Guilty" },
+        { key: "2", value: "Settled" },
+        { key: "3", value: "Withdrawn" },
+        { key: "4", value: "Ongoing" },
+        { key: "5", value: "N/A" },
+      ],
+    },
+  ]);
 
   // Compute filtered + sorted cases
   const filteredCases = useMemo(() => {
@@ -56,7 +152,10 @@ const CourtCasePage = () => {
 
     const matchesStatus = (c: (typeof courtCases)[number]) => {
       if (statusFilter === "all") return true;
-      return c.internalStatus.toLowerCase() === statusFilter.toLowerCase();
+      return (
+        statusLabels[c.internalStatus].toLowerCase() ===
+        statusFilter.toLowerCase()
+      );
     };
 
     const matchesType = (c: (typeof courtCases)[number]) => {
@@ -125,6 +224,18 @@ const CourtCasePage = () => {
     }
   };
 
+  const handleChange = (name: string, value: string) => {
+    setCourtCaseInputs((prev) =>
+      prev.map((i) => (i.name === name ? { ...i, value } : i))
+    );
+
+    setNewCourtCases((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+  };
+
   const renderModal = () => {
     if (!showModal) return null;
     return (
@@ -136,12 +247,7 @@ const CourtCasePage = () => {
         buttonCaption="Add Case"
         buttonOnClick={handleButtonClick}
         values={newCourtCases}
-        handleChange={(name, value) => {
-          setNewCourtCases((prev) => ({
-            ...prev,
-            [name]: value,
-          }));
-        }}
+        handleChange={handleChange}
       />
     );
   };

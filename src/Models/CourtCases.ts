@@ -1,3 +1,5 @@
+import type { InvoiceStatus } from "./Invoices";
+
 interface CourtCases {
     id: string;
     caseNumber: string;
@@ -5,7 +7,7 @@ interface CourtCases {
     plaintiff: string;
     type: string;
     nextDate: string;
-    internalStatus: string;
+    internalStatus: InvoiceStatus;
   };
 
 export type { CourtCases };
