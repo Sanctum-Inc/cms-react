@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import type { InputItem } from "../../Models/InputItem";
 import PillInput from "../Inputs/PillInput";
+import { UserService } from "../../api";
 
 const UserProfile = () => {
   const inputs: InputItem[] = [
@@ -40,6 +42,14 @@ const UserProfile = () => {
       type: "text",
     },
   ];
+
+  useEffect(() => {
+    // Fetch and set user profile data here if needed
+    UserService.getById("current").then((response) => {
+      const userData = response.data;
+      // You can set the fetched data to state and pass it to inputs if needed
+    });
+  }, []);
 
   return (
     <div className="grid grid-cols-10 gap-5">

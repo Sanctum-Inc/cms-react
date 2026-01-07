@@ -13,7 +13,7 @@ interface PrimaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const PrimaryButton = ({ color = 'blue', centerText = true, ...props }: PrimaryButtonProps) => {
     const base =
-        'w-full text-white font-bold py-2 px-4 rounded-xl transition duration-300';
+        'w-full text-white font-bold py-2 px-4 rounded-xl transition duration-300 mb-4';
     const alignment = centerText ? 'text-center' : '';
     const colorClasses = colorMap[color];
 

@@ -7,6 +7,10 @@ export type CourtCaseDatesResponse = {
     date: string;
     title: string;
     type: string;
+    caseNumber: string;
     caseId: string;
+    caseType: string;
+    platiniff: string;
+    defendent: string;
 };
 

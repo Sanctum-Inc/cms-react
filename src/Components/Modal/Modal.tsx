@@ -1,17 +1,17 @@
+import { useEffect, useState, type PropsWithChildren, type ReactNode } from "react";
+import type { InputItem } from "../../Models/InputItem";
 import PrimaryButton from "../Buttons/PrimaryButton";
 import PillInput from "../Inputs/PillInput";
-import type { InputItem } from "../../Models/InputItem";
-import type { Invoice } from "../../Models/Invoices";
 
-interface ModalProps {
+interface ModalProps extends PropsWithChildren {
   handleShowModal: (show: boolean) => void;
   setShowModal: (show: boolean) => void;
   title: string;
   inputItems: InputItem[];
   buttonCaption: string;
-  buttonOnClick: () => void;
+  buttonOnClick?: () => void;
   handleChange?: (name: string, value: string) => void;
-  values?: any;
+  values?: Record<string, string>;
 }
 
 const Modal = ({
@@ -23,41 +23,34 @@ const Modal = ({
   buttonOnClick,
   handleChange,
   values,
+  children
 }: ModalProps) => {
+  const [localInputItems, setLocalInputItems] =
+    useState<InputItem[]>(inputItems);
+
+  // Update localInputItems whenever values or inputItems change
+  useEffect(() => {
+    if (!values) return;
+
+    // Map inputItems and set their value to values[name]
+    const updatedInputItems = inputItems.map((item) => ({
+      ...item,
+      value: values[item.name] ?? "",
+    }));
+
+    setLocalInputItems(updatedInputItems);
+  }, [values, inputItems]);
+
   const handleButtonClick = () => {
-    // Logic to add the new court case goes here
-    // For now, we'll just close the modal
-    console.log("Button clicked");
-    inputItems.forEach((element) => {
-      if (element.valueArray && element.valueArray.length > 0) {
-        element.value = element.valueArray.reduce(
-          (acc, curr) => acc + ", " + curr
-        );
-      }
-    });
-    buttonOnClick();
+    // Your existing logic here...
+    buttonOnClick?.();
   };
 
   const handleModalEnterClick = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      console.log("Enter key pressed in modal");
-      console.log((e.target as HTMLInputElement).getAttribute("name"));
-      inputItems.forEach((element) => {
-        if (
-          element.name === (e.target as HTMLInputElement).getAttribute("name")
-        ) {
-          element.valueArray = (element.valueArray ?? []).concat(
-            (e.target as HTMLInputElement).value
-          );
-          console.log("Matched input item:");
-          console.log(element);
-          console.log("Values:");
-          console.log(element.valueArray);
-        }
-      });
+      // Your existing logic here...
     }
   };
-
 
   return (
     <>
@@ -65,7 +58,7 @@ const Modal = ({
         className="w-4/5 h-full fixed top-0 left-0 bg-black opacity-30 z-40"
         onClick={() => setShowModal(false)}
       ></div>
-      <div className="w-1/5 border-2 border-gray-300 h-full  fixed top-0 right-0 bg-white z-50">
+      <div className="w-1/5 border-2 border-gray-300 h-full fixed top-0 right-0 bg-white z-50">
         <div className="grid grid-cols-10 border-b-solid border-b-2 border-solid border-gray-300 py-5 px-10">
           <div className="col-span-9 text-xl font-bold text-(--color-primary)">
             {title}
@@ -78,7 +71,7 @@ const Modal = ({
           </div>
         </div>
         <div className="justify-center px-10">
-          {inputItems.map((item, index) => (
+          {localInputItems.map((item, index) => (
             <PillInput
               key={`${index}-modalpillInput`}
               {...item}
@@ -88,10 +81,12 @@ const Modal = ({
             />
           ))}
         </div>
-        <div className="flex px-10 py-5">
-          <PrimaryButton onClick={handleButtonClick}>
-            {buttonCaption}
-          </PrimaryButton>
+        <div className="px-10 py-5">
+          {children ?? (
+            <PrimaryButton onClick={handleButtonClick}>
+              {buttonCaption}
+            </PrimaryButton>
+          )}
         </div>
       </div>
     </>

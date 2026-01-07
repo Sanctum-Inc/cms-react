@@ -2,4 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type UpdateCourtCaseDateRequest = Record<string, any>;
+export type UpdateCourtCaseDateRequest = {
+    date: string;
+    title: string;
+    caseId: string;
+};
+

@@ -334,6 +334,7 @@ const CourtCasePage = () => {
     return () => clearTimeout(timer);
   }, [errorAlertMessage]);
 
+  
   const renderSuccessmessage = () => {
     return (
       successAlertMessage && <SuccessAlert message={successAlertMessage} />
@@ -461,6 +462,8 @@ const CourtCasePage = () => {
         {renderSuccessmessage()}
         {renderErrorMessage()}
       </div>
+      {}
+      
       {renderModal()}
     </>
   );
