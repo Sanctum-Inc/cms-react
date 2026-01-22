@@ -27,78 +27,12 @@ interface PillInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   selectOptions?: KeyValue[];
   customOnChange?: (e: PillInputChangeEvent) => void;
   error?: boolean;
+  disabled?: boolean;
 }
 
 const PillInput = (props: PillInputProps) => {
   const [getValues, setValues] = useState<string[]>([]);
   const [getFiles, setFiles] = useState<File[]>([]);
-
-  // Use props.value if provided (controlled), otherwise use internal state
-  const inputValue = props.value !== undefined ? String(props.value) : "";
-
-  const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key !== "Enter") return; // Ignore non-Enter keys
-    if (!props.addEnterHint) return; // Only run if allowed
-
-    e.preventDefault(); // Prevent form submit / blur
-
-    if (inputValue.trim() === "") return; // Ignore empty input
-
-    // Clear input field after adding 
-    setValues((prev) => [...prev, inputValue]);
-
-    if (props.onChange) {
-      props.onChange(e as unknown as React.ChangeEvent<HTMLInputElement>);
-    }
-  };
-
-  const handleSetValues = (e: ChangeEvent<HTMLInputElement>) => {
-    // For regular input mode, just pass through to parent's onChange
-    if (props.onChange) {
-      props.onChange(e);
-    }
-
-    if (customOnChange) {
-      // Pass as array with one element for consistency
-      customOnChange({
-        target: {
-          name: props.name!,
-          value: [e.target.value],
-        },
-      });
-    }
-  };
-
-  const handleSetValuesSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-
-    if (props.onChange) {
-      props.onChange(e as unknown as React.ChangeEvent<HTMLInputElement>);
-    }
-  };
-
-  const handleFileOpen = () => {
-    const input = document.getElementById("hidden-file-input");
-    input?.click();
-  };
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files ? Array.from(e.target.files) : [];
-
-    files.forEach((file) => {
-      const updated = [...getValues, file.name];
-      setValues(updated);
-      setFiles((prev) => [...prev, file]);
-
-      props.customOnChange?.({
-        target: {
-          name: props.name!,
-          value: updated,
-        },
-      });
-    });
-
-    console.log(getFiles);
-  };
 
   const {
     label,
@@ -111,44 +45,124 @@ const PillInput = (props: PillInputProps) => {
     customOnChange,
     error,
     className,
+    disabled,
     ...restProps
   } = props;
 
-  const renderInput = (inputType: "input" | "select" | "file") => {
+  // Controlled value support
+  const inputValue = props.value !== undefined ? String(props.value) : "";
+
+  // Shared disabled styles
+  const disabledStyles = disabled
+    ? "bg-gray-100 text-gray-500 cursor-not-allowed opacity-70 focus:ring-0 focus:outline-none"
+    : "";
+
+  const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (disabled) return;
+    if (e.key !== "Enter") return;
+    if (!addEnterHint) return;
+
+    e.preventDefault();
+    if (inputValue.trim() === "") return;
+
+    setValues((prev) => [...prev, inputValue]);
+
+    if (props.onChange) {
+      props.onChange(e as unknown as React.ChangeEvent<HTMLInputElement>);
+    }
+  };
+
+  const handleSetValues = (e: ChangeEvent<HTMLInputElement>) => {
+    if (disabled) return;
+
+    if (props.onChange) {
+      props.onChange(e);
+    }
+
+    if (customOnChange) {
+      customOnChange({
+        target: {
+          name: props.name!,
+          value: [e.target.value],
+        },
+      });
+    }
+  };
+
+  const handleSetValuesSelect = (e: ChangeEvent<HTMLSelectElement>) => {
+    if (disabled) return;
+
+    if (props.onChange) {
+      props.onChange(e as unknown as React.ChangeEvent<HTMLInputElement>);
+    }
+  };
+
+  const handleFileOpen = () => {
+    if (disabled) return;
+    const input = document.getElementById("hidden-file-input");
+    input?.click();
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (disabled) return;
+
+    const files = e.target.files ? Array.from(e.target.files) : [];
+
+    files.forEach((file) => {
+      const updated = [...getValues, file.name];
+      setValues(updated);
+      setFiles((prev) => [...prev, file]);
+
+      customOnChange?.({
+        target: {
+          name: props.name!,
+          value: updated,
+        },
+      });
+    });
+
+    console.log(getFiles);
+  };
+
+  const renderInput = () => {
     switch (inputType) {
       case "input":
         return (
           <input
             {...restProps}
-            className={`border ${
-              error ? "border-red-500" : "border-gray-300"
-            } rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
-              className ?? ""
-            } ${icon ? "pr-10" : ""} ${
-              width ? "w-" + width : "w-full"
-            } ${height ? "h-" + height : "h-13"}`}
+            disabled={disabled}
+            value={inputValue}
             onKeyDown={handleEnterKey}
             onChange={handleSetValues}
-            value={inputValue}
+            className={`border ${
+              error ? "border-red-500" : "border-gray-300"
+            } rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500
+            ${className ?? ""}
+            ${icon ? "pr-10" : ""}
+            ${width ? "w-" + width : "w-full"}
+            ${height ? "h-" + height : "h-13"}
+            ${disabledStyles}`}
           />
         );
+
       case "select":
         return (
           <select
-            className={`border ${
-              error ? "border-red-500" : "border-gray-300"
-            } rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
-              className ?? ""
-            } ${icon ? "pr-10" : ""} ${width ? "w-" + width : "w-full"} ${
-              height ? "h-" + height : "h-13"
-            }`}
+            disabled={disabled}
             value={inputValue}
             onChange={handleSetValuesSelect}
+            className={`border ${
+              error ? "border-red-500" : "border-gray-300"
+            } rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500
+            ${className ?? ""}
+            ${icon ? "pr-10" : ""}
+            ${width ? "w-" + width : "w-full"}
+            ${height ? "h-" + height : "h-13"}
+            ${disabledStyles}`}
           >
             <option disabled value="">
               Select an option
             </option>
-
             {selectOptions?.map((option) => (
               <option key={option.key} value={option.key}>
                 {option.value}
@@ -156,11 +170,17 @@ const PillInput = (props: PillInputProps) => {
             ))}
           </select>
         );
+
       case "file":
         return (
           <>
             <div
-              className="border-2 border-dashed border-gray-300 h-50 hover:border-blue-500 flex items-center justify-center hover:text-blue-500 cursor-pointer"
+              className={`border-2 border-dashed h-50 flex items-center justify-center
+              ${
+                disabled
+                  ? "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed"
+                  : "border-gray-300 hover:border-blue-500 hover:text-blue-500 cursor-pointer"
+              }`}
               onClick={handleFileOpen}
             >
               <Plus size={72} />
@@ -171,53 +191,60 @@ const PillInput = (props: PillInputProps) => {
               id="hidden-file-input"
               hidden
               multiple
-              onChange={(e) => {
-                handleFileChange(e);
-              }}
+              onChange={handleFileChange}
             />
           </>
         );
+
       default:
-        return <></>;
+        return null;
     }
   };
 
   return (
     <div className="flex flex-col w-full mt-3">
       {label && (
-        <label htmlFor={props.name} className="mb-1 ml-3.5">
+        <label
+          htmlFor={props.name}
+          className={`mb-1 ml-3.5 ${disabled ? "text-gray-400" : ""}`}
+        >
           {label}
         </label>
       )}
+
       <div className="relative">
-        {renderInput(inputType)}
-        {props.icon && addEnterHint && (
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none hover:text-orange-700 cursor-pointer">
-            <props.icon size={16} />
+        {renderInput()}
+        {icon && addEnterHint && !disabled && (
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
+            {props.icon && <props.icon size={16} />}
           </span>
         )}
       </div>
+
       {getValues.length > 0 && (
         <div className="flex flex-wrap mt-2 gap-2">
           {getValues.map((val, index) => (
             <div
               key={index}
-              className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm flex items-center "
+              className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm flex items-center"
             >
               <span>{val}</span>
-              <span
-                className="ml-2 cursor-pointer hover:text-red-600"
-                onClick={() =>
-                  setValues(getValues.filter((_, i) => i !== index))
-                }
-              >
-                x
-              </span>
+              {!disabled && (
+                <span
+                  className="ml-2 cursor-pointer hover:text-red-600"
+                  onClick={() =>
+                    setValues(getValues.filter((_, i) => i !== index))
+                  }
+                >
+                  x
+                </span>
+              )}
             </div>
           ))}
         </div>
       )}
-      {addEnterHint && (
+
+      {addEnterHint && !disabled && (
         <div className="text-xs text-gray-400 mt-1">Press Enter to add</div>
       )}
     </div>

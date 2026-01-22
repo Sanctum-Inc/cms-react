@@ -1,21 +1,34 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { InputItem } from "../../Models/InputItem";
 import PillInput from "../Inputs/PillInput";
 import { UserService } from "../../api";
 
+type UserForm = {
+  userId: string;
+  password: string;
+  firstname: string;
+  surname: string;
+  emailAddress: string;
+  mobileNumber: string;
+};
+
 const UserProfile = () => {
+  const [form, setForm] = useState<UserForm>({
+    userId: "",
+    password: "",
+    firstname: "",
+    surname: "",
+    emailAddress: "",
+    mobileNumber: "",
+  });
+
   const inputs: InputItem[] = [
     {
       inputType: "input",
       name: "userId",
       label: "User ID (Non-Editable):",
       type: "text",
-    },
-    {
-      inputType: "input",
-      name: "password",
-      label: "Password:",
-      type: "Password",
+      disabled: true,
     },
     {
       inputType: "input",
@@ -44,18 +57,36 @@ const UserProfile = () => {
   ];
 
   useEffect(() => {
-    // Fetch and set user profile data here if needed
     UserService.getById("current").then((response) => {
-      const userData = response.data;
-      // You can set the fetched data to state and pass it to inputs if needed
+      setForm({
+        userId: response.id,
+        password: "",
+        firstname: response.name,
+        surname: response.surname,
+        emailAddress: response.email,
+        mobileNumber: response.mobileNumber,
+      });
     });
   }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   return (
     <div className="grid grid-cols-10 gap-5">
       {inputs.map((item, index) => (
-        <div className="col-span-5" key={index}>
-          <PillInput {...item} />
+        <div className="col-span-5" key={`${index}-user-profile-input`}>
+          <PillInput
+            {...item}
+            value={form[item.name as keyof UserForm]}
+            onChange={handleChange}
+          />
         </div>
       ))}
     </div>

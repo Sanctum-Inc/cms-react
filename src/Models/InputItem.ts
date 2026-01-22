@@ -14,6 +14,7 @@ interface InputItem {
   height?: string;
   inputType: "input" | "select" | "file";
   selectOptions?: KeyValue[];
+  disabled?: boolean;
 }
 
 interface KeyValue{

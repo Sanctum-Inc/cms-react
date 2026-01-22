@@ -18,7 +18,7 @@ const TabNavigation = ({ selectedMenu, setSelectedMenu, menu, index, className }
       className={`rounded-t-2xl ml-2 cursor-pointer ${
         selectedMenu === menu.label ? "bg-white" : ""
       }`}
-      key={index}
+      key={`${index}-tab-navigation`}
       onClick={() => setSelectedMenu(menu.label)}
     >
       <div

@@ -61,6 +61,10 @@ export class UserService {
             path: {
                 'id': id,
             },
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+            },
         });
     }
 }
