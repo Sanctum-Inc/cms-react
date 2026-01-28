@@ -1,4 +1,4 @@
-import { useEffect, useState, type PropsWithChildren, type ReactNode } from "react";
+import { useEffect, useState, type PropsWithChildren } from "react";
 import type { InputItem } from "../../Models/InputItem";
 import PrimaryButton from "../Buttons/PrimaryButton";
 import PillInput from "../Inputs/PillInput";
@@ -11,7 +11,7 @@ interface ModalProps extends PropsWithChildren {
   buttonCaption: string;
   buttonOnClick?: () => void;
   handleChange?: (name: string, value: string) => void;
-  values?: Record<string, string>;
+  values?: Record<string, string | number>;
 }
 
 const Modal = ({
@@ -35,7 +35,7 @@ const Modal = ({
     // Map inputItems and set their value to values[name]
     const updatedInputItems = inputItems.map((item) => ({
       ...item,
-      value: values[item.name] ?? "",
+      value: values[item.name] !== undefined ? String(values[item.name]) : "",
     }));
 
     setLocalInputItems(updatedInputItems);

@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import Modal from "../Components/Modal/Modal";
 import SortBar from "../Components/Inputs/SortBar";
 import Header from "../Components/Header/Header";
-import { CourtCaseService, type AddCourtCaseRequest } from "../api";
+import { CourtCaseService, type AddCourtCaseRequest, type InvoiceStatus } from "../api";
 import type { CourtCases } from "../Models/CourtCases";
 import SuccessAlert from "../Components/Alerts/SuccessAlert";
 import ErrorAlert from "../Components/Alerts/ErrorAlert";
@@ -31,7 +31,7 @@ const CourtCasePage = () => {
     location: "",
     plaintiff: "",
     defendant: "",
-    status: "open",
+    status: 0,
     type: "",
     outcome: "",
   });
@@ -246,7 +246,15 @@ const CourtCasePage = () => {
         inputItems={courtCaseInputs}
         buttonCaption="Add Case"
         buttonOnClick={handleButtonClick}
-        values={newCourtCases}
+        values={{
+          caseNumber: newCourtCases.caseNumber!,
+          location: newCourtCases.location!,
+          plaintiff: newCourtCases.plaintiff!,
+          defendant: newCourtCases.defendant!,
+          status: newCourtCases.status!,
+          type: newCourtCases.type!,
+          outcome: newCourtCases.outcome!,
+        }}
         handleChange={handleChange}
       />
     );
@@ -268,7 +276,7 @@ const CourtCasePage = () => {
       defendant:
         courtCaseInputs.find((item) => item.name === "defendant")?.value || "",
       status:
-        courtCaseInputs.find((item) => item.name === "status")?.value || "open",
+        Number(courtCaseInputs.find((item) => item.name === "status")?.value) || 0,
       type: courtCaseInputs.find((item) => item.name === "type")?.value || "",
       outcome:
         courtCaseInputs.find((item) => item.name === "outcome")?.value || "",
@@ -286,7 +294,7 @@ const CourtCasePage = () => {
           plaintiff: newCourtCases.plaintiff,
           type: newCourtCases.type!,
           nextDate: "",
-          internalStatus: newCourtCases.status,
+          internalStatus: newCourtCases.status! as InvoiceStatus,
         });
       })
       .catch(() => {
@@ -302,6 +310,7 @@ const CourtCasePage = () => {
   const handleShowModal = (show: boolean) => {
     setShowModal(show);
   };
+
 
   useEffect(() => {
     CourtCaseService.getAllCourtCases().then((response) => {

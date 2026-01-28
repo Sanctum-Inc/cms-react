@@ -27,6 +27,7 @@ import CourtCaseInformationTable from "../Components/Tables/CourtCaseInformation
 import DynamicModal from "../Components/Modal/DynamicModal";
 import { useLocation } from "react-router-dom";
 import { CourtCaseService } from "../api";
+import PrimaryButton from "../Components/Buttons/PrimaryButton";
 
 interface CaseField {
   label: string;
@@ -238,7 +239,7 @@ const CourtCaseInformation = () => {
               return {
                 attributes1: invoice.invoiceNumber,
                 attributes2: `R${invoice.totalAmount}`,
-                attributes3: invoice.isPaid ? "Paid" : "Unpaid",
+                attributes3: invoice.status.toString(),
               };
             }),
           },
@@ -364,14 +365,11 @@ const CourtCaseInformation = () => {
   const renderModal = () => {
     // Placeholder for future modal rendering logic
     return (
-      <DynamicModal
-        buttonOnClick={handleAddItemButtonClick}
-        handleShowModal={handleShowModal}
-        setShowModal={setShowModal}
-        title="Add New Item"
-        inputItems={[]}
-        key={231}
-      />
+      <DynamicModal title="Delete Confirmation">
+        <PrimaryButton onClick={handleAddItemButtonClick}>
+          Delete
+        </PrimaryButton>
+      </DynamicModal>
     );
   };
 

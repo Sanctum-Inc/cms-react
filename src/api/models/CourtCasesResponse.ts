@@ -5,6 +5,7 @@
 import type { CourtCaseDatesResponse } from './CourtCaseDatesResponse';
 import type { DocumentResponse } from './DocumentResponse';
 import type { InvoiceResponse } from './InvoiceResponse';
+import type { InvoiceStatus } from './InvoiceStatus';
 import type { LawyerResponse } from './LawyerResponse';
 export type CourtCasesResponse = {
     id: string;
@@ -12,7 +13,7 @@ export type CourtCasesResponse = {
     location: string;
     plaintiff: string;
     defendant: string;
-    status: string;
+    status: InvoiceStatus;
     type: string | null;
     outcome?: string | null;
     created?: string;

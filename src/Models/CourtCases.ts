@@ -1,4 +1,4 @@
-import type { InvoiceStatus } from "./Invoices";
+import type { InvoiceStatus } from "../api";
 
 interface CourtCases {
     id: string;

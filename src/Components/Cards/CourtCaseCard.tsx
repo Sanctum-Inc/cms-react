@@ -1,5 +1,5 @@
 
-import type { InvoiceStatus } from "../../Models/Invoices";
+import type { InvoiceStatus } from "../../api";
 import Card from "./Card";
 
 interface courtCaseCardProps {

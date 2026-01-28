@@ -6,7 +6,7 @@ import {
   List,
   Users,
 } from "lucide-react";
-import { statusLabels, type Invoice, type InvoiceItemEntry, type InvoiceStatus } from "../../Models/Invoices";
+import { statusLabels, type Invoice, type InvoiceItemEntry } from "../../Models/Invoices";
 import Card from "./Card";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { InvoiceService } from "../../api";

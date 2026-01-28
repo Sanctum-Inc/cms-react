@@ -14,21 +14,13 @@ const DocumentsPage = () => {
          label: "Case Number:",
          name: "caseNumber",
          selectOptions: [
-           "C0001",
-           "C0002",
-           "C0003",
-           "C0004",
-           "C0005",
-           "C0006",
-           "C0007",
-           "C0008",
          ],
          inputType: "select",
        },
        {
          label: "Item Type:",
          name: "itemType",
-         selectOptions: ["Document (File)", "Folder"],
+         selectOptions: [{key: "file", value: "Document (File)"}, {key: "folder", value: "Folder"}],
          inputType: "select",
        },
        {

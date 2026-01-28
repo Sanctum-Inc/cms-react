@@ -5,7 +5,6 @@ import {
   FileTextIcon,
   Gavel,
   Clock,
-  Briefcase,
 } from "lucide-react";
 
 export type CaseDateType =

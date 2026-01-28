@@ -9,8 +9,9 @@ import {
   CourtCaseService,
   InvoiceItemService,
   InvoiceService,
+  type InvoiceStatus,
 } from "../api";
-import { statusLabels, type Invoice, type InvoiceItemEntry, type InvoiceStatus } from "../Models/Invoices";
+import { statusLabels, type Invoice, type InvoiceItemEntry } from "../Models/Invoices";
 import SuccessAlert from "../Components/Alerts/SuccessAlert";
 import ErrorAlert from "../Components/Alerts/ErrorAlert";
 
@@ -198,7 +199,14 @@ const InvoicePage = () => {
           inputItems={inputItems}
           buttonCaption="Add Item"
           buttonOnClick={handleAddButtonClick}
-          values={newInvoice}
+          values={{
+            caseId: String(newInvoice.caseId ?? ""),
+            invoiceId: String(newInvoice.invoiceId ?? ""),
+            description: String(newInvoice.description ?? ""),
+            date: newInvoice.date ? new Date(newInvoice.date).toISOString().split("T")[0] : "",
+            hours: String(newInvoice.hours ?? ""),
+            rate: String(newInvoice.rate ?? "")
+          }}
           handleChange={handleChange}
         />
       );
@@ -213,7 +221,14 @@ const InvoicePage = () => {
           inputItems={inputItems}
           buttonCaption="Update Item"
           buttonOnClick={handleUpdateButtonClick}
-          values={newInvoice}
+          values={{
+            caseId: String(newInvoice.caseId ?? ""),
+            invoiceId: String(newInvoice.invoiceId ?? ""),
+            description: String(newInvoice.description ?? ""),
+            date: newInvoice.date ? new Date(newInvoice.date).toISOString().split("T")[0] : "",
+            hours: String(newInvoice.hours ?? ""),
+            rate: String(newInvoice.rate ?? "")
+          }}
           handleChange={handleChange}
         />
       );

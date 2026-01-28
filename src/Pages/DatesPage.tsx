@@ -329,6 +329,8 @@ const DatesPage = () => {
           />
         </Card>
         {renderEditModal()}
+        {renderSuccessmessage()}
+        {renderErrorMessage()}
       </div>
     </>
   );

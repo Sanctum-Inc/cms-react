@@ -1,3 +1,5 @@
+import type { InvoiceStatus } from "../api/models/InvoiceStatus";
+
 export interface InvoiceItemEntry {
   date: Date;
   description: string;
@@ -20,9 +22,6 @@ export interface Invoice {
   defendant: string;
   status: InvoiceStatus;
 }
-
-export type InvoiceStatus = 0 | 1 | 2 | 3 | 4 | 5 | 6;
-
 
   export const statusLabels: Record<number, string> = {
     0: "Pending",
