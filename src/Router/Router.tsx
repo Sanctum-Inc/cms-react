@@ -8,24 +8,29 @@ import DatesPage from '../Pages/DatesPage';
 import ProfilePage from '../Pages/ProfilePage';
 import CourtCaseInformation from '../Pages/CourtCaseInformation';
 import Login from '../Pages/Login';
+import ProtectedRoute from './ProtectedRoute';
 
 
 const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <MainLayout />,
-        children: [
-            { path: '/', element: <DashboardPage/> },
-            { path: '/dashboard', element: <DashboardPage/> },
-            { path: '/court-case', element: <CourtCasePage/> },
-            { path: '/invoices', element: <InvoicePage/> },
-            { path: '/documents', element: <DocumentsPage/> },
-            { path: '/dates', element: <DatesPage/> },
-            { path: '/profile', element: <ProfilePage/> },
-            { path: '/court-case-information', element: <CourtCaseInformation/> },
-        ],
-    },
-    { path: '/login', element: <Login/> },
+  {
+    path: "/",
+    element: (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { path: "/", element: <DashboardPage /> },
+      { path: "/dashboard", element: <DashboardPage /> },
+      { path: "/court-case", element: <CourtCasePage /> },
+      { path: "/invoices", element: <InvoicePage /> },
+      { path: "/documents", element: <DocumentsPage /> },
+      { path: "/dates", element: <DatesPage /> },
+      { path: "/profile", element: <ProfilePage /> },
+      { path: "/court-case-information", element: <CourtCaseInformation /> },
+    ],
+  },
+  { path: "/login", element: <Login /> },
 ]);
 
 export default router;
