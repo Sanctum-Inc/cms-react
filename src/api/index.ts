@@ -15,6 +15,7 @@ export type { AddInvoiceRequest } from './models/AddInvoiceRequest';
 export type { AddLawyerRequest } from './models/AddLawyerRequest';
 export type { CourtCaseDatesResponse } from './models/CourtCaseDatesResponse';
 export type { CourtCasesResponse } from './models/CourtCasesResponse';
+export type { CourtCaseStatus } from './models/CourtCaseStatus';
 export type { DocumentResponse } from './models/DocumentResponse';
 export type { EntityTagHeaderValue } from './models/EntityTagHeaderValue';
 export type { FileContentResult } from './models/FileContentResult';

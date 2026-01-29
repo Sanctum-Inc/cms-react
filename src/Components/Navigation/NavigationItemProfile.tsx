@@ -4,6 +4,7 @@ import PrimaryButton from "../Buttons/PrimaryButton";
 import * as React from "react";
 import defaultIcon from "../../assets/default-profile-icon.jpg";
 import { useNavigate } from "react-router-dom";
+import { useAuthentication } from "../../Context/AuthenticationContext";
 
 interface ImageWithFallbackProps {
   src: string;
@@ -27,7 +28,7 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
   fallbackSrc,
 }) => {
   const handleError = (
-    event: React.SyntheticEvent<HTMLImageElement, Event>
+    event: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
     event.currentTarget.src = fallbackSrc;
   };
@@ -40,13 +41,10 @@ const NavigationItemProfile = ({
   email,
   href: url,
 }: NavigationItemProfileProps) => {
-  const navigate = useNavigate();
+  const { logout } = useAuthentication();
 
   const handleLogout = () => {
-    // Clear user session data (e.g., tokens, user info)
-    localStorage.removeItem("accessToken");
-    // Redirect to login page or homepage
-    navigate("/login");
+    logout();
   };
 
   return (
@@ -71,11 +69,7 @@ const NavigationItemProfile = ({
       </a>
       <div id="logout-container" className="w-full justify-center">
         <div className="mt-2">
-          <PrimaryButton
-            centerText={false}
-            color="red"
-            onClick={handleLogout}
-          >
+          <PrimaryButton centerText={false} color="red" onClick={handleLogout}>
             Logout
           </PrimaryButton>
         </div>

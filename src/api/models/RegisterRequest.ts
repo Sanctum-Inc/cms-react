@@ -8,5 +8,6 @@ export type RegisterRequest = {
     surname: string;
     mobileNumber: string;
     password: string;
+    firmId: string;
 };
 

@@ -2,13 +2,13 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { InvoiceStatus } from './InvoiceStatus';
+import type { CourtCaseStatus } from './CourtCaseStatus';
 export type AddCourtCaseRequest = {
     caseNumber: string;
     location: string;
     plaintiff: string;
     defendant: string;
-    status: InvoiceStatus;
+    status: CourtCaseStatus;
     type: string | null;
     outcome: string | null;
 };

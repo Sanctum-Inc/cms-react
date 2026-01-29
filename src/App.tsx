@@ -1,5 +1,4 @@
 import Navigation from './Components/Navigation/Navigation'
-import { AuthenticationProvider } from './Context/AuthenticationContext'
 import DashboardPage from './Pages/DashboardPage'
 
 const App = () => {

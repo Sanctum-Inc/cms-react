@@ -3,9 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { CourtCaseDatesResponse } from './CourtCaseDatesResponse';
+import type { CourtCaseStatus } from './CourtCaseStatus';
 import type { DocumentResponse } from './DocumentResponse';
 import type { InvoiceResponse } from './InvoiceResponse';
-import type { InvoiceStatus } from './InvoiceStatus';
 import type { LawyerResponse } from './LawyerResponse';
 export type CourtCasesResponse = {
     id: string;
@@ -13,7 +13,7 @@ export type CourtCasesResponse = {
     location: string;
     plaintiff: string;
     defendant: string;
-    status: InvoiceStatus;
+    status: CourtCaseStatus;
     type: string | null;
     outcome?: string | null;
     created?: string;

@@ -6,6 +6,8 @@ import PillInput from "../Components/Inputs/PillInput";
 import PrimaryButton from "../Components/Buttons/PrimaryButton";
 import Card from "../Components/Cards/Card";
 import { ValidateField } from "../Utils/InputValidator";
+import { useNavigate } from "react-router-dom";
+import { useAuthentication } from "../Context/AuthenticationContext";
 
 type User = {
   id: string;
@@ -15,9 +17,11 @@ type User = {
   mobileNumber: string;
   password: string;
   confirmPassword: string;
+  firmId: string;
 };
 
 const Login = () => {
+  const navigate = useNavigate();
   const [showRegistration, setShowRegistration] = useState(false);
   const [user, setUser] = useState<User>({
     id: "",
@@ -27,10 +31,13 @@ const Login = () => {
     mobileNumber: "",
     password: "",
     confirmPassword: "",
+    firmId: ""
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const { login } = useAuthentication();
+
 
 
   // Handle input change - clear error immediately when user types
@@ -83,9 +90,8 @@ const Login = () => {
         password: user.password,
       });
       console.log("Login successful:", result);
-      // Handle successful login (e.g., store token, redirect)
-      localStorage.setItem("accessToken", result.token);
-      window.location.href = "/dashboard"; // Redirect to dashboard or desired page
+      login(result.token);
+      navigate("/dashboard");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       // The response body is usually in error.body or error.response.data
@@ -145,34 +151,50 @@ const Login = () => {
     console.log("Register button clicked");
     // Proceed with registration
     try {
-      // Uncomment and use your actual UserService
       const result = await UserService.register({
         name: user.firstName,
         surname: user.lastName,
         email: user.email,
         mobileNumber: user.mobileNumber,
         password: user.password,
+        firmId: user.firmId,
       });
       console.log("Registration successful:", result);
-
-      console.log("Register button clicked - would call API here");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      // Handle 400 error (user already exists)
-      if (error.status === 400 || error.response?.status === 400) {
-        setErrors({
-          ...errors,
-          email: "An account with this email already exists.",
-        });
+      // Axios error: error.response.data contains the ProblemDetails object returned by your API
+      const problemDetails = error.response?.data;
+
+      // Safely extract the error message from ProblemDetails properties
+      const errorMessage =
+        problemDetails?.detail ||
+        problemDetails?.title ||
+        problemDetails?.message ||
+        "Registration failed. Please try again.";
+
+      console.log("API Error message:", error.response?.data);
+
+      if (error.response?.status === 400) {
+        // Example: you can check for specific error messages here to customize UI errors
+        if (errorMessage.toLowerCase().includes("email")) {
+          setErrors({
+            ...errors,
+            email: "An account with this email already exists.",
+          });
+        } else {
+          setErrors({
+            ...errors,
+            email: errorMessage,
+          });
+        }
       } else {
-        // Handle other errors
         setErrors({
           ...errors,
-          email: error.message || "Registration failed. Please try again.",
+          email: errorMessage,
         });
       }
-      console.error("Registration error:", error);
     }
+
+
   };
 
   const renderLogin = () => {
@@ -307,6 +329,24 @@ const Login = () => {
           {touched.mobileNumber && errors.mobileNumber && (
             <p className="text-red-600 text-sm mt-1 ml-3.5">
               {errors.mobileNumber}
+            </p>
+          )}
+        </div>
+        <div className="w-full">
+          <PillInput
+            placeholder="Firm ID"
+            type="text"
+            inputType="input"
+            label="Firm ID"
+            name="firmId"
+            value={user.firmId}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            required
+          />
+          {touched.firmId && errors.firmId && (
+            <p className="text-red-600 text-sm mt-1 ml-3.5">
+              {errors.firmId}
             </p>
           )}
         </div>

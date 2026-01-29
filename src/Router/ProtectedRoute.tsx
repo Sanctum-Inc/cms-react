@@ -1,5 +1,5 @@
 import React, { type JSX } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuthentication } from "../Context/AuthenticationContext";
 
 interface ProtectedRouteProps {
@@ -7,8 +7,9 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated } = useAuthentication();
-  const location = useLocation();
+  const { isAuthenticated, loading } = useAuthentication();
+
+  if (loading) return null; // or spinner
 
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
