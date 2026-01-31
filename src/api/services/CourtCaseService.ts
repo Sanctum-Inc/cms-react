@@ -10,10 +10,10 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class CourtCaseService {
     /**
-     * @returns CourtCasesResponse OK
+     * @returns string OK
      * @throws ApiError
      */
-    public static getAllCourtCases(): CancelablePromise<Array<CourtCasesResponse>> {
+    public static getAllCourtCases(): CancelablePromise<Array<string>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/CourtCase',
@@ -35,6 +35,16 @@ export class CourtCaseService {
             errors: {
                 400: `Bad Request`,
             },
+        });
+    }
+    /**
+     * @returns string OK
+     * @throws ApiError
+     */
+    public static getAllCaseNumbers(): CancelablePromise<Array<string>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/CourtCase/case-numbers',
         });
     }
     /**
