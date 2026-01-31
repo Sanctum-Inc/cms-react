@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import PillInput from "../Inputs/PillInput";
 import PillSelect from "../Inputs/PillSelect";
 import PrimaryButton from "../Buttons/PrimaryButton";
-import { CourtCaseService } from "../../api";
+import { CourtCaseService, type AddInvoiceItemRequest } from "../../api";
 import type { KeyValue } from "../../Models/InputItem";
 
 const AddInvoiceForm = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<AddInvoiceItemRequest>({
     caseId: "",
     invoiceId: "",
-    description: "",
+    name: "",
     date: "",
-    hours: "",
-    rate: "",
+    hours: 0,
+    costPerHour: 0,
   });
   const [caseNumbers, setCaseNumbers] = useState<KeyValue[]>([]);
 
@@ -62,7 +62,7 @@ const AddInvoiceForm = () => {
         label="Description:"
         name="description"
         type="text"
-        value={formData.description}
+        value={formData.name}
         onChange={(e) => handleChange("description", e.target.value)}
       />
 
@@ -88,7 +88,7 @@ const AddInvoiceForm = () => {
         name="rate"
         type="number"
         placeholder="Enter hourly cost"
-        value={formData.rate}
+        value={formData.costPerHour}
         onChange={(e) => handleChange("rate", e.target.value)}
       />
 

@@ -7,6 +7,7 @@ export type AddInvoiceItemRequest = {
     name: string;
     hours: number;
     costPerHour: number;
+    date: string;
     caseId: string;
 };
 

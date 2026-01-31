@@ -1,15 +1,15 @@
-import { ArrowUp, Plus } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import CourtCaseCard from "../Components/Cards/CourtCaseCard";
 import { useState, useMemo, useEffect } from "react";
 import Modal from "../Components/Modal/Modal";
 import SortBar from "../Components/Inputs/SortBar";
 import Header from "../Components/Header/Header";
-import { CourtCaseService, type AddCourtCaseRequest, type InvoiceStatus } from "../api";
+import { CourtCaseService } from "../api";
 import type { CourtCases } from "../Models/CourtCases";
 import SuccessAlert from "../Components/Alerts/SuccessAlert";
 import ErrorAlert from "../Components/Alerts/ErrorAlert";
 import { statusLabels } from "../Models/Invoices";
-import type { InputItem } from "../Models/InputItem";
+import AddCourtCaseForm from "../Components/Forms/AddCourtCaseForm";
 
 const CourtCasePage = () => {
   
@@ -26,104 +26,10 @@ const CourtCasePage = () => {
   const [sortDesc, setSortDesc] = useState(true);
 
   const [courtCases, setCourtCases] = useState<CourtCases[]>([]);
-  const [newCourtCases, setNewCourtCases] = useState<AddCourtCaseRequest>({
-    caseNumber: "",
-    location: "",
-    plaintiff: "",
-    defendant: "",
-    status: 0,
-    type: "",
-    outcome: "",
-  });
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
-  const [courtCaseInputs, setCourtCaseInputs] = useState<InputItem[]>([
-    {
-      label: "Case Number:",
-      name: "caseNumber",
-      type: "text",
-      placeholder: "Enter case number",
-      value: "",
-      inputType: "input",
-    },
-    {
-      label: "Location:",
-      name: "location",
-      type: "text",
-      placeholder: "City, State",
-      value: "",
-      inputType: "input",
-    },
-    {
-      label: "Plaintiff:",
-      name: "plaintiff",
-      type: "text",
-      placeholder: "Enter plaintiff name",
-      value: "",
-      inputType: "input",
-    },
-    {
-      label: "Defendant:",
-      name: "defendant",
-      type: "text",
-      placeholder: "Enter defendant names",
-      value: "",
-      icon: Plus,
-      addEnterHint: true,
-      inputType: "input",
-    },
-    {
-      label: "Status:",
-      name: "status",
-      type: "text",
-      placeholder: "Enter status",
-      value: "",
-      inputType: "select",
-      selectOptions: [
-        { key: "0", value: "Open" },
-        { key: "1", value: "Closed" },
-        { key: "2", value: "Pending" },
-        { key: "3", value: "Appealed" },
-        { key: "4", value: "Dismissed" },
-        { key: "5", value: "Settled" },
-      ],
-      addEnterHint: false,
-    },
-    {
-      label: "Type:",
-      name: "type",
-      type: "text",
-      placeholder: "Enter type",
-      value: "",
-      inputType: "select",
-      selectOptions: [
-        { key: "0", value: "Criminal" },
-        { key: "1", value: "Civil" },
-        { key: "2", value: "Family" },
-        { key: "3", value: "Labor" },
-        { key: "4", value: "Commercial" },
-        { key: "5", value: "Road Accident Fund" },
-      ],
-    },
-    {
-      label: "Outcome:",
-      name: "outcome",
-      type: "text",
-      placeholder: "Enter outcome",
-      value: "",
-      inputType: "select",
-      selectOptions: [
-        { key: "0", value: "Guilty" },
-        { key: "1", value: "Not Guilty" },
-        { key: "2", value: "Settled" },
-        { key: "3", value: "Withdrawn" },
-        { key: "4", value: "Ongoing" },
-        { key: "5", value: "N/A" },
-      ],
-    },
-  ]);
 
   // Compute filtered + sorted cases
   const filteredCases = useMemo(() => {
@@ -135,7 +41,7 @@ const CourtCasePage = () => {
         c.caseNumber.toLowerCase().includes(q) ||
         c.location.toLowerCase().includes(q) ||
         c.plaintiff.toLowerCase().includes(q) ||
-        c.type.toLowerCase().includes(q) ||
+        c.type.toString().toLowerCase().includes(q) ||
         c.nextDate.toLowerCase().includes(q)
       );
     };
@@ -150,7 +56,7 @@ const CourtCasePage = () => {
 
     const matchesType = (c: (typeof courtCases)[number]) => {
       if (typeFilter === "all") return true;
-      return c.type.toLowerCase() === typeFilter.toLowerCase();
+      return c.type.toString().toLowerCase() === typeFilter.toLowerCase();
     };
 
     const compare = (
@@ -214,87 +120,13 @@ const CourtCasePage = () => {
     }
   };
 
-  const handleChange = (name: string, value: string) => {
-    setCourtCaseInputs((prev) =>
-      prev.map((i) => (i.name === name ? { ...i, value } : i))
-    );
-
-    setNewCourtCases((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-  };
-
   const renderModal = () => {
     if (!showModal) return null;
     return (
-      <Modal
-        setShowModal={setShowModal}
-        handleShowModal={handleShowModal}
-        title="New Court Case"
-        inputItems={courtCaseInputs}
-        buttonCaption="Add Case"
-        buttonOnClick={handleButtonClick}
-        values={{
-          caseNumber: newCourtCases.caseNumber!,
-          location: newCourtCases.location!,
-          plaintiff: newCourtCases.plaintiff!,
-          defendant: newCourtCases.defendant!,
-          status: newCourtCases.status!,
-          type: newCourtCases.type!,
-          outcome: newCourtCases.outcome!,
-        }}
-        handleChange={handleChange}
-      />
+      <Modal handleShowModal={handleShowModal} setShowModal={setShowModal} title="New Court Case">
+        <AddCourtCaseForm filteredCases={filteredCases} setShowSuccessMessage={setSuccessAlertMessage} setShowErrorMessage={setErrorAlertMessage} />
+      </Modal>
     );
-  };
-
-  const handleButtonClick = () => {
-    // Logic to add the new court case goes here
-    // For now, we'll just close the modal
-    //setShowModal(false);
-
-    setNewCourtCases({
-      caseNumber:
-        courtCaseInputs.find((item) => item.name === "case-number")?.value ||
-        "",
-      location:
-        courtCaseInputs.find((item) => item.name === "location")?.value || "",
-      plaintiff:
-        courtCaseInputs.find((item) => item.name === "plaintiff")?.value || "",
-      defendant:
-        courtCaseInputs.find((item) => item.name === "defendant")?.value || "",
-      status:
-        Number(courtCaseInputs.find((item) => item.name === "status")?.value) || 0,
-      type: courtCaseInputs.find((item) => item.name === "type")?.value || "",
-      outcome:
-        courtCaseInputs.find((item) => item.name === "outcome")?.value || "",
-    });
-
-    CourtCaseService.createCourtCases(newCourtCases)
-      .then((response) => {
-        console.log("Court case added" + response);
-        setShowModal(false);
-        setSuccessAlertMessage("Court case added successfully.");
-        filteredCases.push({
-          id: response,
-          caseNumber: newCourtCases.caseNumber,
-          location: newCourtCases.location,
-          plaintiff: newCourtCases.plaintiff,
-          type: newCourtCases.type!,
-          nextDate: "",
-          internalStatus: newCourtCases.status! as InvoiceStatus,
-        });
-      })
-      .catch(() => {
-        //Log error somewhere
-        setErrorAlertMessage(
-          "There was an error processing your request, please try again later."
-        );
-      });
-
-    console.log("New Court Case:", newCourtCases);
   };
 
   const handleShowModal = (show: boolean) => {

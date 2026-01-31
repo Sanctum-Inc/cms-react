@@ -3,7 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { CourtCaseDatesResponse } from './CourtCaseDatesResponse';
+import type { CourtCaseOutcomes } from './CourtCaseOutcomes';
 import type { CourtCaseStatus } from './CourtCaseStatus';
+import type { CourtCaseTypes } from './CourtCaseTypes';
 import type { DocumentResponse } from './DocumentResponse';
 import type { InvoiceResponse } from './InvoiceResponse';
 import type { LawyerResponse } from './LawyerResponse';
@@ -14,8 +16,8 @@ export type CourtCasesResponse = {
     plaintiff: string;
     defendant: string;
     status: CourtCaseStatus;
-    type: string | null;
-    outcome?: string | null;
+    type: CourtCaseTypes;
+    outcome?: CourtCaseOutcomes;
     created?: string;
     lastModified?: string;
     courtCaseDates?: Array<CourtCaseDatesResponse>;

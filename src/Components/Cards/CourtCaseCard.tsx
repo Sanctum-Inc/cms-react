@@ -1,5 +1,5 @@
 
-import type { InvoiceStatus } from "../../api";
+import type { CourtCaseTypes, InvoiceStatus } from "../../api";
 import Card from "./Card";
 
 interface courtCaseCardProps {
@@ -7,7 +7,7 @@ interface courtCaseCardProps {
   caseNumber: string;
   location: string;
   plaintiff: string;
-  type: string;
+  type: CourtCaseTypes;
   nextDate: string;
   internalStatus: InvoiceStatus;
 }

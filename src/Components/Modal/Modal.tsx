@@ -1,56 +1,17 @@
-import { useEffect, useState, type PropsWithChildren } from "react";
-import type { InputItem } from "../../Models/InputItem";
-import PrimaryButton from "../Buttons/PrimaryButton";
-import PillInput from "../Inputs/PillInput";
+import { type PropsWithChildren } from "react";
 
 interface ModalProps extends PropsWithChildren {
   handleShowModal: (show: boolean) => void;
   setShowModal: (show: boolean) => void;
   title: string;
-  inputItems: InputItem[];
-  buttonCaption: string;
-  buttonOnClick?: () => void;
-  handleChange?: (name: string, value: string) => void;
-  values?: Record<string, string | number>;
 }
 
 const Modal = ({
   handleShowModal,
   setShowModal,
   title,
-  inputItems,
-  buttonCaption,
-  buttonOnClick,
-  handleChange,
-  values,
   children
 }: ModalProps) => {
-  const [localInputItems, setLocalInputItems] =
-    useState<InputItem[]>(inputItems);
-
-  // Update localInputItems whenever values or inputItems change
-  useEffect(() => {
-    if (!values) return;
-
-    // Map inputItems and set their value to values[name]
-    const updatedInputItems = inputItems.map((item) => ({
-      ...item,
-      value: values[item.name] !== undefined ? String(values[item.name]) : "",
-    }));
-
-    setLocalInputItems(updatedInputItems);
-  }, [values, inputItems]);
-
-  const handleButtonClick = () => {
-    // Your existing logic here...
-    buttonOnClick?.();
-  };
-
-  const handleModalEnterClick = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      // Your existing logic here...
-    }
-  };
 
   return (
     <>
@@ -70,24 +31,7 @@ const Modal = ({
             <div className="w-10 cursor-pointer flex justify-center">x</div>
           </div>
         </div>
-        <div className="justify-center px-10">
-          {localInputItems.map((item, index) => (
-            <PillInput
-              key={`${index}-modalpillInput`}
-              {...item}
-              value={item.value}
-              onKeyDown={handleModalEnterClick}
-              onChange={(e) => handleChange?.(item.name, e.target.value)}
-            />
-          ))}
-        </div>
-        <div className="px-10 py-5">
-          {children ?? (
-            <PrimaryButton onClick={handleButtonClick}>
-              {buttonCaption}
-            </PrimaryButton>
-          )}
-        </div>
+        <div className="justify-center px-10">{children}</div>
       </div>
     </>
   );

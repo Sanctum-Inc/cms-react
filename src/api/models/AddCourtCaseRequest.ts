@@ -2,14 +2,16 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { CourtCaseOutcomes } from './CourtCaseOutcomes';
 import type { CourtCaseStatus } from './CourtCaseStatus';
+import type { CourtCaseTypes } from './CourtCaseTypes';
 export type AddCourtCaseRequest = {
     caseNumber: string;
     location: string;
     plaintiff: string;
     defendant: string;
     status: CourtCaseStatus;
-    type: string | null;
-    outcome: string | null;
+    type: CourtCaseTypes;
+    outcome: CourtCaseOutcomes;
 };
 
