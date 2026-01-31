@@ -97,16 +97,13 @@ const Login = () => {
       // The response body is usually in error.body or error.response.data
       const errorData = error.body || error.response?.data || error;
 
-      // Extract the detail message
-      const errorMessage =
-        errorData.detail || errorData.message || "An error occurred";
       const statusCode =
         errorData.status || error.status || error.response?.status;
 
       if (statusCode === 400 || statusCode === 401) {
         setErrors({
           ...errors,
-          email: errorMessage, // This will show "Username or password is incorrect"
+          email: "Username or password is incorrect",
         });
       } else {
         setErrors({

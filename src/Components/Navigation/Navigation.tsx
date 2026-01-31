@@ -2,8 +2,28 @@ import { BriefcaseBusiness, CalendarDays, FolderOpenDot, House, LogOut, Wallet }
 import NavigationItem from './NavigationItem';
 import NavigationItemProfile from './NavigationItemProfile';
 import brandLogo from "../../assets/crest-removebg-cropped.png";
+import { useState, useEffect } from 'react';
+import { UserService } from '../../api';
 
 const Navigation = () => {
+  const [user, setUser] = useState({
+    name: "",
+    surname: "",
+    email: ""
+  });
+
+  useEffect(() => {
+    // Any side effects or data fetching can be done here
+    UserService.getById("current").then((response) => {
+      console.log("Fetched user data:", response);
+      setUser({
+        name: response.name,
+        surname: response.surname,
+        email: response.email
+      });
+    })
+  },[]);
+
     return (
       <div className="w-1/8 h-screen flex flex-col px-3 border-r-2 border-solid border-gray-300">
         <div id="brand-information-container" className="p-2">
@@ -54,9 +74,9 @@ const Navigation = () => {
           ></NavigationItem>
           <NavigationItemProfile
             icon={LogOut}
-            name="John"
-            surname="Doe"
-            email="johndoe@example.com"
+            name={user.name}
+            surname={user.surname}
+            email={user.email}
             profileImage=""
             href='/profile'
           ></NavigationItemProfile>
