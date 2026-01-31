@@ -10,10 +10,10 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class CourtCaseService {
     /**
-     * @returns string OK
+     * @returns CourtCasesResponse OK
      * @throws ApiError
      */
-    public static getAllCourtCases(): CancelablePromise<Array<string>> {
+    public static getAllCourtCases(): CancelablePromise<Array<CourtCasesResponse>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/CourtCase',
