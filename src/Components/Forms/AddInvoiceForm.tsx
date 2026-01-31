@@ -15,10 +15,6 @@ const AddInvoiceForm = () => {
     rate: "",
   });
   const [caseNumbers, setCaseNumbers] = useState<KeyValue[]>([]);
-  const [invoiceNumber, setInvoiceNumber] = useState<KeyValue[]>([{
-    key: "new",
-    value: "Create New Invoice",
-  }]);
 
   const handleChange = (name: string, value: string) => {
     setFormData((prev) => ({

@@ -305,7 +305,7 @@ const CourtCasePage = () => {
   useEffect(() => {
     CourtCaseService.getAllCourtCases().then((response) => {
       const mapped = response.map((courtCase) => ({
-        id: courtCase.id,
+        id: courtCase.id!,
         caseNumber: courtCase.caseNumber,
         location: courtCase.location,
         plaintiff: courtCase.plaintiff,

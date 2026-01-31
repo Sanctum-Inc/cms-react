@@ -24,12 +24,9 @@ import {
 } from "react";
 import TabNavigation from "../Components/Navigation/TabNavigation";
 import CourtCaseInformationTable from "../Components/Tables/CourtCaseInformationTable";
-import DynamicModal from "../Components/Modal/DynamicModal";
 import { useLocation } from "react-router-dom";
 import { CourtCaseService } from "../api";
-import PrimaryButton from "../Components/Buttons/PrimaryButton";
 import NewItemModal from "../Components/Modal/NewItemModal";
-import PillInput from "../Components/Inputs/PillInput";
 import AddInvoiceForm from "../Components/Forms/AddInvoiceForm";
 import PillSelect from "../Components/Inputs/PillSelect";
 
@@ -203,7 +200,6 @@ const CourtCaseInformation = () => {
     if (!caseId) return;
     CourtCaseService.getCourtCasesById(caseId)
       .then((response) => {
-        console.log(response);
         setCaseFields([
           { ...caseFields[0], value: response.id },
           { ...caseFields[1], value: response.location },
@@ -212,7 +208,7 @@ const CourtCaseInformation = () => {
           { ...caseFields[4], value: response.created! },
           { ...caseFields[5], value: response.lastModified! },
         ]);
-        // console.log(caseFields);
+
         setKeyParties([
           { ...keyParties[0], value: response.plaintiff },
           { ...keyParties[1], value: response.defendant },
@@ -352,11 +348,6 @@ const CourtCaseInformation = () => {
       return menu.label === selectedMenu;
     });
     return <CourtCaseInformationTable headers={x?.headers} items={x?.items} />;
-  };
-
-  const handleAddItemButtonClick = () => {
-    console.log("Add Item Button Clicked");
-    setShowModal(false);
   };
 
   const handleShowModal = (show: boolean) => {

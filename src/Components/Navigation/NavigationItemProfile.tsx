@@ -3,7 +3,6 @@ import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import PrimaryButton from "../Buttons/PrimaryButton";
 import * as React from "react";
 import defaultIcon from "../../assets/default-profile-icon.jpg";
-import { useNavigate } from "react-router-dom";
 import { useAuthentication } from "../../Context/AuthenticationContext";
 
 interface ImageWithFallbackProps {

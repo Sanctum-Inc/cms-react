@@ -160,6 +160,7 @@ const Login = () => {
         firmId: user.firmId,
       });
       console.log("Registration successful:", result);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       // Axios error: error.response.data contains the ProblemDetails object returned by your API
       const problemDetails = error.response?.data;
@@ -204,7 +205,6 @@ const Login = () => {
           <PillInput
             placeholder="Email Address"
             type="email"
-            inputType="input"
             label="Email"
             name="email"
             value={user.email}
@@ -220,7 +220,6 @@ const Login = () => {
           <PillInput
             placeholder="Password"
             type="password"
-            inputType="input"
             label="Password"
             name="password"
             value={user.password}
@@ -265,7 +264,6 @@ const Login = () => {
             <PillInput
               placeholder="First Name"
               type="text"
-              inputType="input"
               label="First Name"
               name="firstName"
               value={user.firstName}
@@ -283,7 +281,6 @@ const Login = () => {
             <PillInput
               placeholder="Last Name"
               type="text"
-              inputType="input"
               label="Last Name"
               name="lastName"
               value={user.lastName}
@@ -302,7 +299,6 @@ const Login = () => {
           <PillInput
             placeholder="Email Address"
             type="email"
-            inputType="input"
             label="Email"
             name="email"
             value={user.email}
@@ -318,7 +314,6 @@ const Login = () => {
           <PillInput
             placeholder="Mobile Number"
             type="text"
-            inputType="input"
             label="Mobile Number"
             name="mobileNumber"
             value={user.mobileNumber}
@@ -336,7 +331,6 @@ const Login = () => {
           <PillInput
             placeholder="Firm ID"
             type="text"
-            inputType="input"
             label="Firm ID"
             name="firmId"
             value={user.firmId}
@@ -354,7 +348,6 @@ const Login = () => {
           <PillInput
             placeholder="Password"
             type="password"
-            inputType="input"
             label="Password"
             name="password"
             value={user.password}
@@ -372,7 +365,6 @@ const Login = () => {
           <PillInput
             placeholder="Confirm Password"
             type="password"
-            inputType="input"
             label="Confirm Password"
             name="confirmPassword"
             value={user.confirmPassword}

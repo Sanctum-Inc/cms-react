@@ -11,6 +11,7 @@
     "test": "vitest",
     "build:production": "tsc -b && vite build --mode production",
     "build:staging": "tsc -b && vite build --mode staging",
+    "github-ci": "concurrently \"npm run lint\" \"npm run test\" \"npm run build\"",
     "generate:client": "npx openapi -c axios -i schema/cms-api.json -o src/api"
   },
   "dependencies": {
@@ -33,6 +34,7 @@
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.4",
+    "concurrently": "^9.2.1",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
