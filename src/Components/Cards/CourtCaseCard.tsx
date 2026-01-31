@@ -15,6 +15,7 @@ interface courtCaseCardProps {
 const CourtCaseCard = ({id, caseNumber, location, plaintiff, type, nextDate, internalStatus}: courtCaseCardProps) => {
 
     const getStatusStyles = (status: number) => {
+      console.log("Status:", status);
       switch (status) {
         case 0: // Pending
           return "text-yellow-700 border border-yellow-500 bg-yellow-100 rounded-full px-2 pb-1 text-[12px]";
@@ -35,6 +36,28 @@ const CourtCaseCard = ({id, caseNumber, location, plaintiff, type, nextDate, int
       }
     };
 
+    const getValues = (status: number) => {
+      console.log("Status:", status);
+      switch (status) {
+        case 0: // Pending
+          return "Pending";
+        case 1: // Sent
+          return "Sent";
+        case 2: // Paid
+          return "Paid";
+        case 3: // Overdue
+          return "Overdue";
+        case 4: // Cancelled
+          return "Cancelled";
+        case 5: // Partially Paid
+          return "Partially Paid";
+        case 6: // Draft
+          return "Draft";
+        default:
+          return "Unknown";
+      }
+    };
+
   return (
     <>
       <Card className="mx-6 my-3 p-6 cursor-pointer">
@@ -47,7 +70,7 @@ const CourtCaseCard = ({id, caseNumber, location, plaintiff, type, nextDate, int
             <div className="flex justify-between">
               <span>{nextDate}</span>
               <span className={getStatusStyles(internalStatus)}>
-                {internalStatus}
+                {getValues(internalStatus)}
               </span>
             </div>
           </div>
