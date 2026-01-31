@@ -28,6 +28,10 @@ import DynamicModal from "../Components/Modal/DynamicModal";
 import { useLocation } from "react-router-dom";
 import { CourtCaseService } from "../api";
 import PrimaryButton from "../Components/Buttons/PrimaryButton";
+import NewItemModal from "../Components/Modal/NewItemModal";
+import PillInput from "../Components/Inputs/PillInput";
+import AddInvoiceForm from "../Components/Forms/AddInvoiceForm";
+import PillSelect from "../Components/Inputs/PillSelect";
 
 interface CaseField {
   label: string;
@@ -193,6 +197,8 @@ const CourtCaseInformation = () => {
     },
   ]);
 
+  const [selectedCreateOption, setSelectedCreateOption] = useState("");
+
   useEffect(() => {
     if (!caseId) return;
     CourtCaseService.getCourtCasesById(caseId)
@@ -208,9 +214,9 @@ const CourtCaseInformation = () => {
         ]);
         // console.log(caseFields);
         setKeyParties([
-          { ...keyParties[0], value:response.plaintiff},
-          { ...keyParties[1], value:response.defendant}
-        ])
+          { ...keyParties[0], value: response.plaintiff },
+          { ...keyParties[1], value: response.defendant },
+        ]);
 
         setProfileMenus([
           {
@@ -259,11 +265,6 @@ const CourtCaseInformation = () => {
         console.log(error);
       });
   }, []);
-
-  // useEffect(() =>{
-  //   if (!caseId) return;
-    
-  // })
 
   const renderCaseSummary = () => {
     return (
@@ -362,16 +363,47 @@ const CourtCaseInformation = () => {
     setShowModal(show);
   };
 
+  const modalCreateOptions = [
+    {
+      key: "date",
+      value: "Add Date",
+    },
+    {
+      key: "document",
+      value: "Add Document",
+    },
+    { key: "invoice", value: "Add Invoice" },
+    { key: "lawyer", value: "Add Lawyer" },
+  ];
+
   const renderModal = () => {
     // Placeholder for future modal rendering logic
     return (
-      <DynamicModal title="Delete Confirmation">
-        <PrimaryButton onClick={handleAddItemButtonClick}>
-          Delete
-        </PrimaryButton>
-      </DynamicModal>
+      <NewItemModal setShowModal={setShowModal}>
+        <PillSelect
+          label="Select Item Type:"
+          name="itemType"
+          selectOptions={modalCreateOptions}
+          value={selectedCreateOption}
+          onChange={(e) => setSelectedCreateOption(e.target.value)}
+        ></PillSelect>
+        {renderCreateForm()}
+      </NewItemModal>
     );
   };
+
+  const renderCreateForm = () =>{
+    switch (selectedCreateOption) {
+      case "date":
+        return <div>Form to add Date</div>;
+      case "document":
+        return <div>Form to add Document</div>;
+      case "invoice":
+        return <AddInvoiceForm />;
+      case "lawyer":
+        return <div>Form to add Lawyer</div>;
+    }
+  }
 
   return (
     <>

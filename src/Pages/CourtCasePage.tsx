@@ -75,16 +75,6 @@ const CourtCasePage = () => {
       inputType: "input",
     },
     {
-      label: "Lawyer:",
-      name: "lawyer",
-      type: "text",
-      placeholder: "Enter lawyer names",
-      value: "",
-      icon: Plus,
-      addEnterHint: true,
-      inputType: "input",
-    },
-    {
       label: "Status:",
       name: "status",
       type: "text",
