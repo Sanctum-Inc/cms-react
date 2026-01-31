@@ -1,18 +1,10 @@
-import { Plus, type LucideProps } from "lucide-react";
 import {
   useState,
   type ChangeEvent,
   type ForwardRefExoticComponent,
   type RefAttributes,
 } from "react";
-import type { KeyValue } from "../../Models/InputItem";
-
-type PillInputChangeEvent = {
-  target: {
-    name: string;
-    value: string[];
-  };
-};
+import type { LucideProps } from "lucide-react";
 
 interface PillInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -23,16 +15,13 @@ interface PillInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   addEnterHint?: boolean;
   width?: string;
   height?: string;
-  inputType: "input" | "select" | "file";
-  selectOptions?: KeyValue[];
-  customOnChange?: (e: PillInputChangeEvent) => void;
+  customOnChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   error?: boolean;
   disabled?: boolean;
 }
 
 const PillInput = (props: PillInputProps) => {
   const [getValues, setValues] = useState<string[]>([]);
-  const [getFiles, setFiles] = useState<File[]>([]);
 
   const {
     label,
@@ -40,8 +29,6 @@ const PillInput = (props: PillInputProps) => {
     addEnterHint,
     width,
     height,
-    inputType,
-    selectOptions,
     customOnChange,
     error,
     className,
@@ -52,7 +39,6 @@ const PillInput = (props: PillInputProps) => {
   // Controlled value support
   const inputValue = props.value !== undefined ? String(props.value) : "";
 
-  // Shared disabled styles
   const disabledStyles = disabled
     ? "bg-gray-100 text-gray-500 cursor-not-allowed opacity-70 focus:ring-0 focus:outline-none"
     : "";
@@ -72,7 +58,7 @@ const PillInput = (props: PillInputProps) => {
     }
   };
 
-  const handleSetValues = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
 
     if (props.onChange) {
@@ -80,124 +66,7 @@ const PillInput = (props: PillInputProps) => {
     }
 
     if (customOnChange) {
-      customOnChange({
-        target: {
-          name: props.name!,
-          value: [e.target.value],
-        },
-      });
-    }
-  };
-
-  const handleSetValuesSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-    if (disabled) return;
-
-    if (props.onChange) {
-      props.onChange(e as unknown as React.ChangeEvent<HTMLInputElement>);
-    }
-  };
-
-  const handleFileOpen = () => {
-    if (disabled) return;
-    const input = document.getElementById("hidden-file-input");
-    input?.click();
-  };
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (disabled) return;
-
-    const files = e.target.files ? Array.from(e.target.files) : [];
-
-    files.forEach((file) => {
-      const updated = [...getValues, file.name];
-      setValues(updated);
-      setFiles((prev) => [...prev, file]);
-
-      customOnChange?.({
-        target: {
-          name: props.name!,
-          value: updated,
-        },
-      });
-    });
-
-    console.log(getFiles);
-  };
-
-  const renderInput = () => {
-    switch (inputType) {
-      case "input":
-        return (
-          <input
-            {...restProps}
-            disabled={disabled}
-            value={inputValue}
-            onKeyDown={handleEnterKey}
-            onChange={handleSetValues}
-            className={`border ${
-              error ? "border-red-500" : "border-gray-300"
-            } rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500
-            ${className ?? ""}
-            ${icon ? "pr-10" : ""}
-            ${width ? "w-" + width : "w-full"}
-            ${height ? "h-" + height : "h-13"}
-            ${disabledStyles}`}
-          />
-        );
-
-      case "select":
-        return (
-          <select
-            disabled={disabled}
-            value={inputValue}
-            onChange={handleSetValuesSelect}
-            className={`border ${
-              error ? "border-red-500" : "border-gray-300"
-            } rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500
-            ${className ?? ""}
-            ${icon ? "pr-10" : ""}
-            ${width ? "w-" + width : "w-full"}
-            ${height ? "h-" + height : "h-13"}
-            ${disabledStyles}`}
-          >
-            <option disabled value="">
-              Select an option
-            </option>
-            {selectOptions?.map((option) => (
-              <option key={option.key} value={option.key}>
-                {option.value}
-              </option>
-            ))}
-          </select>
-        );
-
-      case "file":
-        return (
-          <>
-            <div
-              className={`border-2 border-dashed h-50 flex items-center justify-center
-              ${
-                disabled
-                  ? "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed"
-                  : "border-gray-300 hover:border-blue-500 hover:text-blue-500 cursor-pointer"
-              }`}
-              onClick={handleFileOpen}
-            >
-              <Plus size={72} />
-            </div>
-            <input
-              type="file"
-              name={props.name}
-              id="hidden-file-input"
-              hidden
-              multiple
-              onChange={handleFileChange}
-            />
-          </>
-        );
-
-      default:
-        return null;
+      customOnChange(e);
     }
   };
 
@@ -211,9 +80,22 @@ const PillInput = (props: PillInputProps) => {
           {label}
         </label>
       )}
-
       <div className="relative">
-        {renderInput()}
+        <input
+          {...restProps}
+          disabled={disabled}
+          value={inputValue}
+          onKeyDown={handleEnterKey}
+          onChange={handleChange}
+          className={`border ${
+            error ? "border-red-500" : "border-gray-300"
+          } rounded-full py-1 px-3 focus:outline-none focus:ring-1 focus:ring-blue-500
+            ${className ?? ""}
+            ${icon ? "pr-10" : ""}
+            ${width ? "w-" + width : "w-full"}
+            ${height ? "h-" + height : "h-13"}
+            ${disabledStyles}`}
+        />
         {icon && addEnterHint && !disabled && (
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
             {props.icon && <props.icon size={16} />}
