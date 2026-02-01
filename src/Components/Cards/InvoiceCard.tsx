@@ -16,7 +16,6 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { InvoiceService } from "../../api";
 import axios from "axios";
 import DynamicModal from "../Modal/ShareFileModal";
-import PillInput from "../Inputs/PillInput";
 
 interface InvoiceCardProps {
   invoices: Invoice;
@@ -33,7 +32,7 @@ const InvoiceCard = ({
 }: InvoiceCardProps) => {
   const [showItems, setShowItems] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  // const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [openInvoiceOptions, setOpenInvoiceOptions] = useState(false);
   const [openInvoiceItemOptions, setOpenInvoiceItemOptions] = useState<
     boolean[]

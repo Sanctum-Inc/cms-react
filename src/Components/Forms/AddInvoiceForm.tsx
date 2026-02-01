@@ -190,7 +190,7 @@ const AddInvoiceForm = ({
           name="hours"
           type="number"
           placeholder="0"
-          value={formData.hours}
+          value={formData.hours.toString()}
           onChange={(e) => handleChange("hours", e.target.value)}
         />
 
@@ -199,7 +199,7 @@ const AddInvoiceForm = ({
           name="costPerHour"
           type="number"
           placeholder="Enter hourly cost"
-          value={formData.costPerHour}
+          value={formData.costPerHour.toString()}
           onChange={(e) => handleChange("costPerHour", e.target.value)}
         />
 

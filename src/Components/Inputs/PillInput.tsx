@@ -4,7 +4,7 @@ interface PillInputProps extends Omit<
 > {
   label?: string;
   values?: string[];
-  value: string;
+  value: string ;
   onAdd?: (value: string) => void;
   onRemove?: (index: number) => void;
   addEnterHint?: boolean;
