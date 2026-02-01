@@ -1,31 +1,55 @@
+import type { LucideProps } from "lucide-react";
+import type { ForwardRefExoticComponent, RefAttributes } from "react";
+
 const colorMap = {
-    red: 'bg-red-500 hover:bg-red-700',
-    blue: 'bg-blue-500 hover:bg-blue-700',
-    green: 'bg-green-500 hover:bg-green-700',
-    gray: 'bg-gray-500 hover:bg-gray-700',
+  red: "bg-red-500 hover:bg-red-700 text-white",
+  blue: "bg-blue-500 hover:bg-blue-700 text-white",
+  green: "bg-green-500 hover:bg-green-700 text-white",
+  gray: "bg-gray-500 hover:bg-gray-700 text-white",
+  lightGray: "bg-gray-200 hover:bg-gray-300 text-gray-500",
 };
 
-
 interface PrimaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    color?: keyof typeof colorMap;
-    centerText?: boolean;
+  color?: keyof typeof colorMap;
+  centerText?: boolean;
+  icon?: ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+  >;
+  loading?: boolean;
 }
 
-const PrimaryButton = ({ color = 'blue', centerText = true, ...props }: PrimaryButtonProps) => {
-    const base =
-        'w-full text-white font-bold py-2 px-4 rounded-xl transition duration-300 mb-4';
-    const alignment = centerText ? 'text-center' : '';
-    const colorClasses = colorMap[color];
+const PrimaryButton = ({
+  color = "blue",
+  centerText = true,
+  ...props
+}: PrimaryButtonProps) => {
+  const base =
+    "w-full font-bold py-2 px-4 rounded-xl transition duration-300 mb-4";
+  const alignment = centerText ? "text-center" : "";
+  const colorClasses = colorMap[color];
 
-    return (
-      <button
-        className={`${base} ${colorClasses} ${alignment}`}
-        type="button"
-        {...{
-          ...props,
-        }}
-      />
-    );
-}
+  return (
+    <button
+      className={`${base} ${colorClasses} ${alignment} flex items-center justify-center`}
+      type="button"
+      {...{
+        ...props,
+      }}
+    >
+      {props.icon && !props.loading && (
+        <span className="inline-flex mr-2 pointer-events-none">
+          <props.icon size={16} />
+        </span>
+      )}
+      {props.loading ? (
+        <span className="flex items-center">
+          <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+        </span>
+      ) : (
+        props.children
+      )}
+    </button>
+  );
+};
 
 export default PrimaryButton;

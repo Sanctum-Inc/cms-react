@@ -126,7 +126,7 @@ const InvoicePage = () => {
     return filtered;
   }, [searchQuery, statusFilter, sortBy, sortDesc, invoices]);
 
-  const returnModal = () => {
+  const returnSideModal = () => {
     if (showAddModal)
       return (
         <SideModal
@@ -256,6 +256,7 @@ const InvoicePage = () => {
     return errorAlertMessage && <ErrorAlert message={errorAlertMessage} />;
   };
 
+
   return (
     <>
       <Header
@@ -357,7 +358,7 @@ const InvoicePage = () => {
           }
         />
       ))}
-      {returnModal()}
+      {returnSideModal()}
       {renderSuccessmessage()}
       {renderErrorMessage()}
     </>

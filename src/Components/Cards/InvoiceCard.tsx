@@ -6,11 +6,17 @@ import {
   List,
   Users,
 } from "lucide-react";
-import { statusLabels, type Invoice, type InvoiceItemEntry } from "../../Models/Invoices";
+import {
+  statusLabels,
+  type Invoice,
+  type InvoiceItemEntry,
+} from "../../Models/Invoices";
 import Card from "./Card";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { InvoiceService } from "../../api";
 import axios from "axios";
+import DynamicModal from "../Modal/ShareFileModal";
+import PillInput from "../Inputs/PillInput";
 
 interface InvoiceCardProps {
   invoices: Invoice;
@@ -26,6 +32,8 @@ const InvoiceCard = ({
   openUpdateModal,
 }: InvoiceCardProps) => {
   const [showItems, setShowItems] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [openInvoiceOptions, setOpenInvoiceOptions] = useState(false);
   const [openInvoiceItemOptions, setOpenInvoiceItemOptions] = useState<
     boolean[]
@@ -53,7 +61,6 @@ const InvoiceCard = ({
     }
   };
 
-
   const formatMoney = (amount: number) => {
     return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
@@ -72,7 +79,7 @@ const InvoiceCard = ({
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       const clickedInsideSomeMenu = menuRefs.current.some(
-        (ref) => ref && ref.contains(e.target as Node)
+        (ref) => ref && ref.contains(e.target as Node),
       );
 
       if (!clickedInsideSomeMenu) {
@@ -83,7 +90,6 @@ const InvoiceCard = ({
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [invoices.Items.length]);
-
 
   useEffect(() => {
     setOpenInvoiceItemOptions(Array(invoices.Items.length).fill(false));
@@ -127,7 +133,7 @@ const InvoiceCard = ({
                 className="cursor-pointer focus:outline-none"
                 onClick={() =>
                   setOpenInvoiceItemOptions((o) =>
-                    o.map((_, i) => (i === index ? !o[i] : false))
+                    o.map((_, i) => (i === index ? !o[i] : false)),
                   )
                 }
                 aria-label="Invoice options menu"
@@ -167,7 +173,7 @@ const InvoiceCard = ({
     openUpdateModal(invoiceItem);
   };
 
-  const handleSetToPaid = (id : string, status : number) => {
+  const handleSetToPaid = (id: string, status: number) => {
     InvoiceService.updateInvoicesStatus(id, {
       isPaid: status,
     })
@@ -177,7 +183,7 @@ const InvoiceCard = ({
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   const downloadPdf = async (id: string, invoiceId: string) => {
     try {
@@ -187,7 +193,7 @@ const InvoiceCard = ({
 
       // Create a blob URL from the response data
       const url = window.URL.createObjectURL(
-        new Blob([response.data], { type: "application/pdf" })
+        new Blob([response.data], { type: "application/pdf" }),
       );
 
       // Create a temporary <a> element to trigger the download
@@ -206,6 +212,20 @@ const InvoiceCard = ({
     } catch (error) {
       console.error("Error downloading PDF:", error);
     }
+  };
+
+  const returnCenterModal = () => {
+    return (
+      showShareModal && (
+        <DynamicModal
+          fileName="Invoice_2024_001.pdf"
+          title={"Share Invoice"}
+          fileSize="2.5MB"
+          fileType="PDF Document"
+          setShowModal={setShowShareModal}
+        ></DynamicModal>
+      )
+    );
   };
 
   return (
@@ -238,9 +258,9 @@ const InvoiceCard = ({
             <span className="text-gray-500 text-sm flex">Total</span>
           </div>
           <div>
-          <span className={getStatusStyles(invoices.status)}>
-            {statusLabels[invoices.status]}
-          </span>
+            <span className={getStatusStyles(invoices.status)}>
+              {statusLabels[invoices.status]}
+            </span>
           </div>
           <div className="flex justify-center h-full space-y-2">
             <div
@@ -293,7 +313,9 @@ const InvoiceCard = ({
                   </button>
                   <button
                     className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                    onClick={() => handleSetToPaid(invoices.id, invoices.status == 2 ? 0 : 2)}
+                    onClick={() =>
+                      handleSetToPaid(invoices.id, invoices.status == 2 ? 0 : 2)
+                    }
                   >
                     Set to {invoices.status ? "Unpaid" : "Paid"}
                   </button>
@@ -308,7 +330,7 @@ const InvoiceCard = ({
 
                   <button
                     className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                    onClick={() => console.log("Share via Email")}
+                    onClick={() => setShowShareModal(true)}
                   >
                     Share via Email
                   </button>
@@ -319,6 +341,7 @@ const InvoiceCard = ({
         </div>
         <div>{showItems && renderInvoiceItems(invoices.Items)}</div>
       </Card>
+      {returnCenterModal()}
     </>
   );
 };
