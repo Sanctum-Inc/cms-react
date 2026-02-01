@@ -32,6 +32,15 @@ const AuthenticationContext = createContext<AuthContextType | undefined>(
   undefined,
 );
 
+const isTokenExpired = (token: string): boolean => {
+  try {
+    const decoded = jwtDecode<JwtPayload>(token);
+    return decoded.exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+};
+
 export const AuthenticationProvider = ({
   children,
 }: {
@@ -43,10 +52,11 @@ export const AuthenticationProvider = ({
 
   useEffect(() => {
     const storedToken = localStorage.getItem("accessToken");
-    if (storedToken) {
+    if (storedToken && !isTokenExpired(storedToken)) {
       setToken(storedToken);
-      // Optionally decode token and set user here
       setUser(jwtDecode<JwtPayload>(storedToken));
+    } else {
+      localStorage.removeItem("accessToken");
     }
 
     setLoading(false);

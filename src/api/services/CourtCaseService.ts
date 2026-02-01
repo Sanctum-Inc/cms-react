@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { AddCourtCaseRequest } from '../models/AddCourtCaseRequest';
+import type { CourtCaseNumberResponse } from '../models/CourtCaseNumberResponse';
 import type { CourtCasesResponse } from '../models/CourtCasesResponse';
 import type { UpdateCourtCaseRequest } from '../models/UpdateCourtCaseRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -38,10 +39,10 @@ export class CourtCaseService {
         });
     }
     /**
-     * @returns string OK
+     * @returns CourtCaseNumberResponse OK
      * @throws ApiError
      */
-    public static getAllCaseNumbers(): CancelablePromise<Array<string>> {
+    public static getAllCaseNumbers(): CancelablePromise<Array<CourtCaseNumberResponse>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/CourtCase/case-numbers',

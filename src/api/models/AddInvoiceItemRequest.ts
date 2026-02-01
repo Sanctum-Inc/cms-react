@@ -9,5 +9,7 @@ export type AddInvoiceItemRequest = {
     costPerHour: number;
     date: string;
     caseId: string;
+    clientName: string | null;
+    refference: string | null;
 };
 

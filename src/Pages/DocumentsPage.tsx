@@ -1,42 +1,12 @@
 import { useState } from "react";
 import Header from "../Components/Header/Header";
-import Modal from "../Components/Modal/Modal";
-import type { InputItem } from "../Models/InputItem";
+import SideModal from "../Components/Modal/SideModal";
 import SortBar from "../Components/Inputs/SortBar";
 import DocumentCard from "../Components/Cards/DocumentFolderCard";
 
 const DocumentsPage = () => {
     const [showModal, setShowModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
-
-     const inputItems: InputItem[] = [
-       {
-         label: "Case Number:",
-         name: "caseNumber",
-         selectOptions: [
-         ],
-         inputType: "select",
-       },
-       {
-         label: "Item Type:",
-         name: "itemType",
-         selectOptions: [{key: "file", value: "Document (File)"}, {key: "folder", value: "Folder"}],
-         inputType: "select",
-       },
-       {
-         label: "Title:",
-         name: "title",
-         type: "text",
-         placeholder: "eg. Expert Witness Report",
-         inputType: "input",
-       },
-       {
-         label: "File:",
-         name: "file",
-         inputType: "file"
-       },
-     ];
-
       const documents = [
         // --- Example 1: Small ---
         {
@@ -245,14 +215,11 @@ const DocumentsPage = () => {
         setShowModal(show);
     }
 
-    const handleButtonClick = () => {
-         
-    }
 
     const renderModal = () => {
     if (!showModal) return null;
     return (
-      <Modal setShowModal={setShowModal} handleShowModal={handleShowModal} title="New Court Case" inputItems={inputItems} buttonCaption="Add Case" buttonOnClick={handleButtonClick}/>
+      <SideModal setShowModal={setShowModal} title="New Court Case" />
     );
     }
 

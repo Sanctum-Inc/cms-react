@@ -81,8 +81,8 @@ const PillSelect = (props: PillSelectProps) => {
           <option disabled value="">
             Select an option
           </option>
-          {selectOptions.map((option) => (
-            <option key={option.key} value={option.key}>
+          {selectOptions.map((option, index) => (
+            <option key={`${option.key}-${index}`} value={option.key}>
               {option.value}
             </option>
           ))}

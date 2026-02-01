@@ -1,7 +1,7 @@
 import { ArrowUp } from "lucide-react";
 import CourtCaseCard from "../Components/Cards/CourtCaseCard";
 import { useState, useMemo, useEffect } from "react";
-import Modal from "../Components/Modal/Modal";
+import SideModal from "../Components/Modal/SideModal";
 import SortBar from "../Components/Inputs/SortBar";
 import Header from "../Components/Header/Header";
 import { CourtCaseService } from "../api";
@@ -123,9 +123,9 @@ const CourtCasePage = () => {
   const renderModal = () => {
     if (!showModal) return null;
     return (
-      <Modal handleShowModal={handleShowModal} setShowModal={setShowModal} title="New Court Case">
+      <SideModal setShowModal={setShowModal} title="New Court Case">
         <AddCourtCaseForm filteredCases={filteredCases} setShowSuccessMessage={setSuccessAlertMessage} setShowErrorMessage={setErrorAlertMessage} />
-      </Modal>
+      </SideModal>
     );
   };
 

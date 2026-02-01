@@ -1,7 +1,7 @@
 import Header from "../Components/Header/Header";
 import { useEffect, useState } from "react";
-import Modal from "../Components/Modal/Modal";
-import type { InputItem, KeyValue } from "../Models/InputItem";
+import SideModal from "../Components/Modal/SideModal";
+import type { KeyValue } from "../Models/InputItem";
 import Calendar from "../Components/Calendar/Calendar";
 import Card from "../Components/Cards/Card";
 import CaseTimeLine from "../Components/Cards/CaseTimeLine";
@@ -9,11 +9,9 @@ import { CalendarClock } from "lucide-react";
 import {
   CourtCaseDateService,
   CourtCaseService,
-  type AddCourtCaseDateRequest,
   type UpdateCourtCaseDateRequest,
 } from "../api";
 import {
-  selectCourtCaseTypeOptions,
   type CourtCaseDates,
 } from "../Models/CourtCaseDates";
 import PrimaryButton from "../Components/Buttons/PrimaryButton";
@@ -24,24 +22,8 @@ const DatesPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const handleShowModal = (show: boolean) => {
-    setNewCourtCaseDate({
-      caseId: "",
-      date: "",
-      title: "",
-      type: "",
-    });
     setShowModal(show);
   };
-  const handleShowEditModal = (show: boolean) => {
-    setShowEditModal(show);
-  };
-  const [newCourtCaseDate, setNewCourtCaseDate] =
-    useState<AddCourtCaseDateRequest>({
-      caseId: "",
-      date: "",
-      title: "",
-      type: "",
-    });
 
   const [updateCourtCaseDate, setUpdateCourtCaseDate] = useState<
     UpdateCourtCaseDateRequest & { id: string }
@@ -51,40 +33,6 @@ const DatesPage = () => {
     title: "",
     id: "",
   });
-
-  const [inputItems, setInputItems] = useState<InputItem[]>([
-    {
-      name: "title",
-      label: "Event Title:",
-      type: "text",
-      addEnterHint: false,
-      placeholder: "eg. Final Pre-Trial Hearing",
-      value: "",
-      inputType: "input",
-    },
-    {
-      name: "caseId",
-      label: "Case Number:",
-      type: "text",
-      addEnterHint: false,
-      value: "",
-      inputType: "select",
-      selectOptions: [],
-    },
-    {
-      name: "date",
-      label: "Date:",
-      type: "date",
-      inputType: "input",
-    },
-    {
-      name: "type",
-      label: "Event Type & Icon:",
-      type: "text",
-      inputType: "select",
-      selectOptions: selectCourtCaseTypeOptions,
-    },
-  ]);
 
   const [upcomingCourtCaseDates, setUpcomingCourtCaseDates] = useState<
     CourtCaseDates[]
@@ -144,56 +92,14 @@ const DatesPage = () => {
       });
   }, [isAdded]);
 
-  const handleAddNewDate = () => {
-    CourtCaseDateService.createCourtCaseDates(newCourtCaseDate)
-      .then((response) => {
-        console.log(response);
-        setIsAdded(true);
-        setShowModal(false);
-        setSuccessAlertMessage("Court case date added successfully.");
-      })
-      .catch((error) => {
-        setErrorAlertMessage("Failed to add court case date.");
-        console.log(error);
-      });
-  };
-
-  const handleAddChange = (name: string, value: string) => {
-    setInputItems((prev) =>
-      prev.map((i) => (i.name === name ? { ...i, value } : i))
-    );
-
-    setNewCourtCaseDate((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleUpdateChange = (name: string, value: string) => {
-    setInputItems((prev) =>
-      prev.map((i) => (i.name === name ? { ...i, value } : i))
-    );
-
-    setUpdateCourtCaseDate((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   const renderModal = () => {
     if (showModal == false) return null;
     else
       return (
         <>
-          <Modal
-            buttonCaption="Add Date"
+          <SideModal
             title="Schedule New Event"
             setShowModal={setShowModal}
-            handleShowModal={handleShowModal}
-            inputItems={inputItems}
-            buttonOnClick={handleAddNewDate}
-            values={newCourtCaseDate}
-            handleChange={handleAddChange}
           />
         </>
       );
@@ -208,16 +114,6 @@ const DatesPage = () => {
             key: courtCase.id,
             value: courtCase.caseNumber,
           });
-        });
-
-        setInputItems((prev) => {
-          const updated = [...prev];
-          updated[1] = {
-            ...updated[1],
-            // whatever you want to change
-            selectOptions: options,
-          };
-          return updated;
         });
       })
       .catch((error) => console.log(error));
@@ -262,14 +158,9 @@ const DatesPage = () => {
     else
       return (
         <>
-          <Modal
-            buttonCaption="Edit Date"
+          <SideModal
             title="Edit Event"
             setShowModal={setShowEditModal}
-            handleShowModal={handleShowEditModal}
-            inputItems={inputItems}
-            values={updateCourtCaseDate}
-            handleChange={handleUpdateChange}
           >
             <PrimaryButton
               onClick={() => handleEditDate(updateCourtCaseDate.id)}
@@ -282,7 +173,7 @@ const DatesPage = () => {
             >
               Delete
             </PrimaryButton>
-          </Modal>
+          </SideModal>
         </>
       );
   };

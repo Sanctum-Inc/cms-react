@@ -5,7 +5,6 @@ const MainLayout = () => {
     return (
       <div className="flex">
         <Navigation />
-
         <div className="flex-1 h-screen overflow-y-auto bg-(--color-hover-light)">
           <Outlet />
         </div>

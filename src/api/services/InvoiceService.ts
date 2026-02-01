@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { AddInvoiceRequest } from '../models/AddInvoiceRequest';
 import type { FileContentResult } from '../models/FileContentResult';
+import type { InvoiceNumberResponse } from '../models/InvoiceNumberResponse';
 import type { InvoiceResponse } from '../models/InvoiceResponse';
 import type { UpdateInvoiceRequest } from '../models/UpdateInvoiceRequest';
 import type { UpdateInvoiceStatusRequest } from '../models/UpdateInvoiceStatusRequest';
@@ -37,6 +38,16 @@ export class InvoiceService {
             errors: {
                 400: `Bad Request`,
             },
+        });
+    }
+    /**
+     * @returns InvoiceNumberResponse OK
+     * @throws ApiError
+     */
+    public static getAllInvoiceNumbers(): CancelablePromise<Array<InvoiceNumberResponse>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Invoice/invoice-numbers',
         });
     }
     /**

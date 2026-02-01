@@ -1,13 +1,11 @@
 import { type PropsWithChildren } from "react";
 
 interface ModalProps extends PropsWithChildren {
-  handleShowModal: (show: boolean) => void;
   setShowModal: (show: boolean) => void;
   title: string;
 }
 
-const Modal = ({
-  handleShowModal,
+const SideModal = ({
   setShowModal,
   title,
   children
@@ -26,7 +24,7 @@ const Modal = ({
           </div>
           <div
             className="w-full flex justify-end"
-            onClick={() => handleShowModal(false)}
+            onClick={() => setShowModal(false)}
           >
             <div className="w-10 cursor-pointer flex justify-center">x</div>
           </div>
@@ -37,4 +35,4 @@ const Modal = ({
   );
 };
 
-export default Modal;
+export default SideModal;

@@ -29,6 +29,8 @@ import { CourtCaseService } from "../api";
 import NewItemModal from "../Components/Modal/NewItemModal";
 import AddInvoiceForm from "../Components/Forms/AddInvoiceForm";
 import PillSelect from "../Components/Inputs/PillSelect";
+import SuccessAlert from "../Components/Alerts/SuccessAlert";
+import ErrorAlert from "../Components/Alerts/ErrorAlert";
 
 interface CaseField {
   label: string;
@@ -193,6 +195,12 @@ const CourtCaseInformation = () => {
       ],
     },
   ]);
+  const [successAlertMessage, setSuccessAlertMessage] = useState<string | null>(
+    null,
+  );
+  const [errorAlertMessage, setErrorAlertMessage] = useState<string | null>(
+    null,
+  );
 
   const [selectedCreateOption, setSelectedCreateOption] = useState("");
 
@@ -383,18 +391,33 @@ const CourtCaseInformation = () => {
     );
   };
 
-  const renderCreateForm = () =>{
+  const renderCreateForm = () => {
     switch (selectedCreateOption) {
       case "date":
         return <div>Form to add Date</div>;
       case "document":
         return <div>Form to add Document</div>;
       case "invoice":
-        return <AddInvoiceForm />;
+        return (
+          <AddInvoiceForm
+            setShowSuccessMessage={setSuccessAlertMessage}
+            setShowErrorMessage={setErrorAlertMessage}
+          />
+        );
       case "lawyer":
         return <div>Form to add Lawyer</div>;
     }
-  }
+  };
+
+  const renderSuccessmessage = () => {
+    return (
+      successAlertMessage && <SuccessAlert message={successAlertMessage} />
+    );
+  };
+
+  const renderErrorMessage = () => {
+    return errorAlertMessage && <ErrorAlert message={errorAlertMessage} />;
+  };
 
   return (
     <>
@@ -417,6 +440,8 @@ const CourtCaseInformation = () => {
         </Card>
       </div>
       {showModal && renderModal()}
+      {renderSuccessmessage()}
+      {renderErrorMessage()}
     </>
   );
 };
