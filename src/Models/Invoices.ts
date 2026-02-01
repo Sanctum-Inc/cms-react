@@ -4,7 +4,7 @@ export interface InvoiceItemEntry {
   date: Date;
   description: string;
   hours: number;
-  rate: number;
+  costPerHour: number;
   amount: number;
   caseId: string;
   invoiceId: string;

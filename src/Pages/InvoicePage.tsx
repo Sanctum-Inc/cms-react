@@ -6,6 +6,7 @@ import InvoiceCard from "../Components/Cards/InvoiceCard";
 import Header from "../Components/Header/Header";
 import {
   InvoiceService,
+  type AddInvoiceItemRequest,
   type InvoiceStatus,
 } from "../api";
 import {
@@ -23,8 +24,6 @@ const InvoicePage = () => {
   const [sortDesc, setSortDesc] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdatemodal, setShowUpdateModal] = useState(false);
-  const [caseId, setCaseId] = useState<string>("");
-  const [invoiceId, setInvoiceId] = useState<string>("");
 
   const [invoices, setInvoice] = useState<Invoice[]>([]);
 
@@ -36,6 +35,17 @@ const InvoicePage = () => {
   const [errorAlertMessage, setErrorAlertMessage] = useState<string | null>(
     null,
   );
+  const [addInvoiceItemRequest, setAddInvoiceItemRequest] =
+    useState<AddInvoiceItemRequest>({
+      caseId: "",
+      invoiceId: "",
+      name: "",
+      date: "",
+      hours: 0,
+      costPerHour: 0,
+      clientName: "",
+      refference: "",
+    });
 
   // Compute filtered + sorted cases
   const filteredInvoices = useMemo(() => {
@@ -125,8 +135,7 @@ const InvoicePage = () => {
         >
           <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto p-4">
             <AddInvoiceForm
-              caseId={caseId}
-              invoiceId={invoiceId}
+              addInvoiceItemRequest={addInvoiceItemRequest}
               setInvoice={setInvoice}
               setShowErrorMessage={setErrorAlertMessage}
               setShowSuccessMessage={setSuccessAlertMessage}
@@ -139,16 +148,34 @@ const InvoicePage = () => {
         <SideModal
           setShowModal={setShowUpdateModal}
           title="Update Invoice Item"
-        />
+        >
+          <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto p-4">
+            <AddInvoiceForm
+              addInvoiceItemRequest={addInvoiceItemRequest}
+              setInvoice={setInvoice}
+              setShowErrorMessage={setErrorAlertMessage}
+              setShowSuccessMessage={setSuccessAlertMessage}
+            />
+          </div>
+        </SideModal>
       );
   };
 
   const handleShowUpdateModal = (
-    invoiceId: string,
-    caseId: string,
+    invoice: Invoice,
+    index: number,
   ) => {
-    setCaseId(caseId);
-    setInvoiceId(invoiceId);
+
+    setAddInvoiceItemRequest({
+      caseId: invoice.caseId,
+      invoiceId: invoice.id,
+      name: invoice.Items[index]?.description || "",
+      date: invoice.Items[index]?.date.toISOString().split("T")[0] || "",
+      hours: invoice.Items[index]?.hours || 0,
+      costPerHour: invoice.Items[index]?.costPerHour || 0,
+      clientName: "",
+      refference: "",
+    });
 
     setShowUpdateModal(true);
   };
@@ -158,8 +185,16 @@ const InvoicePage = () => {
     caseId: string,
     invoiceId: string,
   ) => {
-    setCaseId(caseId);
-    setInvoiceId(invoiceId);
+    setAddInvoiceItemRequest({
+      caseId: caseId,
+      invoiceId: invoiceId,
+      name: "",
+      date: "",
+      hours: 0,
+      costPerHour: 0,
+      clientName: "",
+      refference: "",
+    });
 
     setShowAddModal(show);
   };
@@ -194,7 +229,7 @@ const InvoicePage = () => {
             hours: item.hours,
             date: new Date(item.date),
             description: item.name,
-            rate: item.costPerHour,
+            costPerHour: item.costPerHour,
             caseId: invoice.caseId,
             invoiceId: invoice.id,
             id: item.id,
@@ -318,7 +353,7 @@ const InvoicePage = () => {
             handleShowAddModal(true, invoice.caseId, invoice.id)
           }
           openUpdateModal={() =>
-            handleShowUpdateModal(invoice.id, invoice.caseId)
+            handleShowUpdateModal(invoice, index)
           }
         />
       ))}

@@ -17,26 +17,24 @@ interface AddInvoiceFormProps {
   setShowSuccessMessage: (message: string) => void;
   setShowErrorMessage: (message: string) => void;
   setInvoice?: (invoice: SetStateAction<Invoice[]>) => void;
-  invoiceId?: string;
-  caseId?: string;
+  addInvoiceItemRequest?: AddInvoiceItemRequest;
 }
 
 const AddInvoiceForm = ({
   setShowSuccessMessage,
   setShowErrorMessage,
   setInvoice,
-  invoiceId,
-  caseId,
+  addInvoiceItemRequest,
 }: AddInvoiceFormProps) => {
   const [formData, setFormData] = useState<AddInvoiceItemRequest>({
-    caseId: caseId || "",
-    invoiceId: invoiceId || "",
-    name: "",
-    date: "",
-    hours: 0,
-    costPerHour: 0,
-    clientName: "",
-    refference: "",
+    caseId: addInvoiceItemRequest?.caseId || "",
+    invoiceId: addInvoiceItemRequest?.invoiceId || "",
+    name: addInvoiceItemRequest?.name || "",
+    date: addInvoiceItemRequest?.date || "",
+    hours: addInvoiceItemRequest?.hours || 0,
+    costPerHour: addInvoiceItemRequest?.costPerHour || 0,
+    clientName: addInvoiceItemRequest?.clientName || "",
+    refference: addInvoiceItemRequest?.refference || "",
   });
   const [caseNumbers, setCaseNumbers] = useState<KeyValue[]>([]);
   const [invoiceNumbers, setInvoiceNumbers] = useState<KeyValue[]>([
@@ -72,7 +70,7 @@ const AddInvoiceForm = ({
                         invoiceId: formData.invoiceId,
                         date: new Date(formData.date),
                         hours: formData.hours,
-                        rate: formData.costPerHour,
+                        costPerHour: formData.costPerHour,
                         amount: formData.hours * formData.costPerHour,
                         description: formData.name,
                       },

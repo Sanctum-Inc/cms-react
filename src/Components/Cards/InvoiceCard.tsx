@@ -110,7 +110,7 @@ const InvoiceCard = ({
             <div className="text-gray-500">{item.hours}</div>
             <div className="text-gray-500">
               <span>R</span>
-              <span>{formatMoney(item.rate || 0)}</span>
+              <span>{formatMoney(item.costPerHour || 0)}</span>
             </div>
             <div className="font-semibold">
               <span>R</span>
