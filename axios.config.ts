@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Create and configure the default axios instance
 const axiosInstance = axios.create({
-  baseURL: "https://localhost:8080",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5158",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
@@ -43,7 +43,8 @@ axiosInstance.interceptors.response.use(
 
 // Override the default axios instance globally
 // This makes the OpenAPI generated client use our configured instance
-axios.defaults.baseURL = "https://localhost:8080";
+axios.defaults.baseURL =
+  import.meta.env.VITE_API_URL || "http://localhost:5158";
 axios.defaults.timeout = 10000;
 
 // Add the interceptors to the default axios instance too

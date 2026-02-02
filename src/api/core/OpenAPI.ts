@@ -20,13 +20,13 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
-    BASE: 'https://localhost:8080',
-    VERSION: '1.0.0',
-    WITH_CREDENTIALS: false,
-    CREDENTIALS: 'include',
-    TOKEN: undefined,
-    USERNAME: undefined,
-    PASSWORD: undefined,
-    HEADERS: undefined,
-    ENCODE_PATH: undefined,
+  BASE: "http://localhost:5158",
+  VERSION: "1.0.0",
+  WITH_CREDENTIALS: false,
+  CREDENTIALS: "include",
+  TOKEN: undefined,
+  USERNAME: undefined,
+  PASSWORD: undefined,
+  HEADERS: undefined,
+  ENCODE_PATH: undefined,
 };
