@@ -143,7 +143,7 @@ const CourtCasePage = () => {
         plaintiff: courtCase.plaintiff,
         type: courtCase.type!,
         nextDate: courtCase.courtCaseDates?.length
-          ? courtCase.courtCaseDates[0].date! //ToDO: find next upcoming date
+          ? "" //ToDO: find next upcoming date
           : "",
         internalStatus: courtCase.status,
       }));

@@ -29,7 +29,7 @@ const AddCourtCaseForm = ({
     type: 0,
   });
 
-  const handleChange = (name: string, value: string) => {
+  const handleChange = (name: string, value: string | number) => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -92,24 +92,24 @@ const AddCourtCaseForm = ({
         label="Status:"
         name="status"
         selectOptions={CourtCaseStatusOptions}
-        value={formData.status.toString() ?? ""}
-        onChange={(e) => handleChange("status", e.target.value)}
+        value={formData.status ?? ""}
+        onChange={(e) => handleChange("status", parseInt(e.target.value))}
       />
 
       <PillSelect
         label="Type:"
         name="type"
         selectOptions={CourtCaseTypeOptions}
-        value={formData.type?.toString() ?? ""}
-        onChange={(e) => handleChange("type", e.target.value)}
+        value={formData.type ?? ""}
+        onChange={(e) => handleChange("type", parseInt(e.target.value))}
       />
 
       <PillSelect
         label="Outcome:"
         name="outcome"
-        value={formData.outcome.toString() ?? ""}
+        value={formData.outcome ?? ""}
         selectOptions={CourtCaseOutcomeOptions}
-        onChange={(e) => handleChange("outcome", e.target.value)}
+        onChange={(e) => handleChange("outcome", parseInt(e.target.value))}
       />
 
       <div className="mt-5">

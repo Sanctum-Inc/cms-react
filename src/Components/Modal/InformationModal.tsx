@@ -18,6 +18,7 @@ interface InformationModalProps extends PropsWithChildren {
     text: string;
   }[];
   subtitle?: string;
+  showButton? : boolean;
 }
 
 const InformationModal = ({
@@ -25,6 +26,8 @@ const InformationModal = ({
   setShowModal,
   items,
   subtitle,
+  showButton,
+  children
 }: InformationModalProps) => {
   const handleCloseModal = () => {
     setShowModal(false);
@@ -78,11 +81,11 @@ const InformationModal = ({
           </Card>
         ))}
         <div></div>
-        <div className="flex mt-4 items-center">
+        {!showButton ? children : <div className="flex mt-4 items-center">
           <PrimaryButton onClick={handleCloseModal} color="blue">
             Got it, Thanks!
           </PrimaryButton>
-        </div>
+        </div>}
       </Card>
     </div>
   );

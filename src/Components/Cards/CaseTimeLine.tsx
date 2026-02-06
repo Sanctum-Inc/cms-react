@@ -1,77 +1,216 @@
-import CaseTimelineCard, {  } from './CaseTimelineCard';
-import {
-  Briefcase,
-  ChevronDown,
-  User,
-} from "lucide-react";
+import { ArrowRight, Clock, EllipsisVertical, Info } from "lucide-react";
 import Card from "./Card";
-import { useState } from "react";
-import {
-  type CourtCaseDates,
-} from "../../Models/CourtCaseDates";
+import type {
+  CourtCaseDateItemResponse,
+  CourtCaseDateResponse,
+  UpdateCourtCaseDateRequest,
+} from "../../api";
+import { useEffect, useRef, useState, type SetStateAction } from "react";
+import SideModal from "../Modal/SideModal";
+import EditDateForm from "../Forms/EditDateForm";
+
+interface UpdateCourtCaseRequest extends UpdateCourtCaseDateRequest {
+  id: string;
+}
 
 interface CaseTimeLineProps {
-  upcomingCourtCaseDates: CourtCaseDates[];
-  previousCourtCaseDates: CourtCaseDates[];
-  onClickHandler: (courtCaseDate: CourtCaseDates) => void;
+  caseDateItems?: CourtCaseDateItemResponse[];
+  setErrorAlertMessage: (message: string) => void;
+  setSuccessAlertMessage: (message: string) => void;
 }
 
 const CaseTimeLine = ({
-  upcomingCourtCaseDates,
-  previousCourtCaseDates,
-  onClickHandler,
+  caseDateItems,
+  setErrorAlertMessage,
+  setSuccessAlertMessage,
 }: CaseTimeLineProps) => {
-  const [showDetails, setShowDetails] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [updateCourtCaseDateRequest, setUpdateCourtCaseDateRequest] =
+    useState<UpdateCourtCaseRequest>({
+      id: "",
+      caseId: "",
+      date: "",
+      description: "",
+      title: "",
+      type: 0,
+      isCancelled: false,
+      isComplete: false,
+    });
+
+  const [openMenuIndex, setOpenMenuIndex] = useState<number | null>(null);
+  const menuRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const getBorderColor = (status: string) => {
+    switch (status) {
+      case "Overdue":
+        return "border-red-700";
+      case "DueToday":
+        return "border-(--color-primary)";
+      default:
+        return "border-gray-500";
+    }
+  };
+
+  const getBackgroundColor = (status: string) => {
+    switch (status) {
+      case "Overdue":
+        return "bg-red-700";
+      case "DueToday":
+        return "bg-(--color-primary)";
+      default:
+        return "bg-gray-500";
+    }
+  };
+
+  const getPillIconText = (status: string) => {
+    switch (status) {
+      case "Overdue":
+        return "Critical | Overdue";
+      case "DueToday":
+        return "Due Today";
+      default:
+        return "Upcoming";
+    }
+  };
+
+  const handleOpenEditModal = (courtCaseDate: CourtCaseDateItemResponse) => {
+    console.log(courtCaseDate);
+    console.log(showModal);
+    setUpdateCourtCaseDateRequest({
+      id: courtCaseDate.id,
+      caseId: courtCaseDate.caseId,
+      date: courtCaseDate.date,
+      description: courtCaseDate.description,
+      title: courtCaseDate.title,
+      type: courtCaseDate.courtCaseDateType,
+      isCancelled: false,
+      isComplete: false,
+    });
+    setShowModal(true);
+  };
+
+  const toggleMenu = (index: number) => {
+    setOpenMenuIndex(openMenuIndex === index ? null : index);
+  };
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      const clickedInsideSomeMenu = menuRefs.current.some(
+        (ref) => ref && ref.contains(e.target as Node),
+      );
+
+      if (!clickedInsideSomeMenu) {
+        setOpenMenuIndex(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const renderEditModal = () => {
+    return (
+      showModal && (
+        <SideModal setShowModal={setShowModal} title="Edit Event">
+          <EditDateForm
+            setShowErrorMessage={setErrorAlertMessage}
+            setShowSuccessMessage={setSuccessAlertMessage}
+            updateCourtCaseRequest={updateCourtCaseDateRequest}
+            setShowModal={setShowModal}
+          />
+        </SideModal>
+      )
+    );
+  };
 
   return (
     <>
-      <Card
-        hover={true}
-        className="bg-gray-50 hover:bg-blue-50 mb-3 py-3"
-        removePadding={true}
-      >
-        <div className="grid grid-cols-40">
-          <div className="col-span-2 m-auto">
-            <Briefcase className="text-blue-700" />
-          </div>
-          <div className="col-span-18 my-auto">
-            <div className="text-xl font-bold">C-2025-001 - Acme Corp</div>
-            <div className="text-gray-500">TrandeMark Infringement</div>
-          </div>
-          <div className="col-span-18 ">
-            <div className="flex justify-end">
-              <div className="border border-gray-200 w-fit flex py-1 px-2 rounded-full bg-green-200">
-                <span className="flex items-center">
-                  <User className="text-green-600" size={16}></User>
+      {caseDateItems?.map((courtCaseDate, index) => (
+        <Card
+          hover={true}
+          className={`mb-3 flex justify-end ${getBackgroundColor(courtCaseDate.status)} hover:cursor-default`}
+          removePadding={true}
+          key={`CaseTimeLine-${index}`}
+        >
+          <div
+            className={`border ${getBorderColor(courtCaseDate.status)} h-full w-99/100 rounded-2xl bg-(--color-background) p-7`}
+          >
+            <div className="flex">
+              <div
+                className={`font-bold mr-3 border ${getBorderColor(courtCaseDate.status)} rounded-full py-1 px-3 ${getBackgroundColor(courtCaseDate.status)} text-white`}
+              >
+                {getPillIconText(courtCaseDate.status)}
+              </div>
+              <div className="flex items-center text-xs text-gray-500">
+                <span className="mr-1">
+                  <Clock size={20} color="gray" />
                 </span>
-                <span className="text-base font-semibold text-green-600">
-                  Today
-                </span>
+                <span className="font-semibold">{courtCaseDate.date}</span>
+              </div>
+              {courtCaseDate.status === "Overdue" && (
+                <div className="ml-auto flex items-center">
+                  <Info size={20} className="animate-bounce text-red-700" />
+                </div>
+              )}
+            </div>
+            <div className="flex py-4">
+              <div className="w-8/12 py-1">
+                <div className="text-2xl font-bold py-1">
+                  {courtCaseDate.title}
+                </div>
+                <div className="text-lg font-semibold text-gray-500">
+                  {courtCaseDate.subtitle}
+                </div>
+              </div>
+              <div className="w-4/12">
+                <div className="flex gap-2 justify-end items-center h-full">
+                  <button
+                    className="font-bold py-2 px-3 rounded-xl transition duration-300 flex items-center justify-center text-black bg-white hover:bg-gray-50 border border-gray-200 hover:cursor-pointer text-sm"
+                    onClick={() => handleOpenEditModal(courtCaseDate)}
+                  >
+                    Edit <ArrowRight size={16} className="ml-1" />
+                  </button>
+                  <div
+                    className="flex items-center relative"
+                    ref={(el) => {
+                      menuRefs.current[index] = el;
+                    }}
+                  >
+                    <button
+                      type="button"
+                      className="cursor-pointer focus:outline-none p-2 hover:bg-gray-100 rounded-lg transition"
+                      onClick={() => toggleMenu(index)}
+                      aria-label="Invoice options menu"
+                    >
+                      <EllipsisVertical className="h-5 w-5" />
+                    </button>
+                    {openMenuIndex === index && (
+                      <div className="absolute right-0 top-7 mt-2 w-40 bg-white border rounded shadow-lg z-50">
+                        <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                          Add new Item
+                        </button>
+                        <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                          Set to Complete
+                        </button>
+                        <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                          View Generated PDF
+                        </button>
+                        <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                          Share via Email
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="flex justify-end mt-2 text-lg">
-              Strategy Review Meeting
+            <div className="border border-(--color-background) bg-gray-200 w-full rounded-2xl h-20 p-4">
+              {courtCaseDate.description}
             </div>
-            <div className="flex justify-end text-gray-500">2025-11-16</div>
           </div>
-          <div className="col-span-2 m-auto">
-            {showDetails ? (
-              <ChevronDown onClick={() => setShowDetails(!showDetails)} />
-            ) : (
-              <ChevronDown
-                className="rotate-180"
-                onClick={() => setShowDetails(!showDetails)}
-              />
-            )}
-          </div>
-        </div>
-        <CaseTimelineCard
-          previousCourtCaseDates={previousCourtCaseDates}
-          showDetails={showDetails}
-          upcomingCourtCaseDates={upcomingCourtCaseDates}
-          onClickHandler={onClickHandler}
-        />
-      </Card>
+        </Card>
+      ))}
+      {renderEditModal()}
     </>
   );
 };

@@ -139,6 +139,7 @@ const InvoicePage = () => {
               setInvoice={setInvoice}
               setShowErrorMessage={setErrorAlertMessage}
               setShowSuccessMessage={setSuccessAlertMessage}
+              buttonCaption="Create"
             />
           </div>
         </SideModal>
@@ -155,6 +156,7 @@ const InvoicePage = () => {
               setInvoice={setInvoice}
               setShowErrorMessage={setErrorAlertMessage}
               setShowSuccessMessage={setSuccessAlertMessage}
+              buttonCaption="Update"
             />
           </div>
         </SideModal>

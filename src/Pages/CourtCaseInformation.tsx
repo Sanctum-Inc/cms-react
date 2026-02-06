@@ -225,12 +225,12 @@ const CourtCaseInformation = () => {
         setProfileMenus([
           {
             ...profileMenus[0],
-            items: response.courtCaseDates?.map((courtCaseDate) => {
-              return {
-                attributes1: courtCaseDate.date,
-                attributes2: courtCaseDate.type,
-                attributes3: courtCaseDate.title,
-              };
+            items: response.courtCaseDates?.at(0)?.courtCaseDateItems.map((courtCaseDate) => {
+                return {
+                  attributes1: courtCaseDate.date,
+                  attributes2: courtCaseDate.courtCaseDateType.toString(),
+                  attributes3: courtCaseDate.title,
+                };
             }),
           },
           {

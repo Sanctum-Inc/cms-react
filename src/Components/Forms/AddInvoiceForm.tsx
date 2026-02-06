@@ -18,6 +18,7 @@ interface AddInvoiceFormProps {
   setShowErrorMessage: (message: string) => void;
   setInvoice?: (invoice: SetStateAction<Invoice[]>) => void;
   addInvoiceItemRequest?: AddInvoiceItemRequest;
+  buttonCaption: string;
 }
 
 const AddInvoiceForm = ({
@@ -25,6 +26,7 @@ const AddInvoiceForm = ({
   setShowErrorMessage,
   setInvoice,
   addInvoiceItemRequest,
+  buttonCaption,
 }: AddInvoiceFormProps) => {
   const [formData, setFormData] = useState<AddInvoiceItemRequest>({
     caseId: addInvoiceItemRequest?.caseId || "",
@@ -204,7 +206,7 @@ const AddInvoiceForm = ({
         />
 
         <div className="mt-5">
-          <PrimaryButton type="submit">Create Invoice</PrimaryButton>
+          <PrimaryButton type="submit">{buttonCaption}</PrimaryButton>
         </div>
       </div>
     </form>
