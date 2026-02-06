@@ -2,10 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { CourtCaseDateTypes } from './CourtCaseDateTypes';
 export type AddCourtCaseDateRequest = {
     date: string;
     title: string;
+    description: string;
     caseId: string;
-    type: string;
+    type: CourtCaseDateTypes;
 };
 

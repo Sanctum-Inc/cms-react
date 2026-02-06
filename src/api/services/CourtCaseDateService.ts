@@ -3,17 +3,17 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { AddCourtCaseDateRequest } from '../models/AddCourtCaseDateRequest';
-import type { CourtCaseDatesResponse } from '../models/CourtCaseDatesResponse';
+import type { CourtCaseDateResponse } from '../models/CourtCaseDateResponse';
 import type { UpdateCourtCaseDateRequest } from '../models/UpdateCourtCaseDateRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class CourtCaseDateService {
     /**
-     * @returns CourtCaseDatesResponse OK
+     * @returns CourtCaseDateResponse OK
      * @throws ApiError
      */
-    public static getAllCourtCaseDates(): CancelablePromise<Array<CourtCaseDatesResponse>> {
+    public static getAllCourtCaseDates(): CancelablePromise<CourtCaseDateResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/CourtCaseDate',
@@ -39,12 +39,12 @@ export class CourtCaseDateService {
     }
     /**
      * @param id
-     * @returns CourtCaseDatesResponse OK
+     * @returns CourtCaseDateResponse OK
      * @throws ApiError
      */
     public static getCourtCaseDatesById(
         id: string,
-    ): CancelablePromise<CourtCaseDatesResponse> {
+    ): CancelablePromise<CourtCaseDateResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/CourtCaseDate/{id}',

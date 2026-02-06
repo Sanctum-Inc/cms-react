@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CourtCaseDatesResponse } from './CourtCaseDatesResponse';
+import type { CourtCaseDateResponse } from './CourtCaseDateResponse';
 import type { CourtCaseOutcomes } from './CourtCaseOutcomes';
 import type { CourtCaseStatus } from './CourtCaseStatus';
 import type { CourtCaseTypes } from './CourtCaseTypes';
@@ -20,7 +20,7 @@ export type CourtCasesResponse = {
     outcome?: CourtCaseOutcomes;
     created?: string;
     lastModified?: string;
-    courtCaseDates?: Array<CourtCaseDatesResponse>;
+    courtCaseDates?: Array<CourtCaseDateResponse>;
     documents?: Array<DocumentResponse>;
     invoices?: Array<InvoiceResponse>;
     lawyers?: Array<LawyerResponse>;

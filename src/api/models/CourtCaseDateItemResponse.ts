@@ -2,15 +2,16 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type CourtCaseDatesResponse = {
+import type { CourtCaseDateTypes } from './CourtCaseDateTypes';
+export type CourtCaseDateItemResponse = {
     id: string;
     date: string;
     title: string;
-    type: string;
     caseNumber: string;
     caseId: string;
-    caseType: string;
-    platiniff: string;
-    defendent: string;
+    courtCaseDateType: CourtCaseDateTypes;
+    subtitle: string;
+    description: string;
+    status: string;
 };
 
