@@ -16,21 +16,24 @@ interface PrimaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
   >;
   loading?: boolean;
+  removeMargin?: boolean;
 }
 
 const PrimaryButton = ({
   color = "blue",
   centerText = true,
+  removeMargin: removePadding = false,
   ...props
 }: PrimaryButtonProps) => {
   const base =
-    "w-full font-bold py-2 px-4 rounded-xl transition duration-300 mb-4";
+    "w-full font-bold py-2 px-4 rounded-xl transition duration-300";
+  const padding = removePadding ? "" : "mb-4";
   const alignment = centerText ? "text-center" : "";
   const colorClasses = colorMap[color];
 
   return (
     <button
-      className={`${base} ${colorClasses} ${alignment} flex items-center justify-center`}
+      className={`${base} ${colorClasses} ${alignment} ${padding} flex items-center justify-center`}
       type="button"
       {...{
         ...props,
