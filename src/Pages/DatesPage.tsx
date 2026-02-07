@@ -14,6 +14,8 @@ import {
   type CourtCaseDateItemResponse,
   type CourtCaseDateResponse,
 } from "../api";
+import { Info } from "lucide-react";
+import type { ModalItemProps } from "../Components/Cards/Common/Props/ModalItemProps";
 
 const DatesPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -76,8 +78,8 @@ const DatesPage = () => {
         return desc ? db - da : da - db;
       }
 
-      let av = String(a[key] ?? "").toLowerCase();
-      let bv = String(b[key] ?? "").toLowerCase();
+      const av = String(a[key] ?? "").toLowerCase();
+      const bv = String(b[key] ?? "").toLowerCase();
       const res = av.localeCompare(bv);
       return desc ? -res : res;
     };
@@ -216,7 +218,7 @@ const DatesPage = () => {
         <div className="flex mt-5">
           <div className="w-8/12">
             {isCalendarView ? (
-              <Calendar caseDateItems={courtCasesDates || {} as CourtCaseDateResponse} />
+              <Calendar caseDateItems={courtCasesDates || {} as CourtCaseDateResponse} setErrorAlertMessage={setErrorAlertMessage} setSuccessAlertMessage={setSuccessAlertMessage} />
             ) : (
               <CaseTimeLine
                 caseDateItems={filteredItems || []}
@@ -230,6 +232,15 @@ const DatesPage = () => {
               <DeadlineCard
                 deadlineCount={courtCasesDates?.overdueItems || 0}
                 deadlineCase={courtCasesDates?.deadlineCase || undefined}
+                items={courtCasesDates?.courtCaseDateItems
+                  .filter((item) => item.status === "Overdue")
+                  .map((item) => {
+                  return {
+                    Icon: Info,
+                    text: item.title,
+                    title: item.subtitle,
+                  } as ModalItemProps;
+                }) || []}
               />
             </div>
             <div className="mt-5">

@@ -1,13 +1,14 @@
 import { ArrowRight, Clock, EllipsisVertical, Info } from "lucide-react";
-import Card from "./Card";
-import type {
-  CourtCaseDateItemResponse,
-  CourtCaseDateResponse,
-  UpdateCourtCaseDateRequest,
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  CourtCaseDateService,
+  type CourtCaseDateItemResponse,
+  type UpdateCourtCaseDateRequest,
 } from "../../api";
-import { useEffect, useRef, useState, type SetStateAction } from "react";
-import SideModal from "../Modal/SideModal";
 import EditDateForm from "../Forms/EditDateForm";
+import SideModal from "../Modal/SideModal";
+import Card from "./Card";
 
 interface UpdateCourtCaseRequest extends UpdateCourtCaseDateRequest {
   id: string;
@@ -24,6 +25,7 @@ const CaseTimeLine = ({
   setErrorAlertMessage,
   setSuccessAlertMessage,
 }: CaseTimeLineProps) => {
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [updateCourtCaseDateRequest, setUpdateCourtCaseDateRequest] =
     useState<UpdateCourtCaseRequest>({
@@ -123,6 +125,30 @@ const CaseTimeLine = ({
     );
   };
 
+  const handleViewCase = (caseId: string) => {
+    navigate(`/court-case-information?id=${caseId}`);
+  };
+
+  const handleMarkAsCancelled = (id: string) => {
+    CourtCaseDateService.setToCancelled(id)
+      .then(() => {
+        setSuccessAlertMessage("Event cancelled successfully.");
+      })
+      .catch(() => {
+        setErrorAlertMessage("Failed to cancel event. Please try again.");
+      });
+  };
+
+  const handleMarkAsComplete = (id: string) => {
+    CourtCaseDateService.setToComplete(id)
+      .then(() => {
+        setSuccessAlertMessage("Event completed successfully.");
+      })
+      .catch(() => {
+        setErrorAlertMessage("Failed to complete event. Please try again.");
+      });
+  };
+
   return (
     <>
       {caseDateItems?.map((courtCaseDate, index) => (
@@ -186,17 +212,25 @@ const CaseTimeLine = ({
                     </button>
                     {openMenuIndex === index && (
                       <div className="absolute right-0 top-7 mt-2 w-40 bg-white border rounded shadow-lg z-50">
-                        <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
-                          Add new Item
+                        <button
+                          className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                          onClick={() => handleViewCase(courtCaseDate.caseId)}
+                        >
+                          View Case
                         </button>
-                        <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
-                          Set to Complete
+                        <button
+                          className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                          onClick={() => handleMarkAsComplete(courtCaseDate.id)}
+                        >
+                          Mark as complete
                         </button>
-                        <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
-                          View Generated PDF
-                        </button>
-                        <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
-                          Share via Email
+                        <button
+                          className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                          onClick={() =>
+                            handleMarkAsCancelled(courtCaseDate.id)
+                          }
+                        >
+                          Cancel
                         </button>
                       </div>
                     )}

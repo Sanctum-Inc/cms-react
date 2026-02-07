@@ -1,18 +1,16 @@
-import { useEffect, useState, type SetStateAction } from "react";
+import { useEffect, useState } from "react";
 import {
   CourtCaseDateService,
   CourtCaseService,
-  type CourtCaseDateItemResponse,
-  type CourtCaseDateResponse,
   type CourtCaseNumberResponse,
   type UpdateCourtCaseDateRequest,
 } from "../../api";
+import type { KeyValue } from "../../Models/InputItem";
+import PrimaryButton from "../Buttons/PrimaryButton";
+import { CourtCaseDateTypeOptions } from "../Inputs/InputOptions/CourtCaseDateTypeOptions";
 import PillInput from "../Inputs/PillInput";
 import PillSelect from "../Inputs/PillSelect";
-import type { KeyValue } from "../../Models/InputItem";
 import PillTextarea from "../Inputs/PillTextarea";
-import { CourtCaseDateTypeOptions } from "../Inputs/InputOptions/CourtCaseDateTypeOptions";
-import PrimaryButton from "../Buttons/PrimaryButton";
 
 interface UpdateCourtCaseRequest extends UpdateCourtCaseDateRequest {
   id: string;

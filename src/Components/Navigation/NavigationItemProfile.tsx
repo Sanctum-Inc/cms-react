@@ -47,25 +47,27 @@ const NavigationItemProfile = ({
   };
 
   return (
-    <>
-      <a className="py-3 mt-auto" href={url}>
-        <div className="flex items-center hover:text-(--color-primary)">
-          <span>
+    <div className="mt-auto overflow-hidden w-full">
+      <a className="py-3 block w-full" href={url}>
+        <div className="flex items-center hover:text-(--color-primary) w-full min-w-0">
+          <span className="shrink-0">
             <ImageWithFallback
-              /*src={ props.profileImage }*/
               src={defaultIcon}
               alt="profile-image"
               fallbackSrc={defaultIcon}
             />
           </span>
-          <span className="flex flex-col ml-2">
-            <span>
+
+          {/* min-w-0 is essential here to allow flex children to truncate */}
+          <span className="flex flex-col ml-2 min-w-0">
+            <span className="font-medium truncate text-gray-900">
               {name} {surname}
             </span>
-            <span>{email}</span>
+            <span className="text-sm text-gray-500 truncate">{email}</span>
           </span>
         </div>
       </a>
+
       <div id="logout-container" className="w-full justify-center">
         <div className="mt-2">
           <PrimaryButton centerText={false} color="red" onClick={handleLogout}>
@@ -73,7 +75,7 @@ const NavigationItemProfile = ({
           </PrimaryButton>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

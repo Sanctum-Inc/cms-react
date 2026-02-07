@@ -1,8 +1,21 @@
 import { ChevronLeft, ChevronRight, Info } from "lucide-react";
 import { useMemo, useState } from "react";
-import InformationModal from "../Modal/InformationModal";
+import { useNavigate } from "react-router-dom";
+import type {
+  CourtCaseDateItemResponse,
+  CourtCaseDateResponse,
+  UpdateCourtCaseDateRequest,
+} from "../../api";
+import type { KeyValue } from "../../Models/InputItem";
 import PrimaryButton from "../Buttons/PrimaryButton";
-import type { CourtCaseDateResponse } from "../../api";
+import EditDateForm from "../Forms/EditDateForm";
+import PillSelect from "../Inputs/PillSelect";
+import InformationModal from "../Modal/InformationModal";
+import SideModal from "../Modal/SideModal";
+
+interface UpdateCourtCaseRequest extends UpdateCourtCaseDateRequest {
+  id: string;
+}
 
 interface CalendarDay {
   day: number | null;
@@ -13,11 +26,29 @@ interface CalendarDay {
 
 interface CalendarProps {
   caseDateItems: CourtCaseDateResponse;
+  setErrorAlertMessage: (message: string) => void;
+  setSuccessAlertMessage: (message: string) => void;
 }
 
-const Calendar = ({ caseDateItems }: CalendarProps) => {
-  console.log("KEYS:", Object.keys(caseDateItems));
+const Calendar = ({
+  caseDateItems,
+  setErrorAlertMessage,
+  setSuccessAlertMessage,
+}: CalendarProps) => {
+  const [updateCourtCaseDateRequest, setUpdateCourtCaseDateRequest] =
+    useState<UpdateCourtCaseRequest>({
+      id: "",
+      caseId: "",
+      date: "",
+      description: "",
+      title: "",
+      type: 0,
+      isCancelled: false,
+      isComplete: false,
+    });
+  const [showEditModal, setShowEditModal] = useState(false);
 
+  const navigate = useNavigate();
   const today = new Date();
 
   const getInitialDate = () => {
@@ -31,6 +62,7 @@ const Calendar = ({ caseDateItems }: CalendarProps) => {
   const [currentDate, setCurrentDate] = useState(getInitialDate);
 
   const [selectedDay, setSelectedDay] = useState<CalendarDay | null>(null);
+  const [selectedCaseId, setSelectedCaseId] = useState<string>();
   const [showModal, setShowModal] = useState(false);
 
   const daysInMonth = (year: number, month: number) =>
@@ -98,6 +130,8 @@ const Calendar = ({ caseDateItems }: CalendarProps) => {
   const renderModal = () => {
     if (!selectedDay || !selectedDay.date) return null;
 
+    const color = getEventColor(selectedDay.date.toISOString());
+
     return (
       <InformationModal
         title={selectedDay.date.toLocaleDateString("en-US", {
@@ -112,22 +146,94 @@ const Calendar = ({ caseDateItems }: CalendarProps) => {
           text: event.description,
         }))}
         showButton={false}
+        theme={color.color as "primary" | "red" | "green"}
       >
+        <PillSelect
+          label="Select Case:"
+          name="caseId"
+          onChange={handleSelectChange}
+          value={selectedCaseId}
+          selectOptions={selectedDay.events.map((cases) => {
+            return {
+              key: cases.caseId,
+              value: cases.caseNumber,
+            } as KeyValue;
+          })}
+        />
         <div className="flex gap-2 mt-5">
           <div className="w-1/2">
-            <PrimaryButton color="lightGray">Go To Case</PrimaryButton>
+            <PrimaryButton
+              color="lightGray"
+              onClick={() => handleGoToCase(selectedCaseId)}
+            >
+              Go To Case
+            </PrimaryButton>
           </div>
           <div className="w-1/2">
-            <PrimaryButton>Reschedule</PrimaryButton>
+            <PrimaryButton
+              onClick={() =>
+                handleReschedule(
+                  selectedDay.events.find((e) => e.caseId === selectedCaseId),
+                )
+              }
+            >
+              Reschedule
+            </PrimaryButton>
           </div>
         </div>
       </InformationModal>
     );
   };
 
+  const renderEditModal = () => {
+    return (
+      showModal && (
+        <SideModal setShowModal={setShowEditModal} title="Edit Event">
+          <EditDateForm
+            setShowErrorMessage={setErrorAlertMessage}
+            setShowSuccessMessage={setSuccessAlertMessage}
+            updateCourtCaseRequest={updateCourtCaseDateRequest}
+            setShowModal={setShowEditModal}
+          />
+        </SideModal>
+      )
+    );
+  };
+
+  const handleGoToCase = (caseId: string | undefined) => {
+    if (!caseId) return;
+
+    navigate(`/court-case-information?id=${caseId}`);
+  };
+
+  const handleReschedule = (
+    courtCaseDate: CourtCaseDateItemResponse | undefined,
+  ) => {
+    if (!courtCaseDate) {
+      return;
+    }
+
+    setUpdateCourtCaseDateRequest({
+      id: courtCaseDate.id,
+      caseId: courtCaseDate.caseId,
+      date: courtCaseDate.date,
+      description: courtCaseDate.description,
+      title: courtCaseDate.title,
+      type: courtCaseDate.courtCaseDateType,
+      isCancelled: false,
+      isComplete: false,
+    });
+    setShowEditModal(true);
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCaseId(e.target.value);
+  };
+
   const getEventColor = (dateStr: string) => {
     const eventDate = new Date(dateStr);
-    if (isNaN(eventDate.getTime())) return "bg-slate-200"; // invalid date
+    if (isNaN(eventDate.getTime()))
+      return { background: "bg-slate-200", color: "primary" }; // invalid date
 
     // Normalize both dates to midnight (start of day)
     const eventDay = new Date(
@@ -142,9 +248,10 @@ const Calendar = ({ caseDateItems }: CalendarProps) => {
       today.getDate(),
     ).getTime();
 
-    if (eventDay < todayDay) return "bg-red-200"; // Past
-    if (eventDay > todayDay) return "bg-green-200"; // Future
-    return "bg-(--color-primary)"; // Today
+    if (eventDay < todayDay) return { background: "bg-red-200", color: "red" }; // Past
+    if (eventDay > todayDay)
+      return { background: "bg-green-200", color: "green" }; // Future
+    return { background: "bg-(--color-primary)", color: "primary" }; // Today
   };
 
   return (
@@ -245,7 +352,7 @@ const Calendar = ({ caseDateItems }: CalendarProps) => {
                 {day.events.map((event) => (
                   <div
                     key={event.id}
-                    className={`h-1.5 w-full rounded-full ${getEventColor(event.date)}`}
+                    className={`h-1.5 w-full rounded-full ${getEventColor(event.date).background}`}
                   />
                 ))}
               </div>
@@ -255,6 +362,7 @@ const Calendar = ({ caseDateItems }: CalendarProps) => {
       </div>
 
       {showModal && renderModal()}
+      {showEditModal && renderEditModal()}
     </div>
   );
 };

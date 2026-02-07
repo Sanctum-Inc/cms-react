@@ -1,6 +1,6 @@
-import { SearchIcon, FilterIcon, List, Calendar } from "lucide-react";
-import Card from "../Cards/Card";
+import { Calendar, FilterIcon, List, SearchIcon } from "lucide-react";
 import type { KeyValue } from "../../Models/InputItem";
+import Card from "../Cards/Card";
 
 interface SortBarWithToggleProps {
   searchQuery: string;
@@ -26,7 +26,6 @@ const SortBarWithToggle = ({
   statusOptions,
   typeFilter,
   setTypeFilter,
-  typeOptions,
   isCalendarView,
   setIsCalendarView,
 }: SortBarWithToggleProps) => {

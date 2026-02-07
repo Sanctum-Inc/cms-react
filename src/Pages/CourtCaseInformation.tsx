@@ -14,23 +14,23 @@ import {
   Users,
   type LucideProps,
 } from "lucide-react";
-import Card from "../Components/Cards/Card";
-import Header from "../Components/Header/Header";
 import {
   useEffect,
   useState,
   type ForwardRefExoticComponent,
   type RefAttributes,
 } from "react";
-import TabNavigation from "../Components/Navigation/TabNavigation";
-import CourtCaseInformationTable from "../Components/Tables/CourtCaseInformationTable";
 import { useLocation } from "react-router-dom";
 import { CourtCaseService } from "../api";
-import NewItemModal from "../Components/Modal/NewItemModal";
-import AddInvoiceForm from "../Components/Forms/AddInvoiceForm";
-import PillSelect from "../Components/Inputs/PillSelect";
-import SuccessAlert from "../Components/Alerts/SuccessAlert";
 import ErrorAlert from "../Components/Alerts/ErrorAlert";
+import SuccessAlert from "../Components/Alerts/SuccessAlert";
+import Card from "../Components/Cards/Card";
+import AddInvoiceForm from "../Components/Forms/AddInvoiceForm";
+import Header from "../Components/Header/Header";
+import PillSelect from "../Components/Inputs/PillSelect";
+import NewItemModal from "../Components/Modal/NewItemModal";
+import TabNavigation from "../Components/Navigation/TabNavigation";
+import CourtCaseInformationTable from "../Components/Tables/CourtCaseInformationTable";
 
 interface CaseField {
   label: string;
@@ -225,13 +225,15 @@ const CourtCaseInformation = () => {
         setProfileMenus([
           {
             ...profileMenus[0],
-            items: response.courtCaseDates?.at(0)?.courtCaseDateItems.map((courtCaseDate) => {
+            items: response.courtCaseDates
+              ?.at(0)
+              ?.courtCaseDateItems.map((courtCaseDate) => {
                 return {
                   attributes1: courtCaseDate.date,
                   attributes2: courtCaseDate.courtCaseDateType.toString(),
                   attributes3: courtCaseDate.title,
                 };
-            }),
+              }),
           },
           {
             ...profileMenus[1],
@@ -402,6 +404,7 @@ const CourtCaseInformation = () => {
           <AddInvoiceForm
             setShowSuccessMessage={setSuccessAlertMessage}
             setShowErrorMessage={setErrorAlertMessage}
+            buttonCaption="Add Invoice"
           />
         );
       case "lawyer":

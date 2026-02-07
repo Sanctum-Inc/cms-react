@@ -12,8 +12,8 @@ interface DashBoardActivityCardProps {
 const DashBoardActivityCard = (props:DashBoardActivityCardProps) => {
   return (
     <Card className="p-5">
-      <div className="text-2xl font-semibold">{props.title}</div>
-      <div className="pt-8">
+      <div className="text-2xl font-semibold mb-5">{props.title}</div>
+      <div className="h-100 overflow-y-auto">
         {props.items &&
           props.items.map((item, index) => (
             <DashBoardActivityItem
@@ -22,7 +22,6 @@ const DashBoardActivityCard = (props:DashBoardActivityCardProps) => {
               title={item.title}
               description={item.description}
               time={item.time}
-              icon={item.icon}
               size={props.size}
               clickable={props.clickable}
               type={item.type}

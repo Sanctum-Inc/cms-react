@@ -1,3 +1,4 @@
+import { CalendarDays, Dot } from "lucide-react";
 import type { CardItem } from "../../Models/CardItem";
 
 const DashBoardActivityItem = (props: CardItem) => {
@@ -5,7 +6,7 @@ const DashBoardActivityItem = (props: CardItem) => {
     return (
       <div className="py-4 flex border border-gray-200 rounded-4xl items-center hover:border-(--color-primary) cursor-pointer p-3 mb-2">
         <div className="w-1/70">
-          <props.icon size={props.size || 40} color={props.color} />
+          <CalendarDays size={props.size || 40} color={props.color} />
         </div>
         <div className="flex flex-col ml-4">
           <span className="font-semibold">{props.title}</span>
@@ -22,7 +23,7 @@ const DashBoardActivityItem = (props: CardItem) => {
     return (
       <div className="py-4 flex border-b border-gray-200 items-center">
         <div className="w-1/70">
-          <props.icon size={props.size || 40} color={props.color} />
+          <Dot size={props.size || 40} color={props.color} />
         </div>
         <div className="flex flex-col ml-4">
           <span className="font-semibold">{props.title}</span>

@@ -98,4 +98,42 @@ export class CourtCaseDateService {
             },
         });
     }
+    /**
+     * @param id
+     * @returns void
+     * @throws ApiError
+     */
+    public static setToCancelled(
+        id: string,
+    ): CancelablePromise<void> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/CourtCaseDate/cancelled/{id}',
+            path: {
+                'id': id,
+            },
+            errors: {
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
+     * @param id
+     * @returns void
+     * @throws ApiError
+     */
+    public static setToComplete(
+        id: string,
+    ): CancelablePromise<void> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/CourtCaseDate/complete/{id}',
+            path: {
+                'id': id,
+            },
+            errors: {
+                404: `Not Found`,
+            },
+        });
+    }
 }
