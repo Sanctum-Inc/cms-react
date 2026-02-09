@@ -1,36 +1,40 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from "react-router-dom";
+import MainLayout from "../Layout/MainLayout";
+import CourtCaseInformation from "../Pages/CourtCaseInformation";
+import CourtCasePage from "../Pages/CourtCasePage";
 import DashboardPage from "../Pages/DashboardPage";
-import MainLayout from '../Layout/MainLayout';
-import CourtCasePage from '../Pages/CourtCasePage';
-import InvoicePage from '../Pages/InvoicePage';
-import DocumentsPage from '../Pages/DocumentsPage';
-import DatesPage from '../Pages/DatesPage';
-import ProfilePage from '../Pages/ProfilePage';
-import CourtCaseInformation from '../Pages/CourtCaseInformation';
-import Login from '../Pages/Login';
-import ProtectedRoute from './ProtectedRoute';
+import DatesPage from "../Pages/DatesPage";
+import DocumentsPage from "../Pages/DocumentsPage";
+import InvoicePage from "../Pages/InvoicePage";
+import Login from "../Pages/Login";
+import ProfilePage from "../Pages/ProfilePage";
+import ProtectedRoute from "./ProtectedRoute";
 
-
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: (
+        <ProtectedRoute>
+          <MainLayout />
+        </ProtectedRoute>
+      ),
+      children: [
+        { path: "/", element: <DashboardPage /> },
+        { path: "/dashboard", element: <DashboardPage /> },
+        { path: "/court-case", element: <CourtCasePage /> },
+        { path: "/invoices", element: <InvoicePage /> },
+        { path: "/documents", element: <DocumentsPage /> },
+        { path: "/dates", element: <DatesPage /> },
+        { path: "/profile", element: <ProfilePage /> },
+        { path: "/court-case-information", element: <CourtCaseInformation /> },
+      ],
+    },
+    { path: "/login", element: <Login /> },
+  ],
   {
-    path: "/",
-    element: (
-      <ProtectedRoute>
-        <MainLayout />
-      </ProtectedRoute>
-    ),
-    children: [
-      { path: "/", element: <DashboardPage /> },
-      { path: "/dashboard", element: <DashboardPage /> },
-      { path: "/court-case", element: <CourtCasePage /> },
-      { path: "/invoices", element: <InvoicePage /> },
-      { path: "/documents", element: <DocumentsPage /> },
-      { path: "/dates", element: <DatesPage /> },
-      { path: "/profile", element: <ProfilePage /> },
-      { path: "/court-case-information", element: <CourtCaseInformation /> },
-    ],
+    basename: "/cms-react",
   },
-  { path: "/login", element: <Login /> },
-]);
+);
 
 export default router;
