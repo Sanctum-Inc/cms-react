@@ -54,7 +54,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/
+          publish_dir: dist/
           # Optional: set custom domain here if needed via CNAME file
           # cname: dev.lexcase.co.za
 
@@ -65,5 +65,5 @@ jobs:
           server: lexcase.co.za
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: build/
+          local-dir: dist/
           server-dir: /lexcase.co.za/wwwroot/
