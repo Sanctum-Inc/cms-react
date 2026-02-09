@@ -33,7 +33,7 @@ const router = createBrowserRouter(
     { path: "/login", element: <Login /> },
   ],
   {
-    basename: "/cms-react",
+    basename: process.env.VITE_ROUTER_BASENAME,
   },
 );
 
