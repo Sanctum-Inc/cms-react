@@ -363,6 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 dist
 src/Pages/test.tsx
-.env.dev
 .env.local
-.env.prod
