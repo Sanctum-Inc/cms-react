@@ -1,8 +1,13 @@
 name: React Build and Deploy
 
 on:
-  push:
-    branches: [develop, master]
+    push:
+        branches:
+            - master
+            - develop
+    pull_request:
+        types: [opened, synchronize, reopened]
+    workflow_dispatch:
 
 permissions:
   contents: write
