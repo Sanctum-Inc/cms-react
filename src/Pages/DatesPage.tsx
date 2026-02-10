@@ -160,7 +160,6 @@ const DatesPage = () => {
     CourtCaseDateService.getAllCourtCaseDates()
       .then((response) => {
         setCourtCaseDates(response);
-        console.log(response);
       })
       .catch(() => {
         setErrorAlertMessage("Failed to load dates. Please try again.");

@@ -2,9 +2,8 @@ import { useState } from "react";
 import {
   CourtCaseService,
   type AddCourtCaseRequest,
-  type InvoiceStatus,
+  type CourtCaseResponse,
 } from "../../api";
-import type { CourtCases } from "../../Models/CourtCases";
 import PrimaryButton from "../Buttons/PrimaryButton";
 import { CourtCaseOutcomeOptions } from "../Inputs/InputOptions/CourtCaseOutcomeOptions";
 import { CourtCaseStatusOptions } from "../Inputs/InputOptions/CourtCaseStatusOptions";
@@ -15,7 +14,7 @@ import PillSelect from "../Inputs/PillSelect";
 interface AddCourtCaseFormProps {
   setShowSuccessMessage: (message: string) => void;
   setShowErrorMessage: (message: string) => void;
-  filteredCases: CourtCases[];
+  filteredCases: CourtCaseResponse[];
 }
 
 const AddCourtCaseForm = ({
@@ -52,7 +51,7 @@ const AddCourtCaseForm = ({
           plaintiff: formData.plaintiff,
           type: formData.type,
           nextDate: "",
-          internalStatus: formData.status as InvoiceStatus,
+          status: formData.status,
         });
       })
       .catch((error) => {

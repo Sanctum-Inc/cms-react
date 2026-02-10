@@ -4,17 +4,17 @@
 /* eslint-disable */
 import type { AddCourtCaseRequest } from '../models/AddCourtCaseRequest';
 import type { CourtCaseNumberResponse } from '../models/CourtCaseNumberResponse';
-import type { CourtCasesResponse } from '../models/CourtCasesResponse';
+import type { CourtCaseResponse } from '../models/CourtCaseResponse';
 import type { UpdateCourtCaseRequest } from '../models/UpdateCourtCaseRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class CourtCaseService {
     /**
-     * @returns CourtCasesResponse OK
+     * @returns CourtCaseResponse OK
      * @throws ApiError
      */
-    public static getAllCourtCases(): CancelablePromise<Array<CourtCasesResponse>> {
+    public static getAllCourtCases(): CancelablePromise<Array<CourtCaseResponse>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/CourtCase',
@@ -50,12 +50,12 @@ export class CourtCaseService {
     }
     /**
      * @param id
-     * @returns CourtCasesResponse OK
+     * @returns CourtCaseResponse OK
      * @throws ApiError
      */
     public static getCourtCasesById(
         id: string,
-    ): CancelablePromise<CourtCasesResponse> {
+    ): CancelablePromise<CourtCaseResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/CourtCase/{id}',

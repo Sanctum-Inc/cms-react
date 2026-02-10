@@ -124,7 +124,6 @@ const DashboardPage = () => {
         );
 
         setCourtCaseItems(mappedCourtDates);
-        console.log(mappedCourtDates);
       })
       .catch(() => {
         setErrorAlertMessage("Failed to load dashboard. Please try again.");
@@ -181,7 +180,7 @@ const DashboardPage = () => {
         </div>
         <div className="w-full h-full p-3">
           <DashBoardActivityCard
-            items={[]}
+            items={activityItems}
             title="Recent Case Activity"
             size="40"
             cardType="activity"
@@ -189,7 +188,7 @@ const DashboardPage = () => {
         </div>
         <div className="w-full h-full p-3">
           <DashBoardActivityCard
-            items={[]}
+            items={courtCaseItems}
             title="Upcoming Court Dates"
             size="25"
             clickable={true}

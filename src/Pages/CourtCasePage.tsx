@@ -1,14 +1,15 @@
 import { ArrowUp } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { CourtCaseService } from "../api";
+import { CourtCaseService, type CourtCaseResponse } from "../api";
 import CourtCaseCard from "../Components/Cards/CourtCaseCard";
 import ErrorAlert from "../Components/Feedback/Alerts/ErrorAlert";
 import SuccessAlert from "../Components/Feedback/Alerts/SuccessAlert";
 import AddCourtCaseForm from "../Components/Forms/AddCourtCaseForm";
 import Header from "../Components/Header/Header";
+import { CourtCaseStatusOptions } from "../Components/Inputs/InputOptions/CourtCaseStatusOptions";
+import { CourtCaseTypeOptions } from "../Components/Inputs/InputOptions/CourtCaseTypesOptions";
 import SortBar from "../Components/Inputs/SortBar";
 import SideModal from "../Components/Modal/SideModal";
-import type { CourtCases } from "../Models/CourtCases";
 import { statusLabels } from "../Models/Invoices";
 
 const CourtCasePage = () => {
@@ -24,7 +25,7 @@ const CourtCasePage = () => {
   >("caseNumber");
   const [sortDesc, setSortDesc] = useState(true);
 
-  const [courtCases, setCourtCases] = useState<CourtCases[]>([]);
+  const [courtCases, setCourtCases] = useState<CourtCaseResponse[]>([]);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -48,8 +49,7 @@ const CourtCasePage = () => {
     const matchesStatus = (c: (typeof courtCases)[number]) => {
       if (statusFilter === "all") return true;
       return (
-        statusLabels[c.internalStatus].toLowerCase() ===
-        statusFilter.toLowerCase()
+        statusLabels[c.status].toLowerCase() === statusFilter.toLowerCase()
       );
     };
 
@@ -137,21 +137,13 @@ const CourtCasePage = () => {
   };
 
   useEffect(() => {
-    CourtCaseService.getAllCourtCases().then((response) => {
-      const mapped = response.map((courtCase) => ({
-        id: courtCase.id!,
-        caseNumber: courtCase.caseNumber,
-        location: courtCase.location,
-        plaintiff: courtCase.plaintiff,
-        type: courtCase.type!,
-        nextDate: courtCase.courtCaseDates?.length
-          ? "" //ToDO: find next upcoming date
-          : "",
-        internalStatus: courtCase.status,
-      }));
-
-      setCourtCases(mapped);
-    });
+    CourtCaseService.getAllCourtCases()
+      .then((response) => {
+        setCourtCases(response);
+      })
+      .catch(() => {
+        setErrorAlertMessage("Failed to fetch cases. Please try again.");
+      });
   }, []);
 
   useEffect(() => {
@@ -193,8 +185,8 @@ const CourtCasePage = () => {
             setStatusFilter={setStatusFilter}
             typeFilter={typeFilter}
             setTypeFilter={setTypeFilter}
-            statusOptions={["all", "open", "closed", "pending"]}
-            typeOptions={["all", "criminal", "civil", "family"]}
+            statusOptions={CourtCaseStatusOptions.map((s) => s.value)}
+            typeOptions={CourtCaseTypeOptions.map((s) => s.value)}
           ></SortBar>
           <div className="m-6 p-6 mt-5 font-bold text-gray-500 border-b border-gray-300 pb-3">
             <div>Case Information</div>
@@ -287,7 +279,10 @@ const CourtCasePage = () => {
             </div>
           </div>
           {filteredCases.map((courtCase) => (
-            <CourtCaseCard key={courtCase.id} {...courtCase} />
+            <CourtCaseCard
+              key={`CourtCasePageCard-${courtCase.id}`}
+              {...courtCase}
+            />
           ))}
         </div>
         {renderSuccessmessage()}
