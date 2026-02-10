@@ -8,5 +8,6 @@ export type UpcomingCourtCaseActivityResult = {
     courtDateDescription: string;
     date: string;
     courtDateType: CourtCaseDateTypes;
+    id: string;
 };
 

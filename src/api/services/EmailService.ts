@@ -10,19 +10,13 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class EmailService {
     /**
-     * @param id
      * @returns EmailResponse OK
      * @throws ApiError
      */
-    public static getEmails(
-        id: string,
-    ): CancelablePromise<Array<EmailResponse>> {
+    public static getEmails(): CancelablePromise<Array<EmailResponse>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Email',
-            path: {
-                'id': id,
-            },
             errors: {
                 404: `Not Found`,
             },
@@ -30,12 +24,12 @@ export class EmailService {
     }
     /**
      * @param requestBody
-     * @returns EmailResponse OK
+     * @returns any Created
      * @throws ApiError
      */
     public static createEmail(
         requestBody: AddEmailRequest,
-    ): CancelablePromise<Array<EmailResponse>> {
+    ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/Email',
