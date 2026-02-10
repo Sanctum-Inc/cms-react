@@ -33,7 +33,7 @@ const router = createBrowserRouter(
     { path: "/login", element: <Login /> },
   ],
   {
-    basename: process.env.VITE_ROUTER_BASENAME,
+    basename: import.meta.env.VITE_ROUTER_BASENAME,
   },
 );
 
