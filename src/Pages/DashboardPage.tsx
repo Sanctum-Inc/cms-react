@@ -1,7 +1,6 @@
 import {
   BanknoteX,
   BriefcaseBusiness,
-  CalendarCheck,
   CalendarDays,
   FolderOpen,
 } from "lucide-react";
@@ -13,6 +12,7 @@ import {
 } from "../api";
 import DashBoardActivityCard from "../Components/Dashboard/DashBoardActivityCard";
 import DashboardCard from "../Components/Dashboard/DashboardCard";
+import ErrorAlert from "../Components/Feedback/Alerts/ErrorAlert";
 import Header from "../Components/Header/Header";
 import { CourtCaseDateTypeOptions } from "../Components/Inputs/InputOptions/CourtCaseDateTypeOptions";
 import type { CardItem } from "../Models/CardItem";
@@ -56,43 +56,13 @@ const DashboardPage = () => {
 
   const [activityItems, setActivityItems] = useState<CardItem[]>([]);
 
-  const [courtCaseItems, setCourtCaseItems] = useState<CardItem[]>([
-    {
-      color: "green",
-      title: "12/15/2025 @ 9:30 AM",
-      description: "Case 2024-088: State vs. A. Johnson",
-      time: "In 1 day",
-      icon: CalendarCheck,
-      type: "Hearing",
-    },
-    {
-      color: "red",
-      title: "12/20/2025 @ 2:00 PM",
-      description: "Case 2024-119: Property Trust Fund Dispute",
-      time: "In 2 days",
-      icon: CalendarCheck,
-      type: "Trial",
-    },
-    {
-      color: "orange",
-      title: "01/05/2026 @ 11:00 AM",
-      description: "Case 2024-150: Patent Infringement Claim",
-      time: "In a week",
-      icon: CalendarCheck,
-      type: "Deposition",
-    },
-    {
-      color: "purple",
-      title: "01/15/2026 @ 10:00 AM",
-      description: "Case 2023-999: Tax Audit Appeal",
-      time: "In 2 months",
-      icon: CalendarCheck,
-      type: "Final Judgement",
-    },
-  ]);
+  const [courtCaseItems, setCourtCaseItems] = useState<CardItem[]>([]);
 
   const [getTime, setTime] = useState("");
 
+  const [errorAlertMessage, setErrorAlertMessage] = useState<string | null>(
+    null,
+  );
   const getCurrentDate = () => {
     // Get the current date and time
     const currentDate = new Date();
@@ -129,7 +99,6 @@ const DashboardPage = () => {
   useEffect(() => {
     DashboardService.getDashboardInformation()
       .then((response) => {
-        console.log(response);
         setDashboardInformation(response);
         const mappedActivity = response.recentCases.map((item) => ({
           color: "green",
@@ -151,11 +120,16 @@ const DashboardPage = () => {
             }) as CardItem,
         );
 
-        console.log(mappedCourtDates);
         setCourtCaseItems(mappedCourtDates);
       })
-      .catch((error) => console.log(error));
+      .catch(() => {
+        setErrorAlertMessage("Failed to load dashboard. Please try again.");
+      });
   }, []);
+
+  const renderErrorMessage = () => {
+    return errorAlertMessage && <ErrorAlert message={errorAlertMessage} />;
+  };
 
   const formatMoney = () => {
     return dashboardInformation.totalInvoices
@@ -216,6 +190,7 @@ const DashboardPage = () => {
             clickable={true}
           />
         </div>
+        {renderErrorMessage()}
       </div>
     </>
   );

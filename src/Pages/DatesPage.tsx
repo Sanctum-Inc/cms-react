@@ -1,21 +1,21 @@
-import Header from "../Components/Header/Header";
+import { Info } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import SideModal from "../Components/Modal/SideModal";
-import SuccessAlert from "../Components/Alerts/SuccessAlert";
-import ErrorAlert from "../Components/Alerts/ErrorAlert";
-import SortBarWithToggle from "../Components/Inputs/SortBarWithToggle";
-import CaseTimeLine from "../Components/Cards/CaseTimeLine";
-import DeadlineCard from "../Components/Cards/DeadlineCard";
-import DateHealthCard from "../Components/Cards/DateHealthCard";
-import Calendar from "../Components/Calendar/Calendar";
-import AddDateForm from "../Components/Forms/AddDateForm";
 import {
   CourtCaseDateService,
   type CourtCaseDateItemResponse,
   type CourtCaseDateResponse,
 } from "../api";
-import { Info } from "lucide-react";
+import Calendar from "../Components/Calendar/Calendar";
+import CaseTimeLine from "../Components/Cards/CaseTimeLine";
 import type { ModalItemProps } from "../Components/Cards/Common/Props/ModalItemProps";
+import DateHealthCard from "../Components/Cards/DateHealthCard";
+import DeadlineCard from "../Components/Cards/DeadlineCard";
+import ErrorAlert from "../Components/Feedback/Alerts/ErrorAlert";
+import SuccessAlert from "../Components/Feedback/Alerts/SuccessAlert";
+import AddDateForm from "../Components/Forms/AddDateForm";
+import Header from "../Components/Header/Header";
+import SortBarWithToggle from "../Components/Inputs/SortBarWithToggle";
+import SideModal from "../Components/Modal/SideModal";
 
 const DatesPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -31,7 +31,7 @@ const DatesPage = () => {
 
   const [isCalendarView, setIsCalendarView] = useState(false);
 
-  const [sortBy, ] = useState<
+  const [sortBy] = useState<
     | "caseNumber"
     | "title"
     | "subtitle"
@@ -40,7 +40,7 @@ const DatesPage = () => {
     | "status"
   >("date");
 
-  const [sortDesc, ] = useState(false); // earliest first by default
+  const [sortDesc] = useState(false); // earliest first by default
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
@@ -158,15 +158,13 @@ const DatesPage = () => {
 
   useEffect(() => {
     CourtCaseDateService.getAllCourtCaseDates()
-    .then((response) => {
-      setCourtCaseDates(response);
-      console.log(response);
-    })
-    .catch((response) => {
-      if (response.status == 404)
-        console.log("nothing found bitch!")
-      console.log(response);
-    });
+      .then((response) => {
+        setCourtCaseDates(response);
+        console.log(response);
+      })
+      .catch(() => {
+        setErrorAlertMessage("Failed to load dates. Please try again.");
+      });
   }, []);
 
   const renderSuccessmessage = () => {
@@ -218,7 +216,11 @@ const DatesPage = () => {
         <div className="flex mt-5">
           <div className="w-8/12">
             {isCalendarView ? (
-              <Calendar caseDateItems={courtCasesDates || {} as CourtCaseDateResponse} setErrorAlertMessage={setErrorAlertMessage} setSuccessAlertMessage={setSuccessAlertMessage} />
+              <Calendar
+                caseDateItems={courtCasesDates || ({} as CourtCaseDateResponse)}
+                setErrorAlertMessage={setErrorAlertMessage}
+                setSuccessAlertMessage={setSuccessAlertMessage}
+              />
             ) : (
               <CaseTimeLine
                 caseDateItems={filteredItems || []}
@@ -232,15 +234,17 @@ const DatesPage = () => {
               <DeadlineCard
                 deadlineCount={courtCasesDates?.overdueItems || 0}
                 deadlineCase={courtCasesDates?.deadlineCase || undefined}
-                items={courtCasesDates?.courtCaseDateItems
-                  .filter((item) => item.status === "Overdue")
-                  .map((item) => {
-                  return {
-                    Icon: Info,
-                    text: item.title,
-                    title: item.subtitle,
-                  } as ModalItemProps;
-                }) || []}
+                items={
+                  courtCasesDates?.courtCaseDateItems
+                    .filter((item) => item.status === "Overdue")
+                    .map((item) => {
+                      return {
+                        Icon: Info,
+                        text: item.title,
+                        title: item.subtitle,
+                      } as ModalItemProps;
+                    }) || []
+                }
               />
             </div>
             <div className="mt-5">

@@ -29,7 +29,6 @@ const CaseTimelineCard = ({
   };
 
   const handleEditDeleteOnDate = (courtCaseDate: CourtCaseDates) => {
-    console.log(courtCaseDate);
     onClickHandler(courtCaseDate);
   };
 

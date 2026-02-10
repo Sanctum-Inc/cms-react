@@ -76,8 +76,6 @@ const CaseTimeLine = ({
   };
 
   const handleOpenEditModal = (courtCaseDate: CourtCaseDateItemResponse) => {
-    console.log(courtCaseDate);
-    console.log(showModal);
     setUpdateCourtCaseDateRequest({
       id: courtCaseDate.id,
       caseId: courtCaseDate.caseId,

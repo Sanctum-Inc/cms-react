@@ -1,10 +1,10 @@
-import { useState, type PropsWithChildren } from "react";
-import Card from "../Cards/Card";
 import { Copy, Download, Eye, Send, X } from "lucide-react";
+import { useState, type PropsWithChildren } from "react";
+import { EmailService, type AddEmailRequest } from "../../api";
+import PrimaryButton from "../Buttons/PrimaryButton";
+import Card from "../Cards/Card";
 import PillInput from "../Inputs/PillInput";
 import PillTextarea from "../Inputs/PillTextarea";
-import PrimaryButton from "../Buttons/PrimaryButton";
-import { EmailService, type AddEmailRequest } from "../../api";
 import SuccessModal from "./SuccessModal";
 
 interface ShareFileModalProps extends PropsWithChildren {
@@ -52,7 +52,6 @@ const ShareFileModal = ({
 
     EmailService.createEmail(emailRequest)
       .then((response) => {
-        console.log("Email sent successfully:", response);
         setSendingEmail(false);
         setShowSuccessModal(true);
       })

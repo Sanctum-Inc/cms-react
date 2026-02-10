@@ -21,8 +21,6 @@ type User = {
 };
 
 const Login = () => {
-  console.log(import.meta.env.VITE_API_URL);
-
   const navigate = useNavigate();
   const [showRegistration, setShowRegistration] = useState(false);
   const [user, setUser] = useState<User>({
@@ -79,17 +77,14 @@ const Login = () => {
       password: passwordError,
     });
 
-    console.log("Validating login:", { email, password });
     if (emailError || passwordError) return;
 
-    console.log(user.email, user.password);
-    console.log("Login button clicked");
     try {
       const result = await UserService.login({
         email: user.email,
         password: user.password,
       });
-      console.log("Login successful:", result);
+
       login(result.token);
       navigate("/dashboard");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -140,12 +135,11 @@ const Login = () => {
 
     // If any errors exist, stop
     if (Object.values(newErrors).some((err) => err.length > 0)) {
-      console.log("Form invalid:", newErrors);
       return;
     }
 
     // Proceed with registration
-    console.log("Register button clicked");
+
     // Proceed with registration
     try {
       const result = await UserService.register({
@@ -156,7 +150,7 @@ const Login = () => {
         password: user.password,
         firmId: user.firmId,
       });
-      console.log("Registration successful:", result);
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       // Axios error: error.response.data contains the ProblemDetails object returned by your API
@@ -168,8 +162,6 @@ const Login = () => {
         problemDetails?.title ||
         problemDetails?.message ||
         "Registration failed. Please try again.";
-
-      console.log("API Error message:", error.response?.data);
 
       if (error.response?.status === 400) {
         // Example: you can check for specific error messages here to customize UI errors

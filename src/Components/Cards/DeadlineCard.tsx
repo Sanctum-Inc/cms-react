@@ -1,13 +1,11 @@
 import { ShieldAlert, ShieldCheck } from "lucide-react";
-import Card from "./Card";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { CourtCaseDateItemResponse } from "../../api";
 import { CourtCaseDateTypeMap } from "../Inputs/InputOptions/CourtCaseDateTypeOptions";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import type { ModalItemProps } from "./Common/Props/ModalItemProps";
 import ResolveDeadlineModal from "../Modal/ResolveDeadlineModal";
-
-
+import Card from "./Card";
+import type { ModalItemProps } from "./Common/Props/ModalItemProps";
 
 interface DeadlineCardProps {
   deadlineCount: number;
@@ -25,7 +23,6 @@ const DeadlineCard = ({
   const navigate = useNavigate();
 
   const handleViewCourtCase = () => {
-    console.log(deadlineCase);
     navigate(`/court-case-information?id=${deadlineCase?.caseId}`);
   };
 

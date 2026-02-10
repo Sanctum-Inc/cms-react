@@ -1,12 +1,16 @@
 import { useState } from "react";
-import { CourtCaseService, type AddCourtCaseRequest, type InvoiceStatus } from "../../api";
-import PillSelect from "../Inputs/PillSelect";
-import PillInput from "../Inputs/PillInput";
-import PrimaryButton from "../Buttons/PrimaryButton";
+import {
+  CourtCaseService,
+  type AddCourtCaseRequest,
+  type InvoiceStatus,
+} from "../../api";
 import type { CourtCases } from "../../Models/CourtCases";
+import PrimaryButton from "../Buttons/PrimaryButton";
+import { CourtCaseOutcomeOptions } from "../Inputs/InputOptions/CourtCaseOutcomeOptions";
 import { CourtCaseStatusOptions } from "../Inputs/InputOptions/CourtCaseStatusOptions";
 import { CourtCaseTypeOptions } from "../Inputs/InputOptions/CourtCaseTypesOptions";
-import { CourtCaseOutcomeOptions } from "../Inputs/InputOptions/CourtCaseOutcomeOptions";
+import PillInput from "../Inputs/PillInput";
+import PillSelect from "../Inputs/PillSelect";
 
 interface AddCourtCaseFormProps {
   setShowSuccessMessage: (message: string) => void;
@@ -40,7 +44,6 @@ const AddCourtCaseForm = ({
     e.preventDefault();
     CourtCaseService.createCourtCases(formData)
       .then((response) => {
-        console.log("Court case created successfully:", response);
         setShowSuccessMessage("Court case created successfully!");
         filteredCases.push({
           id: response,

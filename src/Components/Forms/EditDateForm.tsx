@@ -50,7 +50,6 @@ const EditDateForm = ({
 
   useEffect(() => {
     CourtCaseService.getAllCaseNumbers().then((response) => {
-      console.log("Fetched court cases:", response);
       const cases = response.map((caseObj: CourtCaseNumberResponse) => ({
         key: caseObj.caseId,
         value: caseObj.caseNumber,
@@ -66,14 +65,12 @@ const EditDateForm = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submit form:", formData);
 
     CourtCaseDateService.updateCourtCaseDates(
       updateCourtCaseRequest?.id || "",
       formData,
     )
       .then((response) => {
-        console.log("Court case date created successfully:", response);
         setShowSuccessMessage("Court case date created successfully!");
         setShowModal(false);
       })

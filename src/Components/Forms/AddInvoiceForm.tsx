@@ -1,7 +1,4 @@
 import { useEffect, useState, type SetStateAction } from "react";
-import PillInput from "../Inputs/PillInput";
-import PillSelect from "../Inputs/PillSelect";
-import PrimaryButton from "../Buttons/PrimaryButton";
 import {
   CourtCaseService,
   InvoiceItemService,
@@ -12,6 +9,9 @@ import {
 } from "../../api";
 import type { KeyValue } from "../../Models/InputItem";
 import type { Invoice } from "../../Models/Invoices";
+import PrimaryButton from "../Buttons/PrimaryButton";
+import PillInput from "../Inputs/PillInput";
+import PillSelect from "../Inputs/PillSelect";
 
 interface AddInvoiceFormProps {
   setShowSuccessMessage: (message: string) => void;
@@ -93,7 +93,6 @@ const AddInvoiceForm = ({
   useEffect(() => {
     // Any side effects or data fetching can be done here
     CourtCaseService.getAllCaseNumbers().then((response) => {
-      console.log("Fetched court cases:", response);
       const cases = response.map((caseObj: CourtCaseNumberResponse) => ({
         key: caseObj.caseId,
         value: caseObj.caseNumber,

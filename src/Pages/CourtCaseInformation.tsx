@@ -22,9 +22,9 @@ import {
 } from "react";
 import { useLocation } from "react-router-dom";
 import { CourtCaseService } from "../api";
-import ErrorAlert from "../Components/Alerts/ErrorAlert";
-import SuccessAlert from "../Components/Alerts/SuccessAlert";
 import Card from "../Components/Cards/Card";
+import ErrorAlert from "../Components/Feedback/Alerts/ErrorAlert";
+import SuccessAlert from "../Components/Feedback/Alerts/SuccessAlert";
 import AddInvoiceForm from "../Components/Forms/AddInvoiceForm";
 import Header from "../Components/Header/Header";
 import PillSelect from "../Components/Inputs/PillSelect";
@@ -267,9 +267,7 @@ const CourtCaseInformation = () => {
           },
         ]);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   }, []);
 
   const renderCaseSummary = () => {

@@ -1,21 +1,18 @@
 import { ArrowUp } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import SideModal from "../Components/Modal/SideModal";
-import SortBar from "../Components/Inputs/SortBar";
-import InvoiceCard from "../Components/Cards/InvoiceCard";
-import Header from "../Components/Header/Header";
 import {
   InvoiceService,
   type AddInvoiceItemRequest,
   type InvoiceStatus,
 } from "../api";
-import {
-  statusLabels,
-  type Invoice,
-} from "../Models/Invoices";
-import SuccessAlert from "../Components/Alerts/SuccessAlert";
-import ErrorAlert from "../Components/Alerts/ErrorAlert";
+import InvoiceCard from "../Components/Cards/InvoiceCard";
+import ErrorAlert from "../Components/Feedback/Alerts/ErrorAlert";
+import SuccessAlert from "../Components/Feedback/Alerts/SuccessAlert";
 import AddInvoiceForm from "../Components/Forms/AddInvoiceForm";
+import Header from "../Components/Header/Header";
+import SortBar from "../Components/Inputs/SortBar";
+import SideModal from "../Components/Modal/SideModal";
+import { statusLabels, type Invoice } from "../Models/Invoices";
 
 const InvoicePage = () => {
   const [sortBy, setSortBy] = useState<
@@ -129,10 +126,7 @@ const InvoicePage = () => {
   const returnSideModal = () => {
     if (showAddModal)
       return (
-        <SideModal
-          setShowModal={setShowAddModal}
-          title="New Invoice Item"
-        >
+        <SideModal setShowModal={setShowAddModal} title="New Invoice Item">
           <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto p-4">
             <AddInvoiceForm
               addInvoiceItemRequest={addInvoiceItemRequest}
@@ -163,11 +157,7 @@ const InvoicePage = () => {
       );
   };
 
-  const handleShowUpdateModal = (
-    invoice: Invoice,
-    index: number,
-  ) => {
-
+  const handleShowUpdateModal = (invoice: Invoice, index: number) => {
     setAddInvoiceItemRequest({
       caseId: invoice.caseId,
       invoiceId: invoice.id,
@@ -215,7 +205,6 @@ const InvoicePage = () => {
   useEffect(() => {
     InvoiceService.getAllInvoices()
       .then((response) => {
-        console.log(response);
         const mapped = response.map((invoice) => ({
           id: invoice.id,
           caseId: invoice.caseId,
@@ -240,7 +229,9 @@ const InvoicePage = () => {
 
         setInvoice(mapped);
       })
-      .catch((error) => console.log(error));
+      .catch(() => {
+        setErrorAlertMessage("Failed to load invoices. Please try again.");
+      });
   }, []);
 
   useEffect(() => {
@@ -257,7 +248,6 @@ const InvoicePage = () => {
   const renderErrorMessage = () => {
     return errorAlertMessage && <ErrorAlert message={errorAlertMessage} />;
   };
-
 
   return (
     <>
@@ -355,9 +345,7 @@ const InvoicePage = () => {
           openAddModal={() =>
             handleShowAddModal(true, invoice.caseId, invoice.id)
           }
-          openUpdateModal={() =>
-            handleShowUpdateModal(invoice, index)
-          }
+          openUpdateModal={() => handleShowUpdateModal(invoice, index)}
         />
       ))}
       {returnSideModal()}

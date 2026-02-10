@@ -1,24 +1,23 @@
 import { ArrowUp } from "lucide-react";
-import CourtCaseCard from "../Components/Cards/CourtCaseCard";
-import { useState, useMemo, useEffect } from "react";
-import SideModal from "../Components/Modal/SideModal";
-import SortBar from "../Components/Inputs/SortBar";
-import Header from "../Components/Header/Header";
+import { useEffect, useMemo, useState } from "react";
 import { CourtCaseService } from "../api";
-import type { CourtCases } from "../Models/CourtCases";
-import SuccessAlert from "../Components/Alerts/SuccessAlert";
-import ErrorAlert from "../Components/Alerts/ErrorAlert";
-import { statusLabels } from "../Models/Invoices";
+import CourtCaseCard from "../Components/Cards/CourtCaseCard";
+import ErrorAlert from "../Components/Feedback/Alerts/ErrorAlert";
+import SuccessAlert from "../Components/Feedback/Alerts/SuccessAlert";
 import AddCourtCaseForm from "../Components/Forms/AddCourtCaseForm";
+import Header from "../Components/Header/Header";
+import SortBar from "../Components/Inputs/SortBar";
+import SideModal from "../Components/Modal/SideModal";
+import type { CourtCases } from "../Models/CourtCases";
+import { statusLabels } from "../Models/Invoices";
 
 const CourtCasePage = () => {
-  
   const [showModal, setShowModal] = useState(false);
   const [successAlertMessage, setSuccessAlertMessage] = useState<string | null>(
-    null
+    null,
   );
   const [errorAlertMessage, setErrorAlertMessage] = useState<string | null>(
-    null
+    null,
   );
   const [sortBy, setSortBy] = useState<
     "caseNumber" | "location" | "plaintiff" | "type" | "nextDate"
@@ -63,7 +62,7 @@ const CourtCasePage = () => {
       a: (typeof courtCases)[number],
       b: (typeof courtCases)[number],
       key: keyof (typeof courtCases)[number],
-      desc: boolean
+      desc: boolean,
     ) => {
       let av: string | number = a[key] ?? "";
       let bv: string | number = b[key] ?? "";
@@ -82,7 +81,7 @@ const CourtCasePage = () => {
 
     // apply filters
     const filtered = courtCases.filter(
-      (c) => matchesSearch(c) && matchesStatus(c) && matchesType(c)
+      (c) => matchesSearch(c) && matchesStatus(c) && matchesType(c),
     );
 
     // apply primary sort by `sortBy` with direction `sortDesc` and then
@@ -110,7 +109,7 @@ const CourtCasePage = () => {
 
   // handle header clicks to set primary sort column and toggle direction
   const handleSort = (
-    col: "caseNumber" | "location" | "plaintiff" | "type" | "nextDate"
+    col: "caseNumber" | "location" | "plaintiff" | "type" | "nextDate",
   ) => {
     if (sortBy === col) {
       setSortDesc((s) => !s);
@@ -124,7 +123,11 @@ const CourtCasePage = () => {
     if (!showModal) return null;
     return (
       <SideModal setShowModal={setShowModal} title="New Court Case">
-        <AddCourtCaseForm filteredCases={filteredCases} setShowSuccessMessage={setSuccessAlertMessage} setShowErrorMessage={setErrorAlertMessage} />
+        <AddCourtCaseForm
+          filteredCases={filteredCases}
+          setShowSuccessMessage={setSuccessAlertMessage}
+          setShowErrorMessage={setErrorAlertMessage}
+        />
       </SideModal>
     );
   };
@@ -132,7 +135,6 @@ const CourtCasePage = () => {
   const handleShowModal = (show: boolean) => {
     setShowModal(show);
   };
-
 
   useEffect(() => {
     CourtCaseService.getAllCourtCases().then((response) => {
@@ -149,7 +151,6 @@ const CourtCasePage = () => {
       }));
 
       setCourtCases(mapped);
-      console.log("Fetched court cases:", mapped);
     });
   }, []);
 
@@ -165,7 +166,6 @@ const CourtCasePage = () => {
     return () => clearTimeout(timer);
   }, [errorAlertMessage]);
 
-  
   const renderSuccessmessage = () => {
     return (
       successAlertMessage && <SuccessAlert message={successAlertMessage} />
@@ -294,7 +294,7 @@ const CourtCasePage = () => {
         {renderErrorMessage()}
       </div>
       {}
-      
+
       {renderModal()}
     </>
   );

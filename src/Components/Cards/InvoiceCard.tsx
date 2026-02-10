@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   BanknoteArrowUp,
   ChevronDown,
@@ -6,16 +7,15 @@ import {
   List,
   Users,
 } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { InvoiceService } from "../../api";
 import {
   statusLabels,
   type Invoice,
   type InvoiceItemEntry,
 } from "../../Models/Invoices";
-import Card from "./Card";
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { InvoiceService } from "../../api";
-import axios from "axios";
 import DynamicModal from "../Modal/ShareFileModal";
+import Card from "./Card";
 
 interface InvoiceCardProps {
   invoices: Invoice;
@@ -176,12 +176,8 @@ const InvoiceCard = ({
     InvoiceService.updateInvoicesStatus(id, {
       isPaid: status,
     })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      .then((response) => {})
+      .catch((error) => {});
   };
 
   const downloadPdf = async (id: string, invoiceId: string) => {

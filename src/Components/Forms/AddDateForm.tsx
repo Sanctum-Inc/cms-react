@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import {
-    CourtCaseDateService,
+  CourtCaseDateService,
   CourtCaseService,
   type AddCourtCaseDateRequest,
   type CourtCaseNumberResponse,
 } from "../../api";
+import type { KeyValue } from "../../Models/InputItem";
+import PrimaryButton from "../Buttons/PrimaryButton";
+import { CourtCaseDateTypeOptions } from "../Inputs/InputOptions/CourtCaseDateTypeOptions";
 import PillInput from "../Inputs/PillInput";
 import PillSelect from "../Inputs/PillSelect";
-import type { KeyValue } from "../../Models/InputItem";
 import PillTextarea from "../Inputs/PillTextarea";
-import { CourtCaseDateTypeOptions } from "../Inputs/InputOptions/CourtCaseDateTypeOptions";
-import PrimaryButton from "../Buttons/PrimaryButton";
 
 interface AddFormDateProps {
   setShowSuccessMessage: (message: string) => void;
@@ -18,7 +18,11 @@ interface AddFormDateProps {
   addCourtCaseRequest?: AddCourtCaseDateRequest;
 }
 
-const AddDateForm = ({ setShowSuccessMessage, setShowErrorMessage, addCourtCaseRequest }: AddFormDateProps) => {
+const AddDateForm = ({
+  setShowSuccessMessage,
+  setShowErrorMessage,
+  addCourtCaseRequest,
+}: AddFormDateProps) => {
   const [caseNumbers, setCaseNumbers] = useState<KeyValue[]>([]);
 
   const [formData, setFormData] = useState<AddCourtCaseDateRequest>({
@@ -38,7 +42,6 @@ const AddDateForm = ({ setShowSuccessMessage, setShowErrorMessage, addCourtCaseR
 
   useEffect(() => {
     CourtCaseService.getAllCaseNumbers().then((response) => {
-      console.log("Fetched court cases:", response);
       const cases = response.map((caseObj: CourtCaseNumberResponse) => ({
         key: caseObj.caseId,
         value: caseObj.caseNumber,
@@ -54,17 +57,17 @@ const AddDateForm = ({ setShowSuccessMessage, setShowErrorMessage, addCourtCaseR
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submit form:", formData);
 
     CourtCaseDateService.createCourtCaseDates(formData)
       .then((response) => {
-        console.log("Court case date created successfully:", response);
         setShowSuccessMessage("Court case date created successfully!");
       })
       .catch((error) => {
         console.error("Error creating court case date:", error);
-        setShowErrorMessage("Failed to create court case date. Please try again.");
-      })
+        setShowErrorMessage(
+          "Failed to create court case date. Please try again.",
+        );
+      });
   };
 
   return (
