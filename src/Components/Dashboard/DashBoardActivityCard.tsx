@@ -1,6 +1,6 @@
-import DashBoardActivityItem from "./DashBoardActivityItem";
 import type { CardItem } from "../../Models/CardItem";
 import Card from "../Cards/Card";
+import DashBoardActivityItem from "./DashBoardActivityItem";
 
 interface DashBoardActivityCardProps {
   title: string;
@@ -9,7 +9,7 @@ interface DashBoardActivityCardProps {
   items: Array<CardItem>;
 }
 
-const DashBoardActivityCard = (props:DashBoardActivityCardProps) => {
+const DashBoardActivityCard = (props: DashBoardActivityCardProps) => {
   return (
     <Card className="p-5">
       <div className="text-2xl font-semibold mb-5">{props.title}</div>
@@ -25,6 +25,7 @@ const DashBoardActivityCard = (props:DashBoardActivityCardProps) => {
               size={props.size}
               clickable={props.clickable}
               type={item.type}
+              caseId={item.caseId}
             />
           ))}
       </div>

@@ -1,10 +1,20 @@
 import { CalendarDays, Dot } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import type { CardItem } from "../../Models/CardItem";
 
 const DashBoardActivityItem = (props: CardItem) => {
+  const navigate = useNavigate();
+  const handleGoToCourtCase = (caseId: string) => {
+    console.log(caseId);
+    navigate(`/court-case-information?id=${caseId}`);
+  };
+
   if (props.clickable == true) {
     return (
-      <div className="py-4 flex border border-gray-200 rounded-4xl items-center hover:border-(--color-primary) cursor-pointer p-3 mb-2">
+      <div
+        className="py-4 flex border border-gray-200 rounded-4xl items-center hover:border-(--color-primary) cursor-pointer p-3 mb-2"
+        onClick={() => handleGoToCourtCase(props.caseId || "")}
+      >
         <div className="w-1/70">
           <CalendarDays size={props.size || 40} color={props.color} />
         </div>

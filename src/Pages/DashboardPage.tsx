@@ -139,13 +139,19 @@ const DashboardPage = () => {
         }));
         setActivityItems(mappedActivity);
 
-        const mappedCourtDates = response.upcomingCases.map((item) => ({
-          color: courtCaseDateTypeClassMap[item.courtDateType],
-          title: item.courtDateTitle,
-          description: item.courtDateDescription,
-          time: item.date,
-          type: CourtCaseDateTypeOptions[item.courtDateType].value,
-        }));
+        const mappedCourtDates = response.upcomingCases.map(
+          (item) =>
+            ({
+              color: courtCaseDateTypeClassMap[item.courtDateType],
+              title: item.courtDateTitle,
+              description: item.courtDateDescription,
+              time: item.date,
+              type: CourtCaseDateTypeOptions[item.courtDateType].value,
+              caseId: item.id,
+            }) as CardItem,
+        );
+
+        console.log(mappedCourtDates);
         setCourtCaseItems(mappedCourtDates);
       })
       .catch((error) => console.log(error));
