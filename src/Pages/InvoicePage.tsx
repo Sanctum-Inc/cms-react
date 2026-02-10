@@ -22,7 +22,7 @@ const InvoicePage = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdatemodal, setShowUpdateModal] = useState(false);
 
-  const [invoices, setInvoice] = useState<Invoice[]>([]);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -130,7 +130,7 @@ const InvoicePage = () => {
           <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto p-4">
             <AddInvoiceForm
               addInvoiceItemRequest={addInvoiceItemRequest}
-              setInvoice={setInvoice}
+              setInvoice={setInvoices}
               setShowErrorMessage={setErrorAlertMessage}
               setShowSuccessMessage={setSuccessAlertMessage}
               buttonCaption="Create"
@@ -147,7 +147,7 @@ const InvoicePage = () => {
           <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto p-4">
             <AddInvoiceForm
               addInvoiceItemRequest={addInvoiceItemRequest}
-              setInvoice={setInvoice}
+              setInvoice={setInvoices}
               setShowErrorMessage={setErrorAlertMessage}
               setShowSuccessMessage={setSuccessAlertMessage}
               buttonCaption="Update"
@@ -227,7 +227,7 @@ const InvoicePage = () => {
           })),
         }));
 
-        setInvoice(mapped);
+        setInvoices(mapped);
       })
       .catch(() => {
         setErrorAlertMessage("Failed to load invoices. Please try again.");
@@ -247,6 +247,20 @@ const InvoicePage = () => {
   };
   const renderErrorMessage = () => {
     return errorAlertMessage && <ErrorAlert message={errorAlertMessage} />;
+  };
+
+  const SetInvoiceToPaid = (invoiceId: string, status: number) => {
+    setInvoices((prev) => {
+      return prev.map((invoice) => {
+        if (invoice.id === invoiceId) {
+          return {
+            ...invoice,
+            status: status,
+          };
+        }
+        return invoice;
+      });
+    });
   };
 
   return (
@@ -346,6 +360,9 @@ const InvoicePage = () => {
             handleShowAddModal(true, invoice.caseId, invoice.id)
           }
           openUpdateModal={() => handleShowUpdateModal(invoice, index)}
+          setShowErrorMessage={setErrorAlertMessage}
+          setShowSuccessMessage={setSuccessAlertMessage}
+          setInvoiceToPaid={SetInvoiceToPaid}
         />
       ))}
       {returnSideModal()}

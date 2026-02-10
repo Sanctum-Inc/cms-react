@@ -21,6 +21,9 @@ interface InvoiceCardProps {
   invoices: Invoice;
   openAddModal: (show: boolean, caseNumber: string) => void;
   openUpdateModal: (invoiceItem: InvoiceItemEntry) => void;
+  setShowErrorMessage: (message: string) => void;
+  setShowSuccessMessage: (message: string) => void;
+  setInvoiceToPaid: (invoiceId: string, status: number) => void;
   caseNumber: string;
 }
 
@@ -29,6 +32,9 @@ const InvoiceCard = ({
   openAddModal: openAddModal,
   caseNumber,
   openUpdateModal,
+  setShowErrorMessage,
+  setShowSuccessMessage,
+  setInvoiceToPaid,
 }: InvoiceCardProps) => {
   const [showItems, setShowItems] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -176,8 +182,13 @@ const InvoiceCard = ({
     InvoiceService.updateInvoicesStatus(id, {
       isPaid: status,
     })
-      .then((response) => {})
-      .catch((error) => {});
+      .then(() => {
+        setShowSuccessMessage("Invoice marked as paid.");
+        setInvoiceToPaid(id, status);
+      })
+      .catch(() => {
+        setShowErrorMessage("Error marking invoice as paid.");
+      });
   };
 
   const downloadPdf = async (id: string, invoiceId: string) => {
