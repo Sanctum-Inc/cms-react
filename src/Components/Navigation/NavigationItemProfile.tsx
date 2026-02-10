@@ -1,9 +1,10 @@
 import { type LucideProps } from "lucide-react";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
-import PrimaryButton from "../Buttons/PrimaryButton";
 import * as React from "react";
+import { Link } from "react-router-dom";
 import defaultIcon from "../../assets/default-profile-icon.jpg";
 import { useAuthentication } from "../../Context/AuthenticationContext";
+import PrimaryButton from "../Buttons/PrimaryButton";
 
 interface ImageWithFallbackProps {
   src: string;
@@ -48,7 +49,7 @@ const NavigationItemProfile = ({
 
   return (
     <div className="mt-auto overflow-hidden w-full">
-      <a className="py-3 block w-full" href={url}>
+      <Link className="py-3 block w-full" to={url}>
         <div className="flex items-center hover:text-(--color-primary) w-full min-w-0">
           <span className="shrink-0">
             <ImageWithFallback
@@ -66,7 +67,7 @@ const NavigationItemProfile = ({
             <span className="text-sm text-gray-500 truncate">{email}</span>
           </span>
         </div>
-      </a>
+      </Link>
 
       <div id="logout-container" className="w-full justify-center">
         <div className="mt-2">

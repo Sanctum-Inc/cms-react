@@ -11,6 +11,7 @@
     "test": "vitest",
     "build:production": "tsc -b && vite build --mode production",
     "build:staging": "tsc -b && vite build --mode staging",
+    "preview:staging": "vite preview --mode staging --port 5174",
     "github-ci": "concurrently \"npm run lint\" \"npm run test\" \"npm run build\"",
     "generate:client": "npx openapi -c axios -i schema/cms-api.json -o src/api"
   },

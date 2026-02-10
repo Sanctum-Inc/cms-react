@@ -1,13 +1,13 @@
 import { ArrowLeft, UserPlus } from "lucide-react";
 import { useState } from "react";
-import logo from "../assets/logo-removebg-preview.png";
+import { useNavigate } from "react-router-dom";
 import { UserService } from "../api/services/UserService";
-import PillInput from "../Components/Inputs/PillInput";
+import logo from "../assets/logo-removebg-preview.png";
 import PrimaryButton from "../Components/Buttons/PrimaryButton";
 import Card from "../Components/Cards/Card";
-import { ValidateField } from "../Utils/InputValidator";
-import { useNavigate } from "react-router-dom";
+import PillInput from "../Components/Inputs/PillInput";
 import { useAuthentication } from "../Context/AuthenticationContext";
+import { ValidateField } from "../Utils/InputValidator";
 
 type User = {
   id: string;
@@ -21,6 +21,8 @@ type User = {
 };
 
 const Login = () => {
+  console.log(import.meta.env.VITE_API_URL);
+
   const navigate = useNavigate();
   const [showRegistration, setShowRegistration] = useState(false);
   const [user, setUser] = useState<User>({
@@ -31,14 +33,12 @@ const Login = () => {
     mobileNumber: "",
     password: "",
     confirmPassword: "",
-    firmId: ""
+    firmId: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const { login } = useAuthentication();
-
-
 
   // Handle input change - clear error immediately when user types
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,8 +191,6 @@ const Login = () => {
         });
       }
     }
-
-
   };
 
   const renderLogin = () => {
@@ -336,9 +334,7 @@ const Login = () => {
             required
           />
           {touched.firmId && errors.firmId && (
-            <p className="text-red-600 text-sm mt-1 ml-3.5">
-              {errors.firmId}
-            </p>
+            <p className="text-red-600 text-sm mt-1 ml-3.5">{errors.firmId}</p>
           )}
         </div>
         <div className="w-full">
