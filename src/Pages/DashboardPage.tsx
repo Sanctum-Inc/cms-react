@@ -165,30 +165,34 @@ const DashboardPage = () => {
         </span>
       </Header>
       <div className="flex-col w-full bg-(--color-hover-light)">
-        <div className="w-full flex justify-between p-3">
+        <div className="w-full flex justify-between p-3 gap-10">
           <DashboardCard
             description="Total Cases"
             value={dashboardInformation.totalCases?.toString() || ""}
             icon={BriefcaseBusiness}
             color="blue"
+            linkTo="/court-case"
           ></DashboardCard>
           <DashboardCard
             description="Pending Invoices"
             value={"R" + formatMoney() || ""}
             icon={BanknoteX}
             color="orange"
+            linkTo="/invoices"
           ></DashboardCard>
           <DashboardCard
             description="Upcoming Dates"
             value={dashboardInformation.upcomingDates?.toString() || ""}
             icon={CalendarDays}
             color="green"
+            linkTo="/dates"
           ></DashboardCard>
           <DashboardCard
             description="Documents Stored"
             value={dashboardInformation.documentsStored?.toString() || ""}
             icon={FolderOpen}
             color="purple"
+            linkTo="/documents"
           ></DashboardCard>
         </div>
         <div className="w-full h-full p-3">

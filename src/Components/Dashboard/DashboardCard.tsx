@@ -1,18 +1,22 @@
-import * as React from 'react';
 import { type LucideProps } from "lucide-react";
-import Card from '../Cards/Card';
-
+import * as React from "react";
+import { Link } from "react-router-dom";
+import Card from "../Cards/Card";
 
 interface DashboardCardProps {
-    description: string;
-    icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>;
-    value: string;
-    color: string;
+  description: string;
+  icon: React.ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+  >;
+  value: string;
+  color: string;
+  linkTo: string;
 }
 
 const DashboardCard = (props: DashboardCardProps) => {
-    return (
-      <Card className="w-1/5 h-1/8 p-8 hover:bg-(--color-hover-light) bg-white">
+  return (
+    <Link to={props.linkTo} className="w-1/4">
+      <Card className="w-full p-8 hover:bg-(--color-hover-light) bg-white">
         <div className="flex justify-between">
           <span className="text-xl font-medium text-gray-400">
             {props.description}
@@ -25,7 +29,8 @@ const DashboardCard = (props: DashboardCardProps) => {
           <span className="text-3xl font-bold">{props.value}</span>
         </div>
       </Card>
-    );
-}
+    </Link>
+  );
+};
 
 export default DashboardCard;
