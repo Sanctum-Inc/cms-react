@@ -5,7 +5,6 @@ import type { CardItem } from "../../Models/CardItem";
 const DashBoardActivityItem = (props: CardItem) => {
   const navigate = useNavigate();
   const handleGoToCourtCase = (caseId: string) => {
-    console.log(caseId);
     navigate(`/court-case-information?id=${caseId}`);
   };
 

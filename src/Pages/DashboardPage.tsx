@@ -100,12 +100,15 @@ const DashboardPage = () => {
     DashboardService.getDashboardInformation()
       .then((response) => {
         setDashboardInformation(response);
-        const mappedActivity = response.recentCases.map((item) => ({
-          color: "green",
-          title: item.actitvityTitle,
-          description: item.activityDescription,
-          time: item.timeSince,
-        }));
+        const mappedActivity = response.recentCases.map(
+          (item) =>
+            ({
+              color: "green",
+              title: item.actitvityTitle,
+              description: item.activityDescription,
+              time: item.timeSince,
+            }) as CardItem,
+        );
         setActivityItems(mappedActivity);
 
         const mappedCourtDates = response.upcomingCases.map(
@@ -121,6 +124,7 @@ const DashboardPage = () => {
         );
 
         setCourtCaseItems(mappedCourtDates);
+        console.log(mappedCourtDates);
       })
       .catch(() => {
         setErrorAlertMessage("Failed to load dashboard. Please try again.");
@@ -177,17 +181,19 @@ const DashboardPage = () => {
         </div>
         <div className="w-full h-full p-3">
           <DashBoardActivityCard
-            items={activityItems}
+            items={[]}
             title="Recent Case Activity"
             size="40"
+            cardType="activity"
           />
         </div>
         <div className="w-full h-full p-3">
           <DashBoardActivityCard
-            items={courtCaseItems}
+            items={[]}
             title="Upcoming Court Dates"
             size="25"
             clickable={true}
+            cardType="dates"
           />
         </div>
         {renderErrorMessage()}
