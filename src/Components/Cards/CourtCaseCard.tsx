@@ -75,21 +75,20 @@ const CourtCaseCard = ({
     <>
       <Card className="mx-6 my-3 p-6 cursor-pointer">
         <Link to={`/court-case-information?id=${id}`}>
-          <div className="grid grid-cols-5 gap-4">
-            <div>{caseNumber}</div>
-            <div>{location}</div>
-            <div>{plaintiff}</div>
-            <div>
+          <div className="grid grid-cols-20 gap-4">
+            <div className="col-span-3">{caseNumber}</div>
+            <div className="col-span-5">{location}</div>
+            <div className="col-span-4">{plaintiff}</div>
+            <div className="col-span-3">
               {CourtCaseTypeOptions.find((x) => x.key === type?.toString())
                 ?.value ?? "Unknown"}
             </div>
-            <div className="flex justify-between">
-              <span>{nextDate ?? "N/A"}</span>
-              <span className={getStatusStyles(status ?? 99)}>
-                {CourtCaseStatusOptions.find(
-                  (x) => x.key === status?.toString(),
-                )?.value ?? "Unknown"}
-              </span>
+            <div className="col-span-3">{nextDate ?? "N/A"}</div>
+            <div
+              className={`${getStatusStyles(status ?? 99)} col-span-2 flex items-center justify-center min-h-7 max-h-12`}
+            >
+              {CourtCaseStatusOptions.find((x) => x.key === status?.toString())
+                ?.value ?? "Unknown"}
             </div>
           </div>
         </Link>

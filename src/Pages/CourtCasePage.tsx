@@ -10,7 +10,6 @@ import { CourtCaseStatusOptions } from "../Components/Inputs/InputOptions/CourtC
 import { CourtCaseTypeOptions } from "../Components/Inputs/InputOptions/CourtCaseTypesOptions";
 import SortBar from "../Components/Inputs/SortBar";
 import SideModal from "../Components/Modal/SideModal";
-import { statusLabels } from "../Models/Invoices";
 
 const CourtCasePage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -47,15 +46,21 @@ const CourtCasePage = () => {
     };
 
     const matchesStatus = (c: (typeof courtCases)[number]) => {
-      if (statusFilter === "all") return true;
+      if (statusFilter.toLowerCase() === "all") return true;
       return (
-        statusLabels[c.status].toLowerCase() === statusFilter.toLowerCase()
+        CourtCaseStatusOptions.find(
+          (o) => o.key === String(c.status),
+        )?.value.toLowerCase() === statusFilter.toLowerCase()
       );
     };
 
     const matchesType = (c: (typeof courtCases)[number]) => {
       if (typeFilter === "all") return true;
-      return c.type.toString().toLowerCase() === typeFilter.toLowerCase();
+      return (
+        CourtCaseTypeOptions.find(
+          (o) => o.key === String(c.type),
+        )?.value.toLowerCase() === typeFilter.toLowerCase()
+      );
     };
 
     const compare = (
@@ -185,13 +190,16 @@ const CourtCasePage = () => {
             setStatusFilter={setStatusFilter}
             typeFilter={typeFilter}
             setTypeFilter={setTypeFilter}
-            statusOptions={CourtCaseStatusOptions.map((s) => s.value)}
-            typeOptions={CourtCaseTypeOptions.map((s) => s.value)}
+            statusOptions={[
+              "All",
+              ...CourtCaseStatusOptions.map((s) => s.value),
+            ]}
+            typeOptions={["All", ...CourtCaseTypeOptions.map((s) => s.value)]}
           ></SortBar>
           <div className="m-6 p-6 mt-5 font-bold text-gray-500 border-b border-gray-300 pb-3">
             <div>Case Information</div>
-            <div className="grid grid-cols-5 gap-4 mt-4">
-              <div className="flex align-center">
+            <div className="grid grid-cols-20 gap-4 mt-4">
+              <div className="flex align-center col-span-3">
                 <span>Case Number </span>
                 <span
                   className="my-auto cursor-pointer"
@@ -208,7 +216,7 @@ const CourtCasePage = () => {
                   )}
                 </span>
               </div>
-              <div className="flex align-center">
+              <div className="flex align-center col-span-5">
                 <span>Location </span>
                 <span
                   className="my-auto cursor-pointer"
@@ -225,7 +233,7 @@ const CourtCasePage = () => {
                   )}
                 </span>
               </div>
-              <div className="flex align-center">
+              <div className="flex align-center col-span-4">
                 <span>Plaintiff</span>
                 <span
                   className="my-auto cursor-pointer"
@@ -242,7 +250,7 @@ const CourtCasePage = () => {
                   )}
                 </span>
               </div>
-              <div className="flex align-center">
+              <div className="flex align-center col-span-3">
                 <span>Type</span>
                 <span
                   className="my-auto cursor-pointer"
@@ -259,7 +267,7 @@ const CourtCasePage = () => {
                   )}
                 </span>
               </div>
-              <div className="flex align-center">
+              <div className="flex align-center col-span-3">
                 <span>Next Date</span>
                 <span
                   className="my-auto cursor-pointer"
@@ -276,6 +284,7 @@ const CourtCasePage = () => {
                   )}
                 </span>
               </div>
+              <div className="flex align-center col-span-2"></div>
             </div>
           </div>
           {filteredCases.map((courtCase) => (

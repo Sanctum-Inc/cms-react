@@ -10,12 +10,12 @@ import {
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { InvoiceService } from "../../api";
 import {
-  statusLabels,
   type Invoice,
   type InvoiceItemEntry,
 } from "../../Models/Invoices";
 import DynamicModal from "../Modal/ShareFileModal";
 import Card from "./Card";
+import { InvoiceStatusOptions } from "../Inputs/InputOptions/InvoiceStatusOptions";
 
 interface InvoiceCardProps {
   invoices: Invoice;
@@ -277,7 +277,7 @@ const InvoiceCard = ({
           </div>
           <div>
             <span className={getStatusStyles(invoices.status)}>
-              {statusLabels[invoices.status]}
+              {InvoiceStatusOptions.find((o) => o.key === String(invoices.status))?.value}
             </span>
           </div>
           <div className="flex justify-center h-full space-y-2">

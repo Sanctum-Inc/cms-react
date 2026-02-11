@@ -10,9 +10,10 @@ import ErrorAlert from "../Components/Feedback/Alerts/ErrorAlert";
 import SuccessAlert from "../Components/Feedback/Alerts/SuccessAlert";
 import AddInvoiceForm from "../Components/Forms/AddInvoiceForm";
 import Header from "../Components/Header/Header";
+import { InvoiceStatusOptions } from "../Components/Inputs/InputOptions/InvoiceStatusOptions";
 import SortBar from "../Components/Inputs/SortBar";
 import SideModal from "../Components/Modal/SideModal";
-import { statusLabels, type Invoice } from "../Models/Invoices";
+import { type Invoice } from "../Models/Invoices";
 
 const InvoicePage = () => {
   const [sortBy, setSortBy] = useState<
@@ -53,7 +54,9 @@ const InvoicePage = () => {
       return (
         c.caseNumber.toLowerCase().includes(q) ||
         c.invoiceNumber.toLowerCase().includes(q) ||
-        statusLabels[c.status].toLowerCase().includes(q) ||
+        InvoiceStatusOptions.find((o) => o.key === String(c.status))
+          ?.value.toLowerCase()
+          .includes(q) ||
         c.Items.toString().toLowerCase().includes(q) ||
         c.total.toString().toLowerCase().includes(q)
       );
@@ -62,7 +65,9 @@ const InvoicePage = () => {
     const matchesStatus = (c: (typeof invoices)[number]) => {
       if (statusFilter === "all") return true;
       return (
-        statusLabels[c.status].toLowerCase() === statusFilter.toLowerCase()
+        InvoiceStatusOptions.find(
+          (o) => o.key === String(c.status),
+        )?.value.toLowerCase() === statusFilter.toLowerCase()
       );
     };
 
@@ -276,7 +281,10 @@ const InvoicePage = () => {
         setSearchQuery={setSearchQuery}
         setStatusFilter={setStatusFilter}
         statusFilter={statusFilter}
-        statusOptions={["all", "paid", "overdue", "pending"]}
+        statusOptions={[
+          "All",
+          ...InvoiceStatusOptions.map((option) => option.value),
+        ]}
       ></SortBar>
       <div className="m-6 p-6 mt-5 font-bold text-gray-500 border-b border-gray-300 pb-3">
         <div>Invoice Information</div>
