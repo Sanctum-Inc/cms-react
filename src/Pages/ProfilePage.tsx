@@ -1,11 +1,11 @@
 import { Briefcase, User } from "lucide-react";
+import { useState } from "react";
 import PrimaryButton from "../Components/Buttons/PrimaryButton";
 import Card from "../Components/Cards/Card";
 import Header from "../Components/Header/Header";
-import { useState } from "react";
-import UserProfile from "../Components/Profile/UserProfile";
-import CompanyProfile from "../Components/Profile/CompanyProfile";
 import TabNavigation from "../Components/Navigation/TabNavigation";
+import CompanyProfile from "../Components/Profile/CompanyProfile";
+import UserProfile from "../Components/Profile/UserProfile";
 
 const ProfilePage = () => {
   const [selectedMenu, setSelectedMenu] = useState("User Profile");
@@ -14,10 +14,12 @@ const ProfilePage = () => {
     {
       label: "User Profile",
       icon: User,
+      color: "purple",
     },
     {
       label: "Company Profile",
       icon: Briefcase,
+      color: "blue",
     },
   ];
 
@@ -30,6 +32,7 @@ const ProfilePage = () => {
           menu={menu}
           index={index}
           className="pt-7"
+          color={menu.color}
         />
       );
     });
@@ -37,10 +40,9 @@ const ProfilePage = () => {
 
   const renderProfileInputs = () => {
     if (selectedMenu === "User Profile") {
-      return <UserProfile/>;
-    }
-    else if (selectedMenu === "Company Profile") {
-      return <CompanyProfile/>;
+      return <UserProfile />;
+    } else if (selectedMenu === "Company Profile") {
+      return <CompanyProfile />;
     }
   };
 

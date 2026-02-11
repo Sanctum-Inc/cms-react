@@ -70,7 +70,7 @@ const EditDateForm = ({
       updateCourtCaseRequest?.id || "",
       formData,
     )
-      .then((response) => {
+      .then(() => {
         setShowSuccessMessage("Court case date created successfully!");
         setShowModal(false);
       })

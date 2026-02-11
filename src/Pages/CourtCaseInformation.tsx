@@ -9,7 +9,6 @@ import {
   File,
   FileText,
   MapPin,
-  Scale,
   User,
   Users,
   type LucideProps,
@@ -23,6 +22,8 @@ import {
 import { useLocation } from "react-router-dom";
 import { CourtCaseService } from "../api";
 import Card from "../Components/Cards/Card";
+import CaseSummaryCard from "../Components/Cards/CaseSummaryCard";
+import KeyPartiesCard from "../Components/Cards/KeyPartiesCard";
 import ErrorAlert from "../Components/Feedback/Alerts/ErrorAlert";
 import SuccessAlert from "../Components/Feedback/Alerts/SuccessAlert";
 import AddInvoiceForm from "../Components/Forms/AddInvoiceForm";
@@ -271,74 +272,10 @@ const CourtCaseInformation = () => {
           },
         ]);
       })
-      .catch((error) => {});
+      .catch(() => {
+        setErrorAlertMessage("Failed to load court case information.");
+      });
   }, []);
-
-  const renderCaseSummary = () => {
-    return (
-      <>
-        <div className="flex items-center mb-4 border-b border-gray-300 pb-2">
-          <span>
-            <Scale />
-          </span>
-          <span className="text-2xl font-semibold ml-2">Case Summary</span>
-        </div>
-        <div className="grid grid-cols-10 gap-4">
-          {caseFields.map(({ label, value, icon: Icon }, index) => (
-            <Card
-              className="col-span-5 bg-gray-50"
-              key={`infoCardsSummary-${index}`}
-            >
-              <div className="grid grid-cols-40">
-                <div className="col-span-3 flex items-center">
-                  <Icon />
-                </div>
-                <div className="col-span-37 text-gray-500 font-medium">
-                  <div>{label}</div>
-                </div>
-                <div className="col-span-3"></div>
-                <div className="col-span-37">{`${value}`}</div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </>
-    );
-  };
-
-  const renderKeyParties = () => {
-    return (
-      <>
-        <div className="flex items-center mb-4 border-b border-gray-300 pb-2">
-          <span>
-            <Users />
-          </span>
-          <span className="text-2xl font-semibold ml-2">Key Parties</span>
-        </div>
-        <div className="">
-          {keyParties.map(({ label, value, icon: Icon, color }, index) => (
-            <Card
-              className="bg-gray-50 mb-4"
-              key={`infoCardsKeyParties-${index}`}
-            >
-              <div className="grid grid-cols-20">
-                <div className="col-span-1 flex items-center">
-                  <Icon color={color} />
-                </div>
-                <div className="col-span-19 text-gray-500 font-medium ml-1">
-                  <div>{label}</div>
-                </div>
-                <div className="col-span-1"></div>
-                <div className="col-span-19 font-medium ml-1" style={{ color }}>
-                  {value?.toString()}
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </>
-    );
-  };
 
   const renderTabs = () => {
     // Placeholder for future tab rendering logic
@@ -356,7 +293,6 @@ const CourtCaseInformation = () => {
   };
 
   const renderTables = () => {
-    // Placeholder for future table rendering logic based on selectedMenu
     const x = profileMenus.find((menu) => {
       return menu.label === selectedMenu;
     });
@@ -434,8 +370,12 @@ const CourtCaseInformation = () => {
         handleShowModal={handleShowModal}
       />
       <div className="grid grid-cols-10 p-6 gap-4">
-        <Card className="col-span-7">{renderCaseSummary()}</Card>
-        <Card className="col-span-3">{renderKeyParties()}</Card>
+        <Card className="col-span-7">
+          <CaseSummaryCard caseFields={caseFields} />
+        </Card>
+        <Card className="col-span-3">
+          <KeyPartiesCard keyParties={keyParties} />
+        </Card>
       </div>
       <div className="px-6 py-2 h-fit">
         <Card className="h-full">

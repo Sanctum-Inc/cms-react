@@ -15,12 +15,14 @@ import PillTextarea from "../Inputs/PillTextarea";
 interface AddFormDateProps {
   setShowSuccessMessage: (message: string) => void;
   setShowErrorMessage: (message: string) => void;
+  setShowModal: (show: boolean) => void;
   addCourtCaseRequest?: AddCourtCaseDateRequest;
 }
 
 const AddDateForm = ({
   setShowSuccessMessage,
   setShowErrorMessage,
+  setShowModal,
   addCourtCaseRequest,
 }: AddFormDateProps) => {
   const [caseNumbers, setCaseNumbers] = useState<KeyValue[]>([]);
@@ -59,8 +61,9 @@ const AddDateForm = ({
     e.preventDefault();
 
     CourtCaseDateService.createCourtCaseDates(formData)
-      .then((response) => {
+      .then(() => {
         setShowSuccessMessage("Court case date created successfully!");
+        setShowModal(false);
       })
       .catch((error) => {
         console.error("Error creating court case date:", error);

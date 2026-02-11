@@ -146,6 +146,7 @@ const DatesPage = () => {
             <AddDateForm
               setShowErrorMessage={setErrorAlertMessage}
               setShowSuccessMessage={setSuccessAlertMessage}
+              setShowModal={setShowModal}
             />
           </SideModal>
         </>

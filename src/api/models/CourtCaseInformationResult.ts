@@ -10,6 +10,7 @@ import type { CourtCaseOutcomes } from './CourtCaseOutcomes';
 import type { CourtCaseTypes } from './CourtCaseTypes';
 export type CourtCaseInformationResult = {
     caseId: string;
+    caseNumber: string;
     location: string;
     plaintiff: string;
     defendant: string;

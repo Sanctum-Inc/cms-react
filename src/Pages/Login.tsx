@@ -151,6 +151,8 @@ const Login = () => {
         firmId: user.firmId,
       });
 
+      if (result) handleLogin();
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       // Axios error: error.response.data contains the ProblemDetails object returned by your API
