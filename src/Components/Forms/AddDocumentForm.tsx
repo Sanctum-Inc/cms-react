@@ -1,44 +1,44 @@
 import { useEffect, useState, type SetStateAction } from "react";
 import {
-  CourtCaseDateService,
   CourtCaseService,
-  type AddCourtCaseDateRequest,
+  DocumentService,
   type CourtCaseNumberResponse,
 } from "../../api";
 import type { KeyValue } from "../../Models/InputItem";
 import type { ProfileMenu } from "../../Pages/CourtCaseInformation";
 import { formatFormalDateTime } from "../../Utils/FormatDateTime";
 import PrimaryButton from "../Buttons/PrimaryButton";
-import { CourtCaseDateTypeOptions } from "../Inputs/InputOptions/CourtCaseDateTypeOptions";
+import PillFile from "../Inputs/PillFile";
 import PillInput from "../Inputs/PillInput";
 import PillSelect from "../Inputs/PillSelect";
-import PillTextarea from "../Inputs/PillTextarea";
 
-interface AddFormDateProps {
+interface DocumentFormData {
+  caseId: string;
+  name: string;
+  file: File | null;
+}
+
+interface AddDocumentFormProps {
   setShowSuccessMessage: (message: string) => void;
   setShowErrorMessage: (message: string) => void;
   setShowModal: (show: boolean) => void;
   setCaseAttachments: (invoice: SetStateAction<ProfileMenu[]>) => void;
-  addCourtCaseRequest?: AddCourtCaseDateRequest;
   caseId?: string;
 }
 
-const AddDateForm = ({
+const AddDocumentForm = ({
   setShowSuccessMessage,
   setShowErrorMessage,
   setShowModal,
-  addCourtCaseRequest,
   setCaseAttachments,
   caseId,
-}: AddFormDateProps) => {
+}: AddDocumentFormProps) => {
   const [caseNumbers, setCaseNumbers] = useState<KeyValue[]>([]);
 
-  const [formData, setFormData] = useState<AddCourtCaseDateRequest>({
-    caseId: addCourtCaseRequest?.caseId || caseId || "",
-    date: addCourtCaseRequest?.date || "",
-    description: addCourtCaseRequest?.description || "",
-    title: addCourtCaseRequest?.title || "",
-    type: addCourtCaseRequest?.type || 0,
+  const [formData, setFormData] = useState<DocumentFormData>({
+    caseId: caseId || "",
+    name: "",
+    file: null,
   });
 
   const handleChange = (name: string, value: string | number) => {
@@ -66,37 +66,46 @@ const AddDateForm = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    CourtCaseDateService.createCourtCaseDates(formData)
-      .then(() => {
-        setShowSuccessMessage("Court case date created successfully!");
+    console.log(formData);
+    console.log("CLicked");
+
+    DocumentService.uploadDocument(formData)
+      .then((res) => {
+        console.log(res);
+        setShowSuccessMessage("Document uploaded successfully!");
         setCaseAttachments((prev) =>
           prev.map((section) => {
-            if (section.label !== "Dates") return section;
+            if (section.label !== "Documents") return section;
 
             return {
               ...section,
               items: [
                 ...(section.items ?? []),
                 {
-                  attributes1: formatFormalDateTime(formData.date),
-                  attributes2:
-                    CourtCaseDateTypeOptions.find(
-                      (option) => option.key === formData.type.toString(),
-                    )?.value || "",
-                  attributes3: formData.description,
+                  attributes1: formData.name,
+                  attributes2: formData.file?.type || "",
+                  attributes3: formatFormalDateTime(
+                    new Date().toLocaleString(),
+                  ),
                 },
               ],
             };
           }),
         );
+
         setShowModal(false);
       })
-      .catch((error) => {
-        console.error("Error creating court case date:", error);
-        setShowErrorMessage(
-          "Failed to create court case date. Please try again.",
-        );
+      .catch(() => {
+        setShowErrorMessage("Failed to upload document. Please try again.");
       });
+  };
+
+  const handleFileChange = (files: File | null) => {
+    if (!files) return;
+    setFormData((prev) => ({
+      ...prev,
+      file: files,
+    }));
   };
 
   return (
@@ -111,41 +120,23 @@ const AddDateForm = ({
       />
 
       <PillInput
-        label="Date of Event:"
-        name="date"
-        type="date"
-        value={formData.date}
-        onChange={(e) => handleChange("date", e.target.value)}
+        label="File Name:"
+        name="name"
+        value={formData.name}
+        onChange={(e) => handleChange("name", e.target.value)}
       />
 
-      <PillInput
-        label="Title:"
-        name="title"
-        type="text"
-        value={formData.title}
-        onChange={(e) => handleChange("title", e.target.value)}
-      />
-
-      <PillTextarea
-        label="Description:"
-        name="description"
-        value={formData.description}
-        onChange={(e) => handleChange("description", e.target.value)}
-      />
-
-      <PillSelect
-        label="Type:"
-        name="type"
-        value={formData.type}
-        onChange={(e) => handleChange("type", parseInt(e.target.value))}
-        selectOptions={CourtCaseDateTypeOptions}
+      <PillFile
+        label="Upload File:"
+        name="file"
+        customOnChange={(files) => handleFileChange(files)}
       />
 
       <div className="mt-5">
-        <PrimaryButton type="submit">Create Event</PrimaryButton>
+        <PrimaryButton type="submit">Add Document</PrimaryButton>
       </div>
     </form>
   );
 };
 
-export default AddDateForm;
+export default AddDocumentForm;

@@ -17,6 +17,7 @@ interface AddInvoiceFormProps {
   setShowSuccessMessage: (message: string) => void;
   setShowErrorMessage: (message: string) => void;
   setInvoice?: (invoice: SetStateAction<Invoice[]>) => void;
+  setShowModal: (show: boolean) => void;
   addInvoiceItemRequest?: AddInvoiceItemRequest;
   buttonCaption: string;
 }
@@ -25,6 +26,7 @@ const AddInvoiceForm = ({
   setShowSuccessMessage,
   setShowErrorMessage,
   setInvoice,
+  setShowModal,
   addInvoiceItemRequest,
   buttonCaption,
 }: AddInvoiceFormProps) => {
@@ -83,6 +85,8 @@ const AddInvoiceForm = ({
             ),
           );
         }
+
+        setShowModal(false);
       })
       .catch((error) => {
         console.error("Error creating invoice item:", error);
