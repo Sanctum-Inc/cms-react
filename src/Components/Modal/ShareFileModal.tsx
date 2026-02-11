@@ -1,6 +1,6 @@
 import { Copy, Download, Eye, Send, X } from "lucide-react";
 import { useState, type PropsWithChildren } from "react";
-import { EmailService, type AddEmailRequest } from "../../api";
+import { EmailService, InvoiceService, type AddEmailRequest } from "../../api";
 import PrimaryButton from "../Buttons/PrimaryButton";
 import Card from "../Cards/Card";
 import PillInput from "../Inputs/PillInput";
@@ -13,6 +13,9 @@ interface ShareFileModalProps extends PropsWithChildren {
   fileSize: string;
   fileType: string;
   setShowModal: (show: boolean) => void;
+  downloadPDF: () => void;
+  viewPDF: () => void;
+  invoiceId: string;
 }
 
 const ShareFileModal = ({
@@ -21,6 +24,9 @@ const ShareFileModal = ({
   fileSize,
   fileType,
   setShowModal,
+  downloadPDF,
+  viewPDF,
+  invoiceId,
 }: ShareFileModalProps) => {
   const [linkCopied, setLinkCopied] = useState<boolean>(false);
   const [sendingEmail, setSendingEmail] = useState<boolean>(false);
@@ -36,8 +42,9 @@ const ShareFileModal = ({
     bcc: null,
   });
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText("https://example.com/shared-file-link");
+  const handleCopyLink = async () => {
+    var url = await InvoiceService.createLink(invoiceId);
+    navigator.clipboard.writeText(`${import.meta.env.VITE_API_URL}${url}`);
     setLinkCopied(true);
     setTimeout(() => setLinkCopied(false), 2000);
   };
@@ -51,7 +58,7 @@ const ShareFileModal = ({
     }, 4000);
 
     EmailService.createEmail(emailRequest)
-      .then((response) => {
+      .then(() => {
         setSendingEmail(false);
         setShowSuccessModal(true);
       })
@@ -81,7 +88,10 @@ const ShareFileModal = ({
             <div className="mt-6 text-lg bg-gray-100 p-4 rounded-md flex items-center">
               <div>
                 <div className="border border-gray-300 rounded-md bg-white p-2 flex items-center justify-center mr-4">
-                  <Download className="inline text-(--color-primary) hover:cursor-pointer" />
+                  <Download
+                    className="inline text-(--color-primary) hover:cursor-pointer"
+                    onClick={downloadPDF}
+                  />
                 </div>
               </div>
               <div>
@@ -93,7 +103,10 @@ const ShareFileModal = ({
                 </div>
               </div>
               <div className="ml-auto">
-                <Eye className="inline ml-4 mr-2 text-(--color-primary) hover:cursor-pointer" />
+                <Eye
+                  className="inline ml-4 mr-2 text-(--color-primary) hover:cursor-pointer"
+                  onClick={viewPDF}
+                />
               </div>
             </div>
 

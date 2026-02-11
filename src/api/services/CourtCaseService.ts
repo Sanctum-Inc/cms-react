@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { AddCourtCaseRequest } from '../models/AddCourtCaseRequest';
+import type { CourtCaseInformationResult } from '../models/CourtCaseInformationResult';
 import type { CourtCaseNumberResponse } from '../models/CourtCaseNumberResponse';
 import type { CourtCaseResponse } from '../models/CourtCaseResponse';
 import type { UpdateCourtCaseRequest } from '../models/UpdateCourtCaseRequest';
@@ -101,6 +102,25 @@ export class CourtCaseService {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/CourtCase/{id}',
+            path: {
+                'id': id,
+            },
+            errors: {
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
+     * @param id
+     * @returns CourtCaseInformationResult OK
+     * @throws ApiError
+     */
+    public static getCourtCaseInformation(
+        id: string,
+    ): CancelablePromise<CourtCaseInformationResult> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/CourtCase/court-case-information/{id}',
             path: {
                 'id': id,
             },

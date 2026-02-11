@@ -121,12 +121,58 @@ export class InvoiceService {
     ): CancelablePromise<FileContentResult> {
         return __request(OpenAPI, {
             method: 'GET',
+            url: '/api/Invoice/pdf/download/{id}',
+            path: {
+                'id': id,
+            },
+            errors: {
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
+     * @param id
+     * @returns string OK
+     * @throws ApiError
+     */
+    public static createLink(
+        id: string,
+    ): CancelablePromise<string> {
+        return __request(OpenAPI, {
+            method: 'GET',
             url: '/api/Invoice/pdf/{id}',
             path: {
                 'id': id,
             },
             errors: {
                 404: `Not Found`,
+            },
+        });
+    }
+    /**
+     * @param id
+     * @param expiry
+     * @param signature
+     * @param firmId
+     * @returns any OK
+     * @throws ApiError
+     */
+    public static getApiInvoicePdfView(
+        id: string,
+        expiry?: number,
+        signature?: string,
+        firmId?: string,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Invoice/pdf/view/{id}',
+            path: {
+                'id': id,
+            },
+            query: {
+                'expiry': expiry,
+                'signature': signature,
+                'firmId': firmId,
             },
         });
     }

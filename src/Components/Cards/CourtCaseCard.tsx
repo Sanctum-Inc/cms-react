@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { CourtCaseTypes, InvoiceStatus } from "../../api";
 import { CourtCaseStatusOptions } from "../Inputs/InputOptions/CourtCaseStatusOptions";
 import { CourtCaseTypeOptions } from "../Inputs/InputOptions/CourtCaseTypesOptions";
@@ -23,6 +24,8 @@ const CourtCaseCard = ({
   status,
 }: courtCaseCardProps) => {
   const getStatusStyles = (status: number) => {
+    if (status === undefined)
+      return "text-gray-600 border border-gray-400 bg-gray-100 rounded-full px-2 pb-1 text-[12px]";
     switch (status) {
       case 0: // Draft
         return "text-gray-700 border border-gray-400 bg-gray-100 rounded-full px-2 pb-1 text-[12px]";
@@ -68,52 +71,28 @@ const CourtCaseCard = ({
     }
   };
 
-  const getValues = (status: number) => {
-    switch (status) {
-      case 0: // Pending
-        return "Pending";
-      case 1: // Sent
-        return "Sent";
-      case 2: // Paid
-        return "Paid";
-      case 3: // Overdue
-        return "Overdue";
-      case 4: // Cancelled
-        return "Cancelled";
-      case 5: // Partially Paid
-        return "Partially Paid";
-      case 6: // Draft
-        return "Draft";
-      default:
-        return "Unknown";
-    }
-  };
-
   return (
     <>
       <Card className="mx-6 my-3 p-6 cursor-pointer">
-        <a href={`/court-case-information?id=${id}`}>
+        <Link to={`/court-case-information?id=${id}`}>
           <div className="grid grid-cols-5 gap-4">
             <div>{caseNumber}</div>
             <div>{location}</div>
             <div>{plaintiff}</div>
             <div>
-              {
-                CourtCaseTypeOptions.find((x) => x.key == status.toString())
-                  ?.value
-              }
+              {CourtCaseTypeOptions.find((x) => x.key === type?.toString())
+                ?.value ?? "Unknown"}
             </div>
             <div className="flex justify-between">
-              <span>{nextDate}</span>
-              <span className={getStatusStyles(status)}>
-                {
-                  CourtCaseStatusOptions.find((x) => x.key == status.toString())
-                    ?.value
-                }
+              <span>{nextDate ?? "N/A"}</span>
+              <span className={getStatusStyles(status ?? 99)}>
+                {CourtCaseStatusOptions.find(
+                  (x) => x.key === status?.toString(),
+                )?.value ?? "Unknown"}
               </span>
             </div>
           </div>
-        </a>
+        </Link>
       </Card>
     </>
   );

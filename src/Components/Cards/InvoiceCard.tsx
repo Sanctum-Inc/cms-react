@@ -220,6 +220,15 @@ const InvoiceCard = ({
     }
   };
 
+  const viewPdf = async (invoiceId: string) => {
+    const signedPath = await InvoiceService.createLink(invoiceId);
+
+    const fullUrl = `${import.meta.env.VITE_API_URL}${signedPath}`;
+    console.log(fullUrl);
+
+    window.open(fullUrl, "_blank", "noopener,noreferrer");
+  };
+
   const returnCenterModal = () => {
     return (
       showShareModal && (
@@ -229,6 +238,9 @@ const InvoiceCard = ({
           fileSize="2.5MB"
           fileType="PDF Document"
           setShowModal={setShowShareModal}
+          downloadPDF={() => downloadPdf(invoices.id, invoices.invoiceNumber)}
+          viewPDF={() => viewPdf(invoices.id)}
+          invoiceId={invoices.id}
         ></DynamicModal>
       )
     );

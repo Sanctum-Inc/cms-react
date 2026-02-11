@@ -10,9 +10,17 @@ interface TabNavigationProps {
   };
   index: number;
   className?: string;
+  color: string;
 }
 
-const TabNavigation = ({ selectedMenu, setSelectedMenu, menu, index, className }: TabNavigationProps) => {
+const TabNavigation = ({
+  selectedMenu,
+  setSelectedMenu,
+  menu,
+  index,
+  className,
+  color,
+}: TabNavigationProps) => {
   return (
     <div
       className={`rounded-t-2xl ml-2 cursor-pointer ${
@@ -27,12 +35,12 @@ const TabNavigation = ({ selectedMenu, setSelectedMenu, menu, index, className }
         } ${className}`}
       >
         <span>
-          <menu.icon />
+          <menu.icon color={color} />
         </span>
         <span className="px-2">{menu.label}</span>
       </div>
     </div>
   );
-}
+};
 
 export default TabNavigation;
