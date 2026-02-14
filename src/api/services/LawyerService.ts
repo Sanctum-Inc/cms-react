@@ -3,16 +3,17 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { AddLawyerRequest } from '../models/AddLawyerRequest';
+import type { LawyerResponse } from '../models/LawyerResponse';
 import type { UpdateLawyerRequest } from '../models/UpdateLawyerRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class LawyerService {
     /**
-     * @returns any OK
+     * @returns LawyerResponse OK
      * @throws ApiError
      */
-    public static getAllLawyers(): CancelablePromise<any> {
+    public static getAllLawyers(): CancelablePromise<Array<LawyerResponse>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Lawyer',
@@ -38,12 +39,12 @@ export class LawyerService {
     }
     /**
      * @param id
-     * @returns any OK
+     * @returns LawyerResponse OK
      * @throws ApiError
      */
     public static getLawyersById(
         id: string,
-    ): CancelablePromise<any> {
+    ): CancelablePromise<LawyerResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Lawyer/{id}',

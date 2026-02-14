@@ -16,12 +16,7 @@ export class DocumentService {
      */
     public static uploadDocument(
         formData: ({
-            ContentType?: string;
-            ContentDisposition?: string;
-            Headers?: Record<string, Array<string>>;
-            Length?: number;
-            Name?: string;
-            FileName?: string;
+            file?: Array<Blob>;
         } & {
             name?: string;
         } & {

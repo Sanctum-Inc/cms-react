@@ -4,6 +4,7 @@ import {
   FolderOpenDot,
   House,
   LogOut,
+  Users,
   Wallet,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -77,6 +78,11 @@ const Navigation = () => {
           icon={FolderOpenDot}
           name="Documents"
           url="/documents"
+        ></NavigationItem>
+        <NavigationItem
+          icon={Users}
+          name="Lawyers"
+          url="/lawyer"
         ></NavigationItem>
         <NavigationItemProfile
           icon={LogOut}

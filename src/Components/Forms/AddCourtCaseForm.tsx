@@ -15,12 +15,14 @@ interface AddCourtCaseFormProps {
   setShowSuccessMessage: (message: string) => void;
   setShowErrorMessage: (message: string) => void;
   filteredCases: CourtCaseResponse[];
+  setShowModal: (show: boolean) => void;
 }
 
 const AddCourtCaseForm = ({
   setShowSuccessMessage,
   setShowErrorMessage,
   filteredCases,
+  setShowModal,
 }: AddCourtCaseFormProps) => {
   const [formData, setFormData] = useState<AddCourtCaseRequest>({
     caseNumber: "",
@@ -53,9 +55,9 @@ const AddCourtCaseForm = ({
           nextDate: "",
           status: formData.status,
         });
+        setShowModal(false);
       })
-      .catch((error) => {
-        console.error("Error creating court case:", error);
+      .catch(() => {
         setShowErrorMessage("Failed to create court case. Please try again.");
       });
   };

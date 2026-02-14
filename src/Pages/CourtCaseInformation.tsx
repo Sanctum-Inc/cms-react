@@ -29,6 +29,7 @@ import SuccessAlert from "../Components/Feedback/Alerts/SuccessAlert";
 import AddDateForm from "../Components/Forms/AddDateForm";
 import AddDocumentForm from "../Components/Forms/AddDocumentForm";
 import AddInvoiceForm from "../Components/Forms/AddInvoiceForm";
+import AddLawyerForm from "../Components/Forms/AddLawyerForm";
 import Header from "../Components/Header/Header";
 import { CourtCaseDateTypeOptions } from "../Components/Inputs/InputOptions/CourtCaseDateTypeOptions";
 import { CourtCaseOutcomeOptions } from "../Components/Inputs/InputOptions/CourtCaseOutcomeOptions";
@@ -326,7 +327,13 @@ const CourtCaseInformation = () => {
           />
         );
       case "lawyer":
-        return <div>Form to add Lawyer</div>;
+        return (
+          <AddLawyerForm
+            setShowSuccessMessage={setSuccessAlertMessage}
+            setShowErrorMessage={setErrorAlertMessage}
+            setShowModal={setShowModal}
+          />
+        );
     }
   };
 

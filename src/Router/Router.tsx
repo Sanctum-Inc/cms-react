@@ -5,7 +5,9 @@ import CourtCasePage from "../Pages/CourtCasePage";
 import DashboardPage from "../Pages/DashboardPage";
 import DatesPage from "../Pages/DatesPage";
 import DocumentsPage from "../Pages/DocumentsPage";
+import EmailVerified from "../Pages/EmailVerified";
 import InvoicePage from "../Pages/InvoicePage";
+import LawyerPage from "../Pages/LawyerPage";
 import Login from "../Pages/Login";
 import ProfilePage from "../Pages/ProfilePage";
 import ProtectedRoute from "./ProtectedRoute";
@@ -26,10 +28,12 @@ const router = createHashRouter([
       { path: "documents", element: <DocumentsPage /> },
       { path: "dates", element: <DatesPage /> },
       { path: "profile", element: <ProfilePage /> },
+      { path: "lawyer", element: <LawyerPage /> },
       { path: "court-case-information", element: <CourtCaseInformation /> },
     ],
   },
   { path: "login", element: <Login /> },
+  { path: "email-verified", element: <EmailVerified /> },
 ]);
 
 export default router;

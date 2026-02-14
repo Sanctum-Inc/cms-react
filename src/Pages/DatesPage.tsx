@@ -118,23 +118,6 @@ const DatesPage = () => {
     sortDesc,
     courtCasesDates?.courtCaseDateItems,
   ]);
-
-  // handle header clicks to set primary sort column and toggle direction
-  // const handleSort = (
-  //   col:
-  //     | "caseNumber"
-  //     | "title"
-  //     | "subtitle"
-  //     | "courtCaseDateType"
-  //     | "date"
-  //     | "status",
-  // ) => {
-  //   if (sortBy === col) {
-  //     setSortDesc((s) => !s);
-  //   } else {
-  //     setSortBy(col);
-  //     setSortDesc(false); // sensible default
-  //   }
   // };
 
   const renderModal = () => {

@@ -132,6 +132,7 @@ const CourtCasePage = () => {
           filteredCases={filteredCases}
           setShowSuccessMessage={setSuccessAlertMessage}
           setShowErrorMessage={setErrorAlertMessage}
+          setShowModal={setShowModal}
         />
       </SideModal>
     );

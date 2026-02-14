@@ -18,7 +18,7 @@ interface AddFormDateProps {
   setShowSuccessMessage: (message: string) => void;
   setShowErrorMessage: (message: string) => void;
   setShowModal: (show: boolean) => void;
-  setCaseAttachments: (invoice: SetStateAction<ProfileMenu[]>) => void;
+  setCaseAttachments?: (invoice: SetStateAction<ProfileMenu[]>) => void;
   addCourtCaseRequest?: AddCourtCaseDateRequest;
   caseId?: string;
 }
@@ -69,26 +69,27 @@ const AddDateForm = ({
     CourtCaseDateService.createCourtCaseDates(formData)
       .then(() => {
         setShowSuccessMessage("Court case date created successfully!");
-        setCaseAttachments((prev) =>
-          prev.map((section) => {
-            if (section.label !== "Dates") return section;
+        if (setCaseAttachments)
+          setCaseAttachments((prev) =>
+            prev.map((section) => {
+              if (section.label !== "Dates") return section;
 
-            return {
-              ...section,
-              items: [
-                ...(section.items ?? []),
-                {
-                  attributes1: formatFormalDateTime(formData.date),
-                  attributes2:
-                    CourtCaseDateTypeOptions.find(
-                      (option) => option.key === formData.type.toString(),
-                    )?.value || "",
-                  attributes3: formData.description,
-                },
-              ],
-            };
-          }),
-        );
+              return {
+                ...section,
+                items: [
+                  ...(section.items ?? []),
+                  {
+                    attributes1: formatFormalDateTime(formData.date),
+                    attributes2:
+                      CourtCaseDateTypeOptions.find(
+                        (option) => option.key === formData.type.toString(),
+                      )?.value || "",
+                    attributes3: formData.description,
+                  },
+                ],
+              };
+            }),
+          );
         setShowModal(false);
       })
       .catch((error) => {
