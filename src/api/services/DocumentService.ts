@@ -16,7 +16,12 @@ export class DocumentService {
      */
     public static uploadDocument(
         formData: ({
-            file?: Array<Blob>;
+            ContentType?: string;
+            ContentDisposition?: string;
+            Headers?: Record<string, Array<string>>;
+            Length?: number;
+            Name?: string;
+            FileName?: string;
         } & {
             name?: string;
         } & {

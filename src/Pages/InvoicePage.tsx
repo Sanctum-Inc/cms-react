@@ -1,11 +1,9 @@
-import { ArrowUp } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
   InvoiceService,
   type AddInvoiceItemRequest,
   type InvoiceStatus,
 } from "../api";
-import InvoiceCard from "../Components/Cards/InvoiceCard";
 import ErrorAlert from "../Components/Feedback/Alerts/ErrorAlert";
 import SuccessAlert from "../Components/Feedback/Alerts/SuccessAlert";
 import AddInvoiceForm from "../Components/Forms/AddInvoiceForm";
@@ -13,6 +11,7 @@ import Header from "../Components/Header/Header";
 import { InvoiceStatusOptions } from "../Components/Inputs/InputOptions/InvoiceStatusOptions";
 import SortBar from "../Components/Inputs/SortBar";
 import SideModal from "../Components/Modal/SideModal";
+import InvoiceTable from "../Components/Tables/InvoiceTable";
 import { type Invoice } from "../Models/Invoices";
 
 const InvoicePage = () => {
@@ -45,7 +44,42 @@ const InvoicePage = () => {
       refference: "",
     });
 
-  // Compute filtered + sorted cases
+  const returnSideModal = () => {
+    if (showAddModal)
+      return (
+        <SideModal setShowModal={setShowAddModal} title="New Invoice Item">
+          <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto p-4">
+            <AddInvoiceForm
+              addInvoiceItemRequest={addInvoiceItemRequest}
+              setInvoice={setInvoices}
+              setShowErrorMessage={setErrorAlertMessage}
+              setShowSuccessMessage={setSuccessAlertMessage}
+              buttonCaption="Create"
+              setShowModal={setShowAddModal}
+            />
+          </div>
+        </SideModal>
+      );
+    else if (showUpdatemodal)
+      return (
+        <SideModal
+          setShowModal={setShowUpdateModal}
+          title="Update Invoice Item"
+        >
+          <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto p-4">
+            <AddInvoiceForm
+              addInvoiceItemRequest={addInvoiceItemRequest}
+              setInvoice={setInvoices}
+              setShowErrorMessage={setErrorAlertMessage}
+              setShowSuccessMessage={setSuccessAlertMessage}
+              buttonCaption="Update"
+              setShowModal={setShowUpdateModal}
+            />
+          </div>
+        </SideModal>
+      );
+  };
+
   const filteredInvoices = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
 
@@ -128,40 +162,6 @@ const InvoicePage = () => {
     return filtered;
   }, [searchQuery, statusFilter, sortBy, sortDesc, invoices]);
 
-  const returnSideModal = () => {
-    if (showAddModal)
-      return (
-        <SideModal setShowModal={setShowAddModal} title="New Invoice Item">
-          <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto p-4">
-            <AddInvoiceForm
-              addInvoiceItemRequest={addInvoiceItemRequest}
-              setInvoice={setInvoices}
-              setShowErrorMessage={setErrorAlertMessage}
-              setShowSuccessMessage={setSuccessAlertMessage}
-              buttonCaption="Create"
-            />
-          </div>
-        </SideModal>
-      );
-    else if (showUpdatemodal)
-      return (
-        <SideModal
-          setShowModal={setShowUpdateModal}
-          title="Update Invoice Item"
-        >
-          <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto p-4">
-            <AddInvoiceForm
-              addInvoiceItemRequest={addInvoiceItemRequest}
-              setInvoice={setInvoices}
-              setShowErrorMessage={setErrorAlertMessage}
-              setShowSuccessMessage={setSuccessAlertMessage}
-              buttonCaption="Update"
-            />
-          </div>
-        </SideModal>
-      );
-  };
-
   const handleShowUpdateModal = (invoice: Invoice, index: number) => {
     setAddInvoiceItemRequest({
       caseId: invoice.caseId,
@@ -194,17 +194,6 @@ const InvoicePage = () => {
     });
 
     setShowAddModal(show);
-  };
-
-  const handleSort = (
-    col: "invoiceNumber" | "caseNumber" | "total" | "status",
-  ) => {
-    if (sortBy === col) {
-      setSortDesc((s) => !s);
-    } else {
-      setSortBy(col);
-      setSortDesc(true);
-    }
   };
 
   useEffect(() => {
@@ -253,21 +242,6 @@ const InvoicePage = () => {
   const renderErrorMessage = () => {
     return errorAlertMessage && <ErrorAlert message={errorAlertMessage} />;
   };
-
-  const SetInvoiceToPaid = (invoiceId: string, status: number) => {
-    setInvoices((prev) => {
-      return prev.map((invoice) => {
-        if (invoice.id === invoiceId) {
-          return {
-            ...invoice,
-            status: status,
-          };
-        }
-        return invoice;
-      });
-    });
-  };
-
   return (
     <>
       <Header
@@ -286,93 +260,22 @@ const InvoicePage = () => {
           ...InvoiceStatusOptions.map((option) => option.value),
         ]}
       ></SortBar>
-      <div className="m-6 p-6 mt-5 font-bold text-gray-500 border-b border-gray-300 pb-3">
-        <div>Invoice Information</div>
-        <div className="grid grid-cols-5 gap-4 mt-4">
-          <div className="flex align-center">
-            <span>Invoice Number </span>
-            <span
-              className="my-auto cursor-pointer"
-              onClick={() => handleSort("invoiceNumber")}
-            >
-              {sortBy === "invoiceNumber" ? (
-                sortDesc ? (
-                  <ArrowUp size={12} />
-                ) : (
-                  <ArrowUp size={12} className="rotate-180" />
-                )
-              ) : (
-                <ArrowUp size={12} />
-              )}
-            </span>
-          </div>
-          <div className="flex align-center">
-            <span>Client Name </span>
-            <span
-              className="my-auto cursor-pointer"
-              onClick={() => handleSort("caseNumber")}
-            >
-              {sortBy === "caseNumber" ? (
-                sortDesc ? (
-                  <ArrowUp size={12} />
-                ) : (
-                  <ArrowUp size={12} className="rotate-180" />
-                )
-              ) : (
-                <ArrowUp size={12} />
-              )}
-            </span>
-          </div>
-          <div className="flex align-center">
-            <span>Total</span>
-            <span
-              className="my-auto cursor-pointer"
-              onClick={() => handleSort("total")}
-            >
-              {sortBy === "total" ? (
-                sortDesc ? (
-                  <ArrowUp size={12} />
-                ) : (
-                  <ArrowUp size={12} className="rotate-180" />
-                )
-              ) : (
-                <ArrowUp size={12} />
-              )}
-            </span>
-          </div>
-          <div className="flex align-center">
-            <span>Status</span>
-            <span
-              className="my-auto cursor-pointer"
-              onClick={() => handleSort("status")}
-            >
-              {sortBy === "status" ? (
-                sortDesc ? (
-                  <ArrowUp size={12} />
-                ) : (
-                  <ArrowUp size={12} className="rotate-180" />
-                )
-              ) : (
-                <ArrowUp size={12} />
-              )}
-            </span>
-          </div>
-        </div>
-      </div>
-      {filteredInvoices.map((invoice, index) => (
-        <InvoiceCard
-          key={`${index}-invoiceCard`}
-          invoices={invoice}
-          caseNumber={invoice.caseNumber}
-          openAddModal={() =>
-            handleShowAddModal(true, invoice.caseId, invoice.id)
-          }
-          openUpdateModal={() => handleShowUpdateModal(invoice, index)}
-          setShowErrorMessage={setErrorAlertMessage}
-          setShowSuccessMessage={setSuccessAlertMessage}
-          setInvoiceToPaid={SetInvoiceToPaid}
-        />
-      ))}
+      <InvoiceTable
+        sortBy={sortBy}
+        sortDesc={sortDesc}
+        invoices={filteredInvoices}
+        setInvoices={setInvoices}
+        searchQuery={searchQuery}
+        statusFilter={statusFilter}
+        setSuccessAlertMessage={setSuccessAlertMessage}
+        setErrorAlertMessage={setErrorAlertMessage}
+        setAddInvoiceItemRequest={setAddInvoiceItemRequest}
+        setShowAddModal={setShowAddModal}
+        handleShowUpdateModal={handleShowUpdateModal}
+        setSortBy={setSortBy}
+        setSortDesc={setSortDesc}
+      
+      />
       {returnSideModal()}
       {renderSuccessmessage()}
       {renderErrorMessage()}

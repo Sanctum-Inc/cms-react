@@ -8,6 +8,7 @@ import DocumentsPage from "../Pages/DocumentsPage";
 import EmailVerified from "../Pages/EmailVerified";
 import InvoicePage from "../Pages/InvoicePage";
 import LawyerPage from "../Pages/LawyerPage";
+import LawyerReport from "../Pages/LawyerReport";
 import Login from "../Pages/Login";
 import ProfilePage from "../Pages/ProfilePage";
 import ProtectedRoute from "./ProtectedRoute";
@@ -30,6 +31,7 @@ const router = createHashRouter([
       { path: "profile", element: <ProfilePage /> },
       { path: "lawyer", element: <LawyerPage /> },
       { path: "court-case-information", element: <CourtCaseInformation /> },
+      { path: "lawyer-report", element: <LawyerReport /> },
     ],
   },
   { path: "login", element: <Login /> },

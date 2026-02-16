@@ -9,11 +9,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PrimaryButton from "../Components/Buttons/PrimaryButton";
 import Card from "../Components/Cards/Card";
+import { UserService } from "../api";
 
 const EmailVerified = () => {
   // We simulate a status check from the URL.
   // In a real app, you might use: const status = new URLSearchParams(window.location.search).get('status');
   const [status, setStatus] = useState<"success" | "error" | null>("success");
+  const [email, setEmail] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,11 +24,18 @@ const EmailVerified = () => {
     const queryString = hash.split("?")[1];
 
     const params = new URLSearchParams(queryString);
-    const result = params.get("status") as "success" | "error" | null;
+    const paramStatus = params.get("status") as "success" | "error" | null;
+    const paramEmail = params.get("email");
 
-    console.log(result);
-    setStatus(result);
+    setStatus(paramStatus);
+    setEmail(paramEmail);
   }, []);
+
+  const handleResendEmail = () => {
+    UserService.resendConfirmEmail(email ?? "")
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans">
@@ -67,21 +76,17 @@ const EmailVerified = () => {
           </p>
 
           <div className="space-y-3">
-            <button
-              onClick={() => (window.location.href = "/resend-verification")}
-              className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
-            >
-              <Mail className="w-4 h-4" />
+            <PrimaryButton onClick={() => handleResendEmail()} icon={Mail}>
               Resend Verification Email
-            </button>
+            </PrimaryButton>
 
-            <button
+            <PrimaryButton
               onClick={() => (window.location.href = "/support")}
-              className="w-full py-3 px-4 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+              color="lightGray"
+              icon={HelpCircle}
             >
-              <HelpCircle className="w-4 h-4" />
               Contact Support
-            </button>
+            </PrimaryButton>
           </div>
 
           <p className="mt-8 text-xs text-slate-400">

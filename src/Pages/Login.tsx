@@ -118,6 +118,7 @@ const Login = () => {
       mobileNumber: true,
       password: true,
       confirmPassword: true,
+      firmId: true,
     };
     setTouched(allTouched);
 
@@ -129,6 +130,7 @@ const Login = () => {
       mobileNumber: ValidateField("mobileNumber", user.mobileNumber),
       password: ValidateField("password", user.password),
       confirmPassword: ValidateField("confirmPassword", user.confirmPassword),
+      firmId: ValidateField("firmId", user.firmId),
     };
 
     setErrors(newErrors);
@@ -155,34 +157,42 @@ const Login = () => {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      // Axios error: error.response.data contains the ProblemDetails object returned by your API
-      const problemDetails = error.response?.data;
+      const problemDetails = error.body;
 
-      // Safely extract the error message from ProblemDetails properties
-      const errorMessage =
-        problemDetails?.detail ||
-        problemDetails?.title ||
-        problemDetails?.message ||
-        "Registration failed. Please try again.";
+      // Rename to avoid shadowing the state variable 'errors'
+      const apiErrors = problemDetails?.errors as {
+        code: string;
+        description: string;
+      }[];
 
-      if (error.response?.status === 400) {
-        // Example: you can check for specific error messages here to customize UI errors
-        if (errorMessage.toLowerCase().includes("email")) {
-          setErrors({
-            ...errors,
-            email: "An account with this email already exists.",
-          });
-        } else {
-          setErrors({
-            ...errors,
-            email: errorMessage,
-          });
-        }
-      } else {
-        setErrors({
-          ...errors,
-          email: errorMessage,
-        });
+      console.log(apiErrors);
+
+      if (apiErrors) {
+        const newErrors: Record<string, string> = {
+          firstName:
+            apiErrors.find((x) => x.code.toLowerCase().includes("firstName"))
+              ?.description || "",
+          lastName:
+            apiErrors.find((x) => x.code.toLowerCase().includes("lastName"))
+              ?.description || "",
+          email:
+            apiErrors.find((x) => x.code.toLowerCase().includes("email"))
+              ?.description || "",
+          mobileNumber:
+            apiErrors.find((x) => x.code.toLowerCase().includes("mobileNumber"))
+              ?.description || "",
+          password:
+            apiErrors.find((x) => x.code.toLowerCase().includes("password"))
+              ?.description || "",
+          confirmPassword:
+            apiErrors.find((x) =>
+              x.code.toLowerCase().includes("confirmPassword"),
+            )?.description || "",
+          firmId:
+            apiErrors.find((x) => x.code.toLowerCase().includes("firm"))
+              ?.description || "",
+        };
+        setErrors(newErrors);
       }
     }
   };
@@ -395,7 +405,7 @@ const Login = () => {
     <>
       {
         <div className="h-dvh justify-center items-center flex flex-col">
-          <Card className="border border-gray-300 p-10 rounded-lg shadow-lg flex flex-col items-center bg-white w-2/8">
+          <Card className="border border-gray-300 p-10 rounded-lg shadow-lg flex flex-col items-center bg-white">
             <div className="h-5/6 w-5/6">
               <img
                 src={logo}

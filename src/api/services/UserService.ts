@@ -67,4 +67,48 @@ export class UserService {
             },
         });
     }
+    /**
+     * @param token
+     * @param email
+     * @returns any OK
+     * @throws ApiError
+     */
+    public static confirmEmail(
+        token?: string,
+        email?: string,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/confirm-email',
+            query: {
+                'token': token,
+                'email': email,
+            },
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+            },
+        });
+    }
+    /**
+     * @param email
+     * @returns boolean OK
+     * @throws ApiError
+     */
+    public static resendConfirmEmail(
+        email: string,
+    ): CancelablePromise<boolean> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/confirm-email/resend/{email}',
+            path: {
+                'email': email,
+            },
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+                404: `Not Found`,
+            },
+        });
+    }
 }

@@ -9,13 +9,13 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { InvoiceService } from "../../api";
+import { type Invoice, type InvoiceItemEntry } from "../../Models/Invoices";
 import {
-  type Invoice,
-  type InvoiceItemEntry,
-} from "../../Models/Invoices";
+  getInvoiceStatusOptionsStyles,
+  InvoiceStatusOptions,
+} from "../Inputs/InputOptions/InvoiceStatusOptions";
 import DynamicModal from "../Modal/ShareFileModal";
 import Card from "./Card";
-import { InvoiceStatusOptions } from "../Inputs/InputOptions/InvoiceStatusOptions";
 
 interface InvoiceCardProps {
   invoices: Invoice;
@@ -45,26 +45,6 @@ const InvoiceCard = ({
   >([]);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const getStatusStyles = (status: number) => {
-    switch (status) {
-      case 0: // Pending
-        return "text-yellow-700 border border-yellow-500 bg-yellow-100 rounded-full px-2 pb-1 text-[12px]";
-      case 1: // Sent
-        return "text-blue-700 border border-blue-500 bg-blue-100 rounded-full px-2 pb-1 text-[12px]";
-      case 2: // Paid
-        return "text-green-700 border border-green-500 bg-green-100 rounded-full px-2 pb-1 text-[12px]";
-      case 3: // Overdue
-        return "text-red-700 border border-red-500 bg-red-100 rounded-full px-2 pb-1 text-[12px]";
-      case 4: // Cancelled
-        return "text-gray-600 border border-gray-600 bg-gray-200 rounded-full px-2 pb-1 text-[12px] line-through";
-      case 5: // Partially Paid
-        return "text-indigo-700 border border-indigo-500 bg-indigo-100 rounded-full px-2 pb-1 text-[12px]";
-      case 6: // Draft
-        return "text-gray-700 border border-gray-400 bg-gray-100 rounded-full px-2 pb-1 text-[12px]";
-      default:
-        return "text-gray-600 border border-gray-400 bg-gray-100 rounded-full px-2 pb-1 text-[12px]";
-    }
-  };
 
   const formatMoney = (amount: number) => {
     return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -276,8 +256,12 @@ const InvoiceCard = ({
             <span className="text-gray-500 text-sm flex">Total</span>
           </div>
           <div>
-            <span className={getStatusStyles(invoices.status)}>
-              {InvoiceStatusOptions.find((o) => o.key === String(invoices.status))?.value}
+            <span className={getInvoiceStatusOptionsStyles(invoices.status)}>
+              {
+                InvoiceStatusOptions.find(
+                  (o) => o.key === String(invoices.status),
+                )?.value
+              }
             </span>
           </div>
           <div className="flex justify-center h-full space-y-2">
@@ -293,10 +277,6 @@ const InvoiceCard = ({
                   type="button"
                   className="w-fit ml-1 flex items-center focus:outline-none"
                   onClick={() => setShowItems((prev) => !prev)}
-                  aria-expanded={showItems}
-                  aria-label={
-                    showItems ? "Hide invoice items" : "Show invoice items"
-                  }
                 >
                   {showItems ? (
                     <ChevronDown
