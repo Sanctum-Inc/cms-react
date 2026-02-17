@@ -10,6 +10,7 @@ import {
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { InvoiceService } from "../../api";
 import { type Invoice, type InvoiceItemEntry } from "../../Models/Invoices";
+import formatMoney from "../../Utils/FormatMoney";
 import {
   getInvoiceStatusOptionsStyles,
   InvoiceStatusOptions,
@@ -45,10 +46,6 @@ const InvoiceCard = ({
   >([]);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  const formatMoney = (amount: number) => {
-    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -203,10 +200,9 @@ const InvoiceCard = ({
   const viewPdf = async (invoiceId: string) => {
     const signedPath = await InvoiceService.createLink(invoiceId);
 
-    const fullUrl = `${import.meta.env.VITE_API_URL}${signedPath}`;
-    console.log(fullUrl);
+    console.log(signedPath);
 
-    window.open(fullUrl, "_blank", "noopener,noreferrer");
+    window.open(signedPath, "_blank", "noopener,noreferrer");
   };
 
   const returnCenterModal = () => {

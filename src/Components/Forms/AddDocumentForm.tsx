@@ -5,7 +5,7 @@ import {
   type CourtCaseNumberResponse,
 } from "../../api";
 import type { KeyValue } from "../../Models/InputItem";
-import type { ProfileMenu } from "../../Pages/CourtCaseInformation";
+import type { ProfileMenu } from "../../Pages/CourtCaseInformationPage";
 import { formatFormalDateTime } from "../../Utils/FormatDateTime";
 import PrimaryButton from "../Buttons/PrimaryButton";
 import PillFile from "../Inputs/PillFile";

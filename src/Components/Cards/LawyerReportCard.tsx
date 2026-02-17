@@ -8,7 +8,6 @@ interface LawyerReportCardProps {
   icon: React.ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
   >;
-  value: string;
   color: string;
   linkTo: string;
   title: string;
@@ -18,7 +17,9 @@ interface LawyerReportCardProps {
 
 const LawyerReportCard = (props: LawyerReportCardProps) => {
   const getStyles = (percentage: string) => {
-    if (percentage.includes("-")) {
+    if (percentage == "0") {
+      return "text-gray-500 bg-gray-100 rounded-full px-2";
+    } else if (percentage.includes("-")) {
       return "text-red-500 bg-red-100 rounded-full px-2";
     } else {
       return "text-green-500 bg-green-100 rounded-full px-2";

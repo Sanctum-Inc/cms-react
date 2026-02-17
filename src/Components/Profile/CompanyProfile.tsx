@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FirmService, type FirmResponse } from "../../api";
 import type { InputItem } from "../../Models/InputItem";
+import PrimaryButton from "../Buttons/PrimaryButton";
 import PillInput from "../Inputs/PillInput";
 
 type FirmForm = {
@@ -205,6 +206,11 @@ const CompanyProfile = () => {
             value={form.accountNumber}
             onChange={handleChange}
           />
+        </div>
+      </div>
+      <div className="mt-5 flex justify-end">
+        <div className="w-1/6">
+          <PrimaryButton>Save Firm Changes</PrimaryButton>
         </div>
       </div>
     </div>

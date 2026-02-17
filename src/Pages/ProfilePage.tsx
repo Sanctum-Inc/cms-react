@@ -1,6 +1,5 @@
 import { Briefcase, User } from "lucide-react";
 import { useState } from "react";
-import PrimaryButton from "../Components/Buttons/PrimaryButton";
 import Card from "../Components/Cards/Card";
 import Header from "../Components/Header/Header";
 import TabNavigation from "../Components/Navigation/TabNavigation";
@@ -59,11 +58,6 @@ const ProfilePage = () => {
           {selectedMenu}
         </div>
         <div className="">{renderProfileInputs()}</div>
-        <div className="mt-5 flex justify-end">
-          <div className="w-1/6">
-            <PrimaryButton>Save Profile Changes</PrimaryButton>
-          </div>
-        </div>
       </Card>
     </>
   );

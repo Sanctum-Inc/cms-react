@@ -68,7 +68,7 @@ export interface ProfileMenu {
   color: string;
 }
 
-const CourtCaseInformation = () => {
+const CourtCaseInformationPage = () => {
   const { search } = useLocation();
   const query = new URLSearchParams(search);
   const caseId = query.get("id");
@@ -392,4 +392,4 @@ const CourtCaseInformation = () => {
   );
 };
 
-export default CourtCaseInformation;
+export default CourtCaseInformationPage;

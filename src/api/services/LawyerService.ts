@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { AddLawyerRequest } from '../models/AddLawyerRequest';
+import type { LawyerReportResponse } from '../models/LawyerReportResponse';
 import type { LawyerResponse } from '../models/LawyerResponse';
 import type { UpdateLawyerRequest } from '../models/UpdateLawyerRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -91,6 +92,25 @@ export class LawyerService {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/Lawyer/{id}',
+            path: {
+                'id': id,
+            },
+            errors: {
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
+     * @param id
+     * @returns LawyerReportResponse OK
+     * @throws ApiError
+     */
+    public static getLawyerReportInformation(
+        id: string,
+    ): CancelablePromise<LawyerReportResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Lawyer/report/{id}',
             path: {
                 'id': id,
             },

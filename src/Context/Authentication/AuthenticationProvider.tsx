@@ -1,44 +1,8 @@
 import { jwtDecode } from "jwt-decode";
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
-
-type JwtPayload = {
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": string;
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname": string;
-  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string;
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": string;
-  "custom:user_id": string;
-  "custom:firm_id": string;
-  exp: number;
-};
-
-type AuthContextType = {
-  user: JwtPayload | null;
-  token: string | null;
-  loading: boolean;
-  isAuthenticated: boolean;
-  login: (token: string) => void;
-  logout: () => void;
-};
-
-const AuthenticationContext = createContext<AuthContextType | undefined>(
-  undefined,
-);
-
-const isTokenExpired = (token: string): boolean => {
-  try {
-    const decoded = jwtDecode<JwtPayload>(token);
-    return decoded.exp * 1000 <= Date.now();
-  } catch {
-    return true;
-  }
-};
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { isTokenExpired } from "../../Utils/AuthUtils";
+import { AuthenticationContext } from "./AuthenticationContext";
+import type { JwtPayload } from "./JwtPayload";
 
 export const AuthenticationProvider = ({
   children,
@@ -61,6 +25,10 @@ export const AuthenticationProvider = ({
   const scheduleAutoLogout = (decoded: JwtPayload) => {
     clearLogoutTimer();
 
+    if (!decoded.exp) {
+      logout();
+      return;
+    }
     const expiresInMs = decoded.exp * 1000 - Date.now();
 
     if (expiresInMs <= 0) {
@@ -96,6 +64,7 @@ export const AuthenticationProvider = ({
     try {
       const decoded = jwtDecode<JwtPayload>(jwt);
 
+      if (!decoded.exp) return;
       if (decoded.exp * 1000 <= Date.now()) {
         logout();
         return;
@@ -144,18 +113,6 @@ export const AuthenticationProvider = ({
       {children}
     </AuthenticationContext.Provider>
   );
-};
-
-export const useAuthentication = () => {
-  const context = useContext(AuthenticationContext);
-
-  if (!context) {
-    throw new Error(
-      "useAuthentication must be used within AuthenticationProvider",
-    );
-  }
-
-  return context;
 };
 
 export default AuthenticationProvider;

@@ -11,7 +11,7 @@ import PrimaryButton from "../Components/Buttons/PrimaryButton";
 import Card from "../Components/Cards/Card";
 import { UserService } from "../api";
 
-const EmailVerified = () => {
+const EmailVerifiedPage = () => {
   // We simulate a status check from the URL.
   // In a real app, you might use: const status = new URLSearchParams(window.location.search).get('status');
   const [status, setStatus] = useState<"success" | "error" | null>("success");
@@ -98,4 +98,4 @@ const EmailVerified = () => {
   );
 };
 
-export default EmailVerified;
+export default EmailVerifiedPage;

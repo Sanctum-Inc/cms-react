@@ -5,12 +5,7 @@ interface ModalProps extends PropsWithChildren {
   title: string;
 }
 
-const SideModal = ({
-  setShowModal,
-  title,
-  children
-}: ModalProps) => {
-
+const SideModal = ({ setShowModal, title, children }: ModalProps) => {
   return (
     <>
       <div
@@ -29,7 +24,7 @@ const SideModal = ({
             <div className="w-10 cursor-pointer flex justify-center">x</div>
           </div>
         </div>
-        <div className="justify-center px-10">{children}</div>
+        <div className="justify-center">{children}</div>
       </div>
     </>
   );

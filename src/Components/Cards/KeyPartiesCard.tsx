@@ -5,7 +5,10 @@ interface KeyPartiesCardProps {
   keyParties: {
     label: string;
     value: string;
-    icon: any;
+    icon: React.ForwardRefExoticComponent<
+      Omit<import("lucide-react").LucideProps, "ref"> &
+        React.RefAttributes<SVGSVGElement>
+    >;
     color: string;
   }[];
 }

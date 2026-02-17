@@ -1,16 +1,15 @@
-import { ArrowLeft, UserPlus } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserService } from "../api/services/UserService";
-import logo from "../assets/logo-removebg-preview.png";
+import logo from "../assets/logo-white.png";
 import PrimaryButton from "../Components/Buttons/PrimaryButton";
 import Card from "../Components/Cards/Card";
 import PillInput from "../Components/Inputs/PillInput";
-import { useAuthentication } from "../Context/AuthenticationContext";
 import { ValidateField } from "../Utils/InputValidator";
+import useAuthentication from "../Context/Authentication/useAuthentication";
 
 type User = {
-  id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -20,11 +19,9 @@ type User = {
   firmId: string;
 };
 
-const Login = () => {
+const RegisterPage = () => {
   const navigate = useNavigate();
-  const [showRegistration, setShowRegistration] = useState(false);
   const [user, setUser] = useState<User>({
-    id: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -62,23 +59,6 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    const email = user.email.trim();
-    const password = user.password;
-
-    // Mark fields as touched
-    setTouched({ email: true, password: true });
-
-    // Validate login fields
-    const emailError = ValidateField("email", email);
-    const passwordError = ValidateField("password", password);
-
-    setErrors({
-      email: emailError,
-      password: passwordError,
-    });
-
-    if (emailError || passwordError) return;
-
     try {
       const result = await UserService.login({
         email: user.email,
@@ -89,23 +69,9 @@ const Login = () => {
       navigate("/dashboard");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      // The response body is usually in error.body or error.response.data
-      const errorData = error.body || error.response?.data || error;
-
-      const statusCode =
-        errorData.status || error.status || error.response?.status;
-
-      if (statusCode === 400 || statusCode === 401) {
-        setErrors({
-          ...errors,
-          email: "Username or password is incorrect",
-        });
-      } else {
-        setErrors({
-          ...errors,
-          email: "Login failed. Please try again.",
-        });
-      }
+      console.error("Auto-login failed after registration:", error);
+      // Redirect to login page if auto-login fails
+      navigate("/login");
     }
   };
 
@@ -141,8 +107,6 @@ const Login = () => {
     }
 
     // Proceed with registration
-
-    // Proceed with registration
     try {
       const result = await UserService.register({
         name: user.firstName,
@@ -170,23 +134,23 @@ const Login = () => {
       if (apiErrors) {
         const newErrors: Record<string, string> = {
           firstName:
-            apiErrors.find((x) => x.code.toLowerCase().includes("firstName"))
+            apiErrors.find((x) => x.code.toLowerCase().includes("firstname"))
               ?.description || "",
           lastName:
-            apiErrors.find((x) => x.code.toLowerCase().includes("lastName"))
+            apiErrors.find((x) => x.code.toLowerCase().includes("lastname"))
               ?.description || "",
           email:
             apiErrors.find((x) => x.code.toLowerCase().includes("email"))
               ?.description || "",
           mobileNumber:
-            apiErrors.find((x) => x.code.toLowerCase().includes("mobileNumber"))
+            apiErrors.find((x) => x.code.toLowerCase().includes("mobilenumber"))
               ?.description || "",
           password:
             apiErrors.find((x) => x.code.toLowerCase().includes("password"))
               ?.description || "",
           confirmPassword:
             apiErrors.find((x) =>
-              x.code.toLowerCase().includes("confirmPassword"),
+              x.code.toLowerCase().includes("confirmpassword"),
             )?.description || "",
           firmId:
             apiErrors.find((x) => x.code.toLowerCase().includes("firm"))
@@ -197,103 +161,51 @@ const Login = () => {
     }
   };
 
-  const renderLogin = () => {
-    return (
-      <>
-        <div className="w-full">
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 mx-5">
+      <Card className="w-full max-w-sm border border-gray-200 p-6 rounded-xl shadow-md flex flex-col items-center bg-white">
+        <div className="w-32 mb-6">
+          <img
+            src={logo}
+            alt="logo"
+            className="max-h-full max-w-full object-contain"
+          />
+        </div>
+        <div className="w-full mr-2">
           <PillInput
-            placeholder="Email Address"
-            type="email"
-            label="Email"
-            name="email"
-            value={user.email}
+            placeholder="First Name"
+            type="text"
+            label="First Name"
+            name="firstName"
+            value={user.firstName}
             onChange={handleChange}
             onBlur={handleBlur}
+            required
           />
-          {touched.email && errors.email && (
-            <p className="text-red-600 text-sm mb-2 ml-3.5">{errors.email}</p>
+          {touched.firstName && errors.firstName && (
+            <p className="text-red-600 text-sm mt-1 ml-3.5">
+              {errors.firstName}
+            </p>
+          )}
+        </div>
+        <div className="w-full">
+          <PillInput
+            placeholder="Last Name"
+            type="text"
+            label="Last Name"
+            name="lastName"
+            value={user.lastName}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            required
+          />
+          {touched.lastName && errors.lastName && (
+            <p className="text-red-600 text-sm mt-1 ml-3.5">
+              {errors.lastName}
+            </p>
           )}
         </div>
 
-        <div className="w-full">
-          <PillInput
-            placeholder="Password"
-            type="password"
-            label="Password"
-            name="password"
-            value={user.password}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-          {touched.password && errors.password && (
-            <p className="text-red-600 text-sm ml-3.5">{errors.password}</p>
-          )}
-        </div>
-        <div className="w-full flex justify-end mt-5">
-          <a href="" className="text-(--color-primary) hover:underline">
-            Forgot Password?
-          </a>
-        </div>
-        <div className="w-full flex justify-end mt-5">
-          <div className="w-8/8 flex justify-end">
-            <PrimaryButton onClick={handleLogin}>Login</PrimaryButton>
-          </div>
-        </div>
-        <div className="mt-5">
-          <span className="text-gray-500">Don't have an account? </span>
-          <div
-            className="text-(--color-primary) hover:underline flex items-center align-center justify-center gap-1 mt-1 cursor-pointer"
-            onClick={() => setShowRegistration(true)}
-          >
-            <span>
-              <UserPlus />
-            </span>
-            <span>Create an account</span>
-          </div>
-        </div>
-      </>
-    );
-  };
-
-  const renderRegister = () => {
-    return (
-      <>
-        <div className="w-full flex">
-          <div className="w-full mr-2">
-            <PillInput
-              placeholder="First Name"
-              type="text"
-              label="First Name"
-              name="firstName"
-              value={user.firstName}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              required
-            />
-            {touched.firstName && errors.firstName && (
-              <p className="text-red-600 text-sm mt-1 ml-3.5">
-                {errors.firstName}
-              </p>
-            )}
-          </div>
-          <div className="w-full">
-            <PillInput
-              placeholder="Last Name"
-              type="text"
-              label="Last Name"
-              name="lastName"
-              value={user.lastName}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              required
-            />
-            {touched.lastName && errors.lastName && (
-              <p className="text-red-600 text-sm mt-1 ml-3.5">
-                {errors.lastName}
-              </p>
-            )}
-          </div>
-        </div>
         <div className="w-full">
           <PillInput
             placeholder="Email Address"
@@ -309,6 +221,7 @@ const Login = () => {
             <p className="text-red-600 text-sm mt-1 ml-3.5">{errors.email}</p>
           )}
         </div>
+
         <div className="w-full">
           <PillInput
             placeholder="Mobile Number"
@@ -326,6 +239,7 @@ const Login = () => {
             </p>
           )}
         </div>
+
         <div className="w-full">
           <PillInput
             placeholder="Firm ID"
@@ -341,6 +255,7 @@ const Login = () => {
             <p className="text-red-600 text-sm mt-1 ml-3.5">{errors.firmId}</p>
           )}
         </div>
+
         <div className="w-full">
           <PillInput
             placeholder="Password"
@@ -358,6 +273,7 @@ const Login = () => {
             </p>
           )}
         </div>
+
         <div className="w-full">
           <PillInput
             placeholder="Confirm Password"
@@ -375,50 +291,28 @@ const Login = () => {
             </p>
           )}
         </div>
-        <div className="w-full flex justify-end mt-5">
-          <a href="" className="text-(--color-primary) hover:underline">
-            Forgot Password?
-          </a>
-        </div>
+
         <div className="w-full flex justify-end mt-5">
           <div className="w-8/8 flex justify-end">
             <PrimaryButton onClick={handleRegister}>Register</PrimaryButton>
           </div>
         </div>
+
         <div className="mt-5">
           <span className="text-gray-500">Already have an account? </span>
-          <div
+          <Link
+            to="/login"
             className="text-(--color-primary) hover:underline flex items-center align-center justify-center gap-1 mt-1 cursor-pointer"
-            onClick={() => setShowRegistration(false)}
           >
             <span>
               <ArrowLeft />
             </span>
             <span>Sign In</span>
-          </div>
+          </Link>
         </div>
-      </>
-    );
-  };
-
-  return (
-    <>
-      {
-        <div className="h-dvh justify-center items-center flex flex-col">
-          <Card className="border border-gray-300 p-10 rounded-lg shadow-lg flex flex-col items-center bg-white">
-            <div className="h-5/6 w-5/6">
-              <img
-                src={logo}
-                alt="logo"
-                className="max-h-full max-w-full object-contain"
-              />
-            </div>
-            {showRegistration ? renderRegister() : renderLogin()}
-          </Card>
-        </div>
-      }
-    </>
+      </Card>
+    </div>
   );
 };
 
-export default Login;
+export default RegisterPage;

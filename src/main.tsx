@@ -4,11 +4,10 @@ import "./Config/OpenApiSetup";
 
 validateEnv();
 
-
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
-import { AuthenticationProvider } from "./Context/AuthenticationContext";
+import AuthenticationProvider from "./Context/Authentication/AuthenticationProvider";
 import "./index.css";
 import router from "./Router/Router";
 

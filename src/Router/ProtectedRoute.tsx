@@ -1,6 +1,6 @@
 import React, { type JSX } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuthentication } from "../Context/AuthenticationContext";
+import useAuthentication from "../Context/Authentication/useAuthentication";
 
 interface ProtectedRouteProps {
   children: JSX.Element;

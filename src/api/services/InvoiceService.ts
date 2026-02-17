@@ -151,16 +151,16 @@ export class InvoiceService {
     }
     /**
      * @param id
-     * @param expiry
-     * @param signature
+     * @param exp
+     * @param sig
      * @param firmId
      * @returns any OK
      * @throws ApiError
      */
     public static getApiInvoicePdfView(
         id: string,
-        expiry?: number,
-        signature?: string,
+        exp?: number,
+        sig?: string,
         firmId?: string,
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
@@ -170,8 +170,8 @@ export class InvoiceService {
                 'id': id,
             },
             query: {
-                'expiry': expiry,
-                'signature': signature,
+                'exp': exp,
+                'sig': sig,
                 'firmId': firmId,
             },
         });

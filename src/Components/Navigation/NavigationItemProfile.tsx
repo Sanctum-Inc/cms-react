@@ -3,7 +3,7 @@ import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import defaultIcon from "../../assets/default-profile-icon.jpg";
-import { useAuthentication } from "../../Context/AuthenticationContext";
+import useAuthentication from "../../Context/Authentication/useAuthentication";
 import PrimaryButton from "../Buttons/PrimaryButton";
 
 interface ImageWithFallbackProps {

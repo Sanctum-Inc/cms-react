@@ -2,7 +2,10 @@ interface KeyParties {
   label: string;
   name: string;
   value: string;
-  icon: any;
+  icon: React.ForwardRefExoticComponent<
+    Omit<import("lucide-react").LucideProps, "ref"> &
+      React.RefAttributes<SVGSVGElement>
+  >;
   type: string;
   color: string;
 }

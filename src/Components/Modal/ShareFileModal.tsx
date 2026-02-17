@@ -43,8 +43,8 @@ const ShareFileModal = ({
   });
 
   const handleCopyLink = async () => {
-    var url = await InvoiceService.createLink(invoiceId);
-    navigator.clipboard.writeText(`${import.meta.env.VITE_API_URL}${url}`);
+    const url = await InvoiceService.createLink(invoiceId);
+    navigator.clipboard.writeText(url);
     setLinkCopied(true);
     setTimeout(() => setLinkCopied(false), 2000);
   };

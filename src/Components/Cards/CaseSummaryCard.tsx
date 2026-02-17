@@ -5,7 +5,10 @@ interface CaseSummaryCardProps {
   caseFields: {
     label: string;
     value: string | number | Date;
-    icon: any;
+    icon: React.ForwardRefExoticComponent<
+      Omit<import("lucide-react").LucideProps, "ref"> &
+        React.RefAttributes<SVGSVGElement>
+    >;
   }[];
 }
 

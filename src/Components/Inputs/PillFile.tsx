@@ -12,7 +12,6 @@ const PillFile = (props: PillFileProps) => {
   const { label, disabled, className, customOnChange, name } = props;
 
   const [fileName, setFileName] = useState<string | null>(null);
-  const [file, setFile] = useState<File | null>(null);
 
   const disabledStyles = disabled
     ? "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed"
@@ -35,14 +34,12 @@ const PillFile = (props: PillFileProps) => {
 
     if (!selectedFile) return;
 
-    setFile(selectedFile);
     setFileName(selectedFile.name);
 
     customOnChange?.(selectedFile);
   };
 
   const handleRemove = () => {
-    setFile(null);
     setFileName(null);
     customOnChange?.(null);
   };

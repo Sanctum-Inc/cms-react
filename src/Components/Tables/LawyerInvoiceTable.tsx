@@ -1,11 +1,14 @@
 import { EllipsisVertical, FileText } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import type { InvoiceResponse } from "../../api";
+import type { LawyerReportInvoicesResponse } from "../../api";
 import EmptyStateInvoices from "../Feedback/EmptyState/EmptyStateInvoices";
-import { getInvoiceStatusOptionsStyles } from "../Inputs/InputOptions/InvoiceStatusOptions";
+import {
+  getInvoiceStatusOptionsStyles,
+  InvoiceStatusOptions,
+} from "../Inputs/InputOptions/InvoiceStatusOptions";
 
 interface LawyerInvoiceTableProps {
-  LawyerInvoice: InvoiceResponse[];
+  LawyerInvoice?: LawyerReportInvoicesResponse[];
 }
 
 const LawyerInvoiceTable = ({ LawyerInvoice }: LawyerInvoiceTableProps) => {
@@ -28,7 +31,7 @@ const LawyerInvoiceTable = ({ LawyerInvoice }: LawyerInvoiceTableProps) => {
   }, []);
 
   return (
-    <div className="bg-white rounded-3xl">
+    <div className="bg-white rounded-3xl h-auto">
       {/* Header */}
       <div className="flex gap-2 py-3 pl-2 items-center">
         <FileText className="text-gray-400" />
@@ -36,7 +39,7 @@ const LawyerInvoiceTable = ({ LawyerInvoice }: LawyerInvoiceTableProps) => {
       </div>
 
       {/* Table Header */}
-      <div className="grid grid-cols-4 gap-4 font-semibold text-gray-400 bg-gray-100 p-2 py-4">
+      <div className="grid grid-cols-4 gap-4 font-semibold text-gray-400 bg-gray-100 px-4 py-4">
         <div>Invoice ID</div>
         <div>Case/Client</div>
         <div>Amount</div>
@@ -45,10 +48,10 @@ const LawyerInvoiceTable = ({ LawyerInvoice }: LawyerInvoiceTableProps) => {
 
       {/* Table Body */}
       <div>
-        {LawyerInvoice.length > 0 ? (
+        {LawyerInvoice && LawyerInvoice.length > 0 ? (
           LawyerInvoice.map((invoice, index) => (
-            <div key={invoice.id}>
-              <div className="grid grid-cols-4 gap-4 p-2 py-4 items-center">
+            <div key={`lawyerInvoiceTable-${index}`}>
+              <div className="grid grid-cols-4 gap-4 px-4 py-4 items-center">
                 {/* Invoice ID */}
                 <div className="text-(--color-primary) underline decoration-(--color-primary) hover:cursor-pointer font-semibold">
                   {invoice.invoiceNumber}
@@ -56,7 +59,7 @@ const LawyerInvoiceTable = ({ LawyerInvoice }: LawyerInvoiceTableProps) => {
 
                 {/* Case / Client */}
                 <div className="flex flex-col">
-                  <span className="font-semibold">{invoice.clientName}</span>
+                  <span className="font-semibold">{invoice.caseName}</span>
                   <span className="text-sm text-gray-400">
                     Case: {invoice.caseNumber}
                   </span>
@@ -74,7 +77,11 @@ const LawyerInvoiceTable = ({ LawyerInvoice }: LawyerInvoiceTableProps) => {
                       invoice.status,
                     )}`}
                   >
-                    {invoice.status}
+                    {
+                      InvoiceStatusOptions.find(
+                        (o) => o.key === String(invoice.status),
+                      )?.value
+                    }
                   </span>
 
                   <div
@@ -110,8 +117,9 @@ const LawyerInvoiceTable = ({ LawyerInvoice }: LawyerInvoiceTableProps) => {
                   </div>
                 </div>
               </div>
-
-              <div className="border-t border-gray-200" />
+              {index !== LawyerInvoice.length - 1 && (
+                <div className="border-t border-gray-200" />
+              )}
             </div>
           ))
         ) : (

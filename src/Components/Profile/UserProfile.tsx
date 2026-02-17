@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import type { InputItem } from "../../Models/InputItem";
-import PillInput from "../Inputs/PillInput";
 import { UserService } from "../../api";
+import type { InputItem } from "../../Models/InputItem";
+import PrimaryButton from "../Buttons/PrimaryButton";
+import PillInput from "../Inputs/PillInput";
 
 type UserForm = {
   userId: string;
@@ -78,18 +79,27 @@ const UserProfile = () => {
     }));
   };
 
+  //const handleSaveUser = () => {};
+
   return (
-    <div className="grid grid-cols-10 gap-5">
-      {inputs.map((item, index) => (
-        <div className="col-span-5" key={`${index}-user-profile-input`}>
-          <PillInput
-            {...item}
-            value={form[item.name as keyof UserForm]}
-            onChange={handleChange}
-          />
+    <>
+      <div className="grid grid-cols-10 gap-5">
+        {inputs.map((item, index) => (
+          <div className="col-span-5" key={`${index}-user-profile-input`}>
+            <PillInput
+              {...item}
+              value={form[item.name as keyof UserForm]}
+              onChange={handleChange}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="mt-5 flex justify-end">
+        <div className="w-1/6">
+          <PrimaryButton>Save Profile Changes</PrimaryButton>
         </div>
-      ))}
-    </div>
+      </div>
+    </>
   );
 };
 
