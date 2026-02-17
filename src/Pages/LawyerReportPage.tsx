@@ -2,7 +2,9 @@ import { CheckCircle, DollarSign, Gavel, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { LawyerService, type LawyerReportResponse } from "../api";
 import CaseStatusDistributionCard from "../Components/Cards/CaseStatusDistributionCard";
+import LawyerReportActivityCard from "../Components/Cards/LawyerReportActivityCard";
 import LawyerReportCard from "../Components/Cards/LawyerReportCard";
+import LawyerReportDateCard from "../Components/Cards/LawyerReportDateCard";
 import RevenueOpportunityCard from "../Components/Cards/RevenueOpportunityCard";
 import ErrorAlert from "../Components/Feedback/Alerts/ErrorAlert";
 import SuccessAlert from "../Components/Feedback/Alerts/SuccessAlert";
@@ -168,8 +170,18 @@ const LawyerReportPage = () => {
         </div>
       </div>
       <div className="flex">
-        <div className=" border border-gray-300 mx-5 rounded-3xl h-fit">
-          <LawyerInvoiceTable LawyerInvoice={reportInformation?.invoices} />
+        <div className="mx-5 ">
+          <div className="border border-gray-300 rounded-3xl h-fit mb-5">
+            <LawyerInvoiceTable LawyerInvoice={reportInformation?.invoices} />
+          </div>
+          <div className="flex gap-5">
+            <div className="w-1/2">
+              <LawyerReportDateCard />
+            </div>
+            <div className="w-1/2">
+              <LawyerReportActivityCard />
+            </div>
+          </div>
         </div>
         <div className="">
           <div className="flex flex-col gap-5">
@@ -179,7 +191,6 @@ const LawyerReportPage = () => {
             />
           </div>
         </div>
-        <div className=""></div>
       </div>
       {renderModal()}
       {renderSuccessmessage()}
