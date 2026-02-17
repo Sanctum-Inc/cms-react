@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { AddInvoiceRequest } from '../models/AddInvoiceRequest';
-import type { FileContentResult } from '../models/FileContentResult';
+import type { FileResult } from '../models/FileResult';
 import type { InvoiceNumberResponse } from '../models/InvoiceNumberResponse';
 import type { InvoiceResponse } from '../models/InvoiceResponse';
 import type { UpdateInvoiceRequest } from '../models/UpdateInvoiceRequest';
@@ -113,12 +113,12 @@ export class InvoiceService {
     }
     /**
      * @param id
-     * @returns FileContentResult OK
+     * @returns FileResult OK
      * @throws ApiError
      */
     public static generatePdf(
         id: string,
-    ): CancelablePromise<FileContentResult> {
+    ): CancelablePromise<FileResult> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Invoice/pdf/download/{id}',

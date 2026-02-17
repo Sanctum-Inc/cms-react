@@ -32,7 +32,7 @@ export type { DocumentResponse } from './models/DocumentResponse';
 export type { EmailResponse } from './models/EmailResponse';
 export type { EmailStatus } from './models/EmailStatus';
 export type { EntityTagHeaderValue } from './models/EntityTagHeaderValue';
-export type { FileContentResult } from './models/FileContentResult';
+export type { FileResult } from './models/FileResult';
 export type { FileStreamResult } from './models/FileStreamResult';
 export type { FirmResponse } from './models/FirmResponse';
 export type { InvoiceItemResponse } from './models/InvoiceItemResponse';

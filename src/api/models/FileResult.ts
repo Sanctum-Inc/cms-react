@@ -3,8 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { EntityTagHeaderValue } from './EntityTagHeaderValue';
-export type FileContentResult = {
-    fileContents?: string;
+export type FileResult = {
     contentType?: string | null;
     fileDownloadName?: string | null;
     lastModified?: string | null;

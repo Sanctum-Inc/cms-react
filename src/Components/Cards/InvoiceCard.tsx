@@ -170,7 +170,7 @@ const InvoiceCard = ({
 
   const downloadPdf = async (id: string, invoiceId: string) => {
     try {
-      const response = await axios.get(`/api/Invoice/pdf/${id}`, {
+      const response = await axios.get(`/api/Invoice/pdf/download/${id}`, {
         responseType: "blob", // important to get binary data as Blob
       });
 
