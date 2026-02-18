@@ -4,10 +4,10 @@ import {
   type AddCourtCaseRequest,
   type CourtCaseResponse,
 } from "../../api";
+import { CourtCaseOutcomeOptions } from "../../Models/InputOptions/CourtCaseOutcomeOptions";
+import { CourtCaseStatusOptions } from "../../Models/InputOptions/CourtCaseStatusOptions";
+import { CourtCaseTypeOptions } from "../../Models/InputOptions/CourtCaseTypesOptions";
 import PrimaryButton from "../Buttons/PrimaryButton";
-import { CourtCaseOutcomeOptions } from "../Inputs/InputOptions/CourtCaseOutcomeOptions";
-import { CourtCaseStatusOptions } from "../Inputs/InputOptions/CourtCaseStatusOptions";
-import { CourtCaseTypeOptions } from "../Inputs/InputOptions/CourtCaseTypesOptions";
 import PillInput from "../Inputs/PillInput";
 import PillSelect from "../Inputs/PillSelect";
 

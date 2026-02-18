@@ -1,8 +1,8 @@
 import { InfoIcon, X } from "lucide-react";
 import type { PropsWithChildren } from "react";
+import type { ModalItemProps } from "../../Models/ModalItemProps";
 import PrimaryButton from "../Buttons/PrimaryButton";
 import Card from "../Cards/Card";
-import type { ModalItemProps } from "../Cards/Common/Props/ModalItemProps";
 
 interface ResolveDeadlineModalProps extends PropsWithChildren {
   title: string;

@@ -1,11 +1,11 @@
 import { EllipsisVertical, FileText } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { LawyerReportInvoicesResponse } from "../../api";
-import EmptyStateInvoices from "../Feedback/EmptyState/EmptyStateInvoices";
 import {
   getInvoiceStatusOptionsStyles,
   InvoiceStatusOptions,
-} from "../Inputs/InputOptions/InvoiceStatusOptions";
+} from "../../Models/InputOptions/InvoiceStatusOptions";
+import EmptyStateInvoices from "../Feedback/EmptyState/EmptyStateInvoices";
 
 interface LawyerInvoiceTableProps {
   LawyerInvoice?: LawyerReportInvoicesResponse[];

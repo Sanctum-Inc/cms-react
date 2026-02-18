@@ -1,5 +1,5 @@
 import Navigation from "./Components/Navigation/Navigation";
-import DashboardPage from "./Pages/DashboardPage";
+import DashboardPage from "./Pages/Dashboard/DashboardPage";
 
 const App = () => {
   return (

@@ -4,8 +4,8 @@ import {
   type AddLawyerRequest,
   type LawyerResponse,
 } from "../../api";
+import { LawyerSpecialityOptions } from "../../Models/InputOptions/LawyerSpecialityOptions";
 import PrimaryButton from "../Buttons/PrimaryButton";
-import { LawyerSpecialityOptions } from "../Inputs/InputOptions/LawyerSpecialityOptions";
 import PillInput from "../Inputs/PillInput";
 import PillSelect from "../Inputs/PillSelect";
 

@@ -1,4 +1,4 @@
-import type { Items } from "../../Pages/CourtCaseInformationPage";
+import type { Items } from "../../Pages/CourtCase/CourtCaseInformationPage";
 
 export interface CourtCaseInformationTableProps {
   // Define any props needed for the CourtCaseInformationTable here

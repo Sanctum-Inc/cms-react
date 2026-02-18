@@ -5,9 +5,9 @@ import {
   InvoiceService,
   type InvoiceStatus,
 } from "../../api";
+import { InvoiceStatusOptions } from "../../Models/InputOptions/InvoiceStatusOptions";
 import type { Invoice } from "../../Models/Invoices";
-import InvoiceCard from "../Cards/InvoiceCard";
-import { InvoiceStatusOptions } from "../Inputs/InputOptions/InvoiceStatusOptions";
+import InvoiceCard from "../../Pages/Invoice/InvoiceCard";
 
 interface InvoiceTableProps {
   invoices: Invoice[];
