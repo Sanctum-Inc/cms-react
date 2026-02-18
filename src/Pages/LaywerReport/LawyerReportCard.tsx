@@ -43,7 +43,7 @@ const LawyerReportCard = (props: LawyerReportCardProps) => {
 
   return (
     <Link to={props.linkTo} className="w-1/4">
-      <Card className="w-full p-8 hover:bg-(--color-hover-light) bg-white">
+      <Card className="w-full p-8 hover:bg-(--color-hover-light) bg-white h-full">
         <div className="flex justify-between">
           <span className={getStylesBackground(props.color)}>
             <props.icon color={props.color} />

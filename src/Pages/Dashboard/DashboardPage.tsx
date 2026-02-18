@@ -143,12 +143,12 @@ const DashboardPage = () => {
   return (
     <>
       <Header title="Dashboard" showButton={false}>
-        <span className="text-2xl text-gray-400 font-bold">
+        <div className="text-2xl text-gray-400 font-bold flex items-start justify-end p-4">
           {getCurrentDate()} | {getTime}
-        </span>
+        </div>
       </Header>
       <div className="flex-col w-full bg-(--color-hover-light)">
-        <div className="w-full flex justify-between p-3 gap-10">
+        <div className="w-full flex p-3 gap-10">
           <DashboardCard
             description="Total Cases"
             value={dashboardInformation.totalCases?.toString() || ""}
@@ -171,7 +171,7 @@ const DashboardPage = () => {
             linkTo="/dates"
           ></DashboardCard>
           <DashboardCard
-            description="Documents Stored"
+            description="Documents"
             value={dashboardInformation.documentsStored?.toString() || ""}
             icon={FolderOpen}
             color="purple"
