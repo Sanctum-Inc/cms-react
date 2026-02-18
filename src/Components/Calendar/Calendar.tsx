@@ -21,7 +21,7 @@ interface CalendarDay {
   day: number | null;
   date: Date | null;
   currentMonth: boolean;
-  events: CourtCaseDateResponse["courtCaseDateItems"];
+  events: Array<CourtCaseDateItemResponse>;
 }
 
 interface CalendarProps {
@@ -230,28 +230,44 @@ const Calendar = ({
     setSelectedCaseId(e.target.value);
   };
 
-  const getEventColor = (dateStr: string) => {
-    const eventDate = new Date(dateStr);
-    if (isNaN(eventDate.getTime()))
-      return { background: "bg-slate-200", color: "primary" }; // invalid date
+  const getEventColor = (eventStatus: string) => {
+    switch (eventStatus) {
+      case "Overdue":
+        return {
+          background: "bg-red-200",
+          color: "text-red-800",
+        };
 
-    // Normalize both dates to midnight (start of day)
-    const eventDay = new Date(
-      eventDate.getFullYear(),
-      eventDate.getMonth(),
-      eventDate.getDate(),
-    ).getTime();
-    const today = new Date();
-    const todayDay = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
-    ).getTime();
+      case "Cancelled":
+        return {
+          background: "bg-gray-200",
+          color: "text-gray-700",
+        };
 
-    if (eventDay < todayDay) return { background: "bg-red-200", color: "red" }; // Past
-    if (eventDay > todayDay)
-      return { background: "bg-green-200", color: "green" }; // Future
-    return { background: "bg-(--color-primary)", color: "primary" }; // Today
+      case "Completed":
+        return {
+          background: "bg-green-200",
+          color: "text-green-800",
+        };
+
+      case "Upcoming":
+        return {
+          background: "bg-blue-200",
+          color: "text-blue-800",
+        };
+
+      case "DueToday":
+        return {
+          background: "bg-amber-200",
+          color: "text-amber-800",
+        };
+
+      default:
+        return {
+          background: "bg-blue-200",
+          color: "text-blue-800",
+        };
+    }
   };
 
   return (
@@ -276,6 +292,7 @@ const Calendar = ({
                 ),
               )
             }
+            type="button"
             className="p-2 hover:bg-white border border-slate-200 rounded-xl"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -352,7 +369,7 @@ const Calendar = ({
                 {day.events.map((event) => (
                   <div
                     key={event.id}
-                    className={`h-1.5 w-full rounded-full ${getEventColor(event.date).background}`}
+                    className={`h-1.5 w-full rounded-full ${getEventColor(event.status).background}`}
                   />
                 ))}
               </div>

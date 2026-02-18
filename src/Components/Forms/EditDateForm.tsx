@@ -83,7 +83,7 @@ const EditDateForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="space-y-5 px-4">
       <PillSelect
         label="Case Number:"
         name="caseId"

@@ -49,7 +49,7 @@ const DeadlineCard = ({
 
   const renderDeadlineErrorCard = () => {
     return (
-      <Card className="border border-red-500 bg-red-700 text-white px-10 py-5 shadow-md">
+      <Card className="border border-red-500 bg-red-700 text-white px-10 py-5 shadow-md ">
         <div className="flex justify-center">
           <ShieldAlert size={48} className="text-gray-300/50" />
         </div>

@@ -60,25 +60,29 @@ const CaseTimeLine = ({
     }
   > = {
     Overdue: {
-      border: "border-red-700",
-      background: "bg-red-700",
-      text: "Critical | Overdue",
+      border: "border-red-600",
+      background: "bg-red-600",
+      text: "Overdue",
     },
+
     DueToday: {
-      border: "border-[var(--color-primary)]",
-      background: "bg-[var(--color-primary)]",
+      border: "border-amber-500",
+      background: "bg-amber-500",
       text: "Due Today",
     },
+
     Upcoming: {
       border: "border-blue-500",
       background: "bg-blue-500",
       text: "Upcoming",
     },
+
     Completed: {
       border: "border-green-600",
       background: "bg-green-600",
       text: "Completed",
     },
+
     Cancelled: {
       border: "border-gray-500",
       background: "bg-gray-500",
@@ -188,6 +192,7 @@ const CaseTimeLine = ({
   };
 
   const statusOrder: Record<string, number> = {
+    DueToday: 0,
     Overdue: 1,
     Upcoming: 2,
     Completed: 3,
