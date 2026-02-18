@@ -46,6 +46,22 @@ const DatesPage = () => {
 
   // Compute filtered + sorted cases
   const filteredItems = useMemo(() => {
+    // const statusOrder: Record<string, number> = {
+    //   Overdue: 1,
+    //   Upcoming: 2,
+    //   Completed: 3,
+    //   Cancelled: 4,
+    // };
+
+    // setCourtCaseDates((prev) => {
+    //   if (prev) {
+    //     prev.courtCaseDateItems.sort(
+    //       (a, b) => statusOrder[a.status] - statusOrder[b.status],
+    //     );
+    //   }
+    //   return prev;
+    // });
+
     const q = searchQuery.trim().toLowerCase();
 
     const matchesSearch = (c: CourtCaseDateItemResponse) => {
@@ -143,6 +159,7 @@ const DatesPage = () => {
   useEffect(() => {
     CourtCaseDateService.getAllCourtCaseDates()
       .then((response) => {
+        console.log(response);
         setCourtCaseDates(response);
       })
       .catch(() => {
