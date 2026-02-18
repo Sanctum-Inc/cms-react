@@ -6,13 +6,13 @@ import {
   type CourtCaseNumberResponse,
 } from "../../api";
 import type { KeyValue } from "../../Models/InputItem";
+import { CourtCaseDateTypeOptions } from "../../Models/InputOptions/CourtCaseDateTypeOptions";
 import type { ProfileMenu } from "../../Pages/CourtCase/CourtCaseInformationPage";
 import { formatFormalDateTime } from "../../Utils/FormatDateTime";
 import PrimaryButton from "../Buttons/PrimaryButton";
 import PillInput from "../Inputs/PillInput";
 import PillSelect from "../Inputs/PillSelect";
 import PillTextarea from "../Inputs/PillTextarea";
-import { CourtCaseDateTypeOptions } from "../../Models/InputOptions/CourtCaseDateTypeOptions";
 
 interface AddFormDateProps {
   setShowSuccessMessage: (message: string) => void;
@@ -101,53 +101,51 @@ const AddDateForm = ({
   };
 
   return (
-    <div className="max-h-[80vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 mx-5">
-      <form onSubmit={handleSubmit}>
-        <PillSelect
-          label="Case Number:"
-          name="caseId"
-          selectOptions={caseNumbers}
-          value={formData.caseId}
-          onChange={(e) => handleChange("caseId", e.target.value)}
-          disabled={caseId !== undefined}
-        />
+    <form onSubmit={handleSubmit}>
+      <PillSelect
+        label="Case Number:"
+        name="caseId"
+        selectOptions={caseNumbers}
+        value={formData.caseId}
+        onChange={(e) => handleChange("caseId", e.target.value)}
+        disabled={caseId !== undefined}
+      />
 
-        <PillInput
-          label="Date of Event:"
-          name="date"
-          type="date"
-          value={formData.date}
-          onChange={(e) => handleChange("date", e.target.value)}
-        />
+      <PillInput
+        label="Date of Event:"
+        name="date"
+        type="date"
+        value={formData.date}
+        onChange={(e) => handleChange("date", e.target.value)}
+      />
 
-        <PillInput
-          label="Title:"
-          name="title"
-          type="text"
-          value={formData.title}
-          onChange={(e) => handleChange("title", e.target.value)}
-        />
+      <PillInput
+        label="Title:"
+        name="title"
+        type="text"
+        value={formData.title}
+        onChange={(e) => handleChange("title", e.target.value)}
+      />
 
-        <PillTextarea
-          label="Description:"
-          name="description"
-          value={formData.description}
-          onChange={(e) => handleChange("description", e.target.value)}
-        />
+      <PillTextarea
+        label="Description:"
+        name="description"
+        value={formData.description}
+        onChange={(e) => handleChange("description", e.target.value)}
+      />
 
-        <PillSelect
-          label="Type:"
-          name="type"
-          value={formData.type}
-          onChange={(e) => handleChange("type", parseInt(e.target.value))}
-          selectOptions={CourtCaseDateTypeOptions}
-        />
+      <PillSelect
+        label="Type:"
+        name="type"
+        value={formData.type}
+        onChange={(e) => handleChange("type", parseInt(e.target.value))}
+        selectOptions={CourtCaseDateTypeOptions}
+      />
 
-        <div className="mt-5">
-          <PrimaryButton type="submit">Create Event</PrimaryButton>
-        </div>
-      </form>
-    </div>
+      <div className="mt-5">
+        <PrimaryButton type="submit">Create Event</PrimaryButton>
+      </div>
+    </form>
   );
 };
 

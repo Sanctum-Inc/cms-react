@@ -22,7 +22,7 @@ interface AddDocumentFormProps {
   setShowSuccessMessage: (message: string) => void;
   setShowErrorMessage: (message: string) => void;
   setShowModal: (show: boolean) => void;
-  setCaseAttachments: (invoice: SetStateAction<ProfileMenu[]>) => void;
+  setCaseAttachments?: (invoice: SetStateAction<ProfileMenu[]>) => void;
   caseId?: string;
 }
 
@@ -73,25 +73,26 @@ const AddDocumentForm = ({
       .then((res) => {
         console.log(res);
         setShowSuccessMessage("Document uploaded successfully!");
-        setCaseAttachments((prev) =>
-          prev.map((section) => {
-            if (section.label !== "Documents") return section;
+        if (setCaseAttachments)
+          setCaseAttachments((prev) =>
+            prev.map((section) => {
+              if (section.label !== "Documents") return section;
 
-            return {
-              ...section,
-              items: [
-                ...(section.items ?? []),
-                {
-                  attributes1: formData.name,
-                  attributes2: formData.file?.type || "",
-                  attributes3: formatFormalDateTime(
-                    new Date().toLocaleString(),
-                  ),
-                },
-              ],
-            };
-          }),
-        );
+              return {
+                ...section,
+                items: [
+                  ...(section.items ?? []),
+                  {
+                    attributes1: formData.name,
+                    attributes2: formData.file?.type || "",
+                    attributes3: formatFormalDateTime(
+                      new Date().toLocaleString(),
+                    ),
+                  },
+                ],
+              };
+            }),
+          );
 
         setShowModal(false);
       })

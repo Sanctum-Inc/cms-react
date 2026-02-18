@@ -83,7 +83,7 @@ const UserProfile = () => {
 
   return (
     <>
-      <div className="grid grid-cols-10 gap-5">
+      <div className="grid grid-cols-10 gap-5               ">
         {inputs.map((item, index) => (
           <div className="col-span-5" key={`${index}-user-profile-input`}>
             <PillInput

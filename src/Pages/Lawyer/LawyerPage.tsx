@@ -103,13 +103,15 @@ const LawyerPage = () => {
     if (!showModal) return null;
     return (
       <SideModal setShowModal={setShowModal} title="New Lawyer">
-        <AddLawyerForm
-          setShowSuccessMessage={setSuccessAlertMessage}
-          setShowErrorMessage={setErrorAlertMessage}
-          setShowModal={setShowModal}
-          setLawyers={setLawyers}
-          selectedLawyer={selectedLawyer}
-        />
+        <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto p-4">
+          <AddLawyerForm
+            setShowSuccessMessage={setSuccessAlertMessage}
+            setShowErrorMessage={setErrorAlertMessage}
+            setShowModal={setShowModal}
+            setLawyers={setLawyers}
+            selectedLawyer={selectedLawyer}
+          />
+        </div>
       </SideModal>
     );
   };

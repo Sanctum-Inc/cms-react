@@ -234,14 +234,22 @@ const InvoicePage = () => {
     return () => clearTimeout(timer);
   }, [successAlertMessage]);
 
+  useEffect(() => {
+    if (!errorAlertMessage) return;
+    const timer = setTimeout(() => setErrorAlertMessage(null), 5000);
+    return () => clearTimeout(timer);
+  }, [errorAlertMessage]);
+
   const renderSuccessmessage = () => {
     return (
       successAlertMessage && <SuccessAlert message={successAlertMessage} />
     );
   };
+
   const renderErrorMessage = () => {
     return errorAlertMessage && <ErrorAlert message={errorAlertMessage} />;
   };
+
   return (
     <>
       <Header

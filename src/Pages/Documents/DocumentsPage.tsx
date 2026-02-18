@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ErrorAlert from "../../Components/Feedback/Alerts/ErrorAlert";
+import SuccessAlert from "../../Components/Feedback/Alerts/SuccessAlert";
+import AddDocumentForm from "../../Components/Forms/AddDocumentForm";
 import Header from "../../Components/Header/Header";
 import SortBar from "../../Components/Inputs/SortBar";
 import SideModal from "../../Components/Modal/SideModal";
@@ -209,14 +212,52 @@ const DocumentsPage = () => {
       ],
     },
   ];
+  const [successAlertMessage, setSuccessAlertMessage] = useState<string | null>(
+    null,
+  );
+  const [errorAlertMessage, setErrorAlertMessage] = useState<string | null>(
+    null,
+  );
 
   const handleShowModal = (show: boolean) => {
     setShowModal(show);
   };
 
+  useEffect(() => {
+    if (!successAlertMessage) return;
+    const timer = setTimeout(() => setSuccessAlertMessage(null), 5000);
+    return () => clearTimeout(timer);
+  }, [successAlertMessage]);
+
+  useEffect(() => {
+    if (!errorAlertMessage) return;
+    const timer = setTimeout(() => setErrorAlertMessage(null), 5000);
+    return () => clearTimeout(timer);
+  }, [errorAlertMessage]);
+
+  const renderSuccessmessage = () => {
+    return (
+      successAlertMessage && <SuccessAlert message={successAlertMessage} />
+    );
+  };
+
+  const renderErrorMessage = () => {
+    return errorAlertMessage && <ErrorAlert message={errorAlertMessage} />;
+  };
+
   const renderModal = () => {
     if (!showModal) return null;
-    return <SideModal setShowModal={setShowModal} title="New Court Case" />;
+    return (
+      <SideModal setShowModal={setShowModal} title="New Court Case">
+        <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto p-4">
+          <AddDocumentForm
+            setShowModal={setShowModal}
+            setShowErrorMessage={setErrorAlertMessage}
+            setShowSuccessMessage={setSuccessAlertMessage}
+          />
+        </div>
+      </SideModal>
+    );
   };
 
   return (
@@ -238,6 +279,8 @@ const DocumentsPage = () => {
         />
       ))}
       {renderModal()}
+      {renderSuccessmessage()}
+      {renderErrorMessage()}
     </>
   );
 };

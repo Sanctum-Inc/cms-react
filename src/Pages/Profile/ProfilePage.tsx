@@ -53,7 +53,7 @@ const ProfilePage = () => {
           {renderProfileMenu()}
         </div>
       </div>
-      <Card className="mx-48 p-6">
+      <Card className="mx-auto w-2/3 mb-5 p-6">
         <div className="text-3xl font-semibold border-b border-gray-200 mb-8 pb-3">
           {selectedMenu}
         </div>

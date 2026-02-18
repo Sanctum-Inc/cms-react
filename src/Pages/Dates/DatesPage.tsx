@@ -141,11 +141,13 @@ const DatesPage = () => {
       return (
         <>
           <SideModal title="Schedule New Event" setShowModal={setShowModal}>
-            <AddDateForm
-              setShowErrorMessage={setErrorAlertMessage}
-              setShowSuccessMessage={setSuccessAlertMessage}
-              setShowModal={setShowModal}
-            />
+            <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto p-4">
+              <AddDateForm
+                setShowErrorMessage={setErrorAlertMessage}
+                setShowSuccessMessage={setSuccessAlertMessage}
+                setShowModal={setShowModal}
+              />
+            </div>
           </SideModal>
         </>
       );
