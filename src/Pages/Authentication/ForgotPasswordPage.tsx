@@ -5,10 +5,13 @@ import PrimaryButton from "../../Components/Buttons/PrimaryButton";
 import Card from "../../Components/Cards/Card";
 import PillInput from "../../Components/Inputs/PillInput";
 import { ValidateField } from "../../Utils/InputValidator";
+import { UserService, type ForgotPasswordRequest } from "../../api";
 import logo from "../../assets/logo-white.png";
 
 const ForgotPasswordPage = () => {
-  const [email, setEmail] = useState("");
+  const [emailRequest, setEmail] = useState<ForgotPasswordRequest>({
+    email: "",
+  });
   const [error, setError] = useState("");
   const [touched, setTouched] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -16,7 +19,9 @@ const ForgotPasswordPage = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setEmail(value);
+    setEmail({
+      email: value,
+    });
 
     // Clear error immediately when user starts typing (if field was touched)
     if (touched) {
@@ -34,7 +39,10 @@ const ForgotPasswordPage = () => {
   };
 
   const handleSubmit = async () => {
-    const trimmedEmail = email.trim();
+    const trimmedEmail = emailRequest.email.trim();
+    setEmail({
+      email: trimmedEmail,
+    });
 
     // Mark field as touched
     setTouched(true);
@@ -48,8 +56,13 @@ const ForgotPasswordPage = () => {
     setIsSubmitting(true);
 
     try {
-      // Call your password reset API endpoint
-      // await UserService.passwordReset(trimmedEmail);
+      UserService.forgotPassword(emailRequest)
+        .then(() => {
+          console.log("Password reset email sent successfully.");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       // // Show success message
       // setIsSuccess(true);
       // setError("");
@@ -107,7 +120,7 @@ const ForgotPasswordPage = () => {
                 type="email"
                 label="Email"
                 name="email"
-                value={email}
+                value={emailRequest.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 onKeyPress={handleKeyPress}
@@ -135,7 +148,8 @@ const ForgotPasswordPage = () => {
                 Check Your Email
               </h2>
               <p className="text-gray-600 text-center text-sm mb-4">
-                We've sent a password reset link to <strong>{email}</strong>
+                We've sent a password reset link to{" "}
+                <strong>{emailRequest.email}</strong>
               </p>
               <p className="text-gray-500 text-center text-xs">
                 Didn't receive the email? Check your spam folder or try again.

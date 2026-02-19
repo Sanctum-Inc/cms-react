@@ -1,5 +1,6 @@
 import { createHashRouter } from "react-router-dom";
 import MainLayout from "../Layout/MainLayout";
+import ChangePassword from "../Pages/Authentication/ChangePassword";
 import EmailVerifiedPage from "../Pages/Authentication/EmailVerifiedPage";
 import ForgotPasswordPage from "../Pages/Authentication/ForgotPasswordPage";
 import Login from "../Pages/Authentication/LoginPage";
@@ -40,6 +41,7 @@ const router = createHashRouter([
   { path: "forgot-password", element: <ForgotPasswordPage /> },
   { path: "register", element: <RegisterPage /> },
   { path: "email-verified", element: <EmailVerifiedPage /> },
+  { path: "change-password", element: <ChangePassword /> },
 ]);
 
 export default router;

@@ -2,6 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ChangePasswordRequest } from '../models/ChangePasswordRequest';
+import type { ForgotPasswordRequest } from '../models/ForgotPasswordRequest';
 import type { LoginRequest } from '../models/LoginRequest';
 import type { LoginResponse } from '../models/LoginResponse';
 import type { RegisterRequest } from '../models/RegisterRequest';
@@ -39,6 +41,44 @@ export class UserService {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/register',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+            },
+        });
+    }
+    /**
+     * @param requestBody
+     * @returns boolean OK
+     * @throws ApiError
+     */
+    public static forgotPassword(
+        requestBody: ForgotPasswordRequest,
+    ): CancelablePromise<boolean> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/forgot-password',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+            },
+        });
+    }
+    /**
+     * @param requestBody
+     * @returns boolean OK
+     * @throws ApiError
+     */
+    public static changePassword(
+        requestBody: ChangePasswordRequest,
+    ): CancelablePromise<boolean> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/change-password',
             body: requestBody,
             mediaType: 'application/json',
             errors: {
