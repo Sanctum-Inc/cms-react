@@ -13,9 +13,11 @@ const ChangePassword = () => {
 
   // Extract token and email from URL (sent via the email link)
   const token = searchParams.get("token") || "";
-  const email = searchParams.get("email") || "";
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    password: string;
+    confirmPassword: string;
+  }>({
     password: "",
     confirmPassword: "",
   });
@@ -73,11 +75,14 @@ const ChangePassword = () => {
         .catch((err) => {
           console.log(err);
         });
-    } catch (error: any) {
-      const errorData = error.body || error.response?.data || error;
+        
+    } catch (error: unknown) {
+      const errObj =
+        (error as { body?: { detail?: string }; response?: { data?: { detail?: string } } }) ||
+        undefined;
+      const detail = errObj?.body?.detail ?? errObj?.response?.data?.detail;
       setErrors({
-        password:
-          errorData.detail || "Reset failed. The link may have expired.",
+        password: detail ?? "Reset failed. The link may have expired.",
       });
     } finally {
       setIsSubmitting(false);

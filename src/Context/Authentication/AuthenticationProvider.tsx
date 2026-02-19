@@ -58,7 +58,7 @@ export const AuthenticationProvider = ({
     return () => {
       clearLogoutTimer();
     };
-  }, []);
+  }, [scheduleAutoLogout]);
 
   const login = (jwt: string) => {
     try {

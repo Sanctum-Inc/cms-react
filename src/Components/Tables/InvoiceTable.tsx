@@ -188,7 +188,7 @@ const InvoiceTable = ({
       .catch(() => {
         setErrorAlertMessage("Failed to load invoices. Please try again.");
       });
-  }, []);
+  }, [setInvoices]);
 
   const SetInvoiceToPaid = (invoiceId: string, status: number) => {
     setInvoices((prev) => {
