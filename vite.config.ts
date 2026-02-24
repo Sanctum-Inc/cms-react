@@ -17,6 +17,12 @@ export default defineConfig(({ mode }) => {
   return {
     base,
     plugins: [react(), tailwindcss()],
+    server: {
+      fs: { strict: false },
+    },
+    build: {
+      rollupOptions: {},
+    },
     test: {
       environment: "jsdom",
       globals: true,

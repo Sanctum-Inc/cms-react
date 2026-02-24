@@ -42,22 +42,19 @@ const DocumentFolderCard = ({ caseNumber, client, folders }: DocumentProps) => {
   };
 
   const returnContentTypeIcon = (contentType: string) => {
-    switch (contentType.toLowerCase()) {
-      case "mp4":
-        return <FileVideoCamera className="text-purple-600" />;
-      case "mp3":
-        return <FileVolume className="text-yellow-500" />;
-      case "pdf":
-        return <FileKey className="text-red-700" />;
-      case "xlsx":
-        return <FileSpreadsheet className="text-green-700" />;
-      case "docx":
-        return <FileText className="text-blue-600" />;
-      case "txt":
-        return <FileText className="text-blue-600" />;
-      default:
-        return <Image className="text-gray-500" />;
-    }
+    if (contentType.includes("mp4"))
+      return <FileVideoCamera className="text-purple-600" />;
+    else if (contentType.includes("mp3"))
+      return <FileVolume className="text-yellow-500" />;
+    else if (contentType.includes("pdf"))
+      return <FileKey className="text-red-700" />;
+    else if (contentType.includes("xlsx"))
+      return <FileSpreadsheet className="text-green-700" />;
+    else if (contentType.includes("docx"))
+      return <FileText className="text-blue-600" />;
+    else if (contentType.includes("txt"))
+      return <FileText className="text-blue-600" />;
+    else return <Image className="text-gray-500" />;
   };
 
   const renderItem = (

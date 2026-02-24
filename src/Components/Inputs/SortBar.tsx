@@ -1,4 +1,4 @@
-import { SearchIcon, FilterIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import Card from "../Cards/Card";
 
 interface SortBarProps {
@@ -50,15 +50,6 @@ const SortBar = ({
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </Card>
-
-        {statusOptions !== undefined &&
-          setStatusFilter !== undefined &&
-          typeFilter !== undefined &&
-          setTypeFilter !== undefined && (
-            <div className="text-gray-400">
-              <FilterIcon size={18} />
-            </div>
-          )}
 
         {/* 3. Wrapped label and select in a flex container for vertical alignment */}
         {statusOptions !== undefined && setStatusFilter !== undefined && (

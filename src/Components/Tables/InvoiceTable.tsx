@@ -292,6 +292,7 @@ const InvoiceTable = ({
           setShowErrorMessage={setErrorAlertMessage}
           setShowSuccessMessage={setSuccessAlertMessage}
           setInvoiceToPaid={SetInvoiceToPaid}
+          data-testid={`InvoiceCard-${index}`}
         />
       ))}
     </>

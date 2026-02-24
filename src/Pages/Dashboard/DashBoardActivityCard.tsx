@@ -38,7 +38,7 @@ const DashBoardActivityCard = (props: DashBoardActivityCardProps) => {
   };
 
   return (
-    <Card className="p-5">
+    <Card className="p-5" {...props}>
       <div className="text-2xl font-semibold mb-5">{props.title}</div>
       <div className="min-h-50 max-h-100 overflow-y-auto">
         {renderActivityItem(props.items)}

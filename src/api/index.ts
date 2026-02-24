@@ -36,6 +36,7 @@ export type { EntityTagHeaderValue } from './models/EntityTagHeaderValue';
 export type { FileResult } from './models/FileResult';
 export type { FileStreamResult } from './models/FileStreamResult';
 export type { FirmResponse } from './models/FirmResponse';
+export type { FolderResponse } from './models/FolderResponse';
 export type { ForgotPasswordRequest } from './models/ForgotPasswordRequest';
 export type { InvoiceItemResponse } from './models/InvoiceItemResponse';
 export type { InvoiceNumberResponse } from './models/InvoiceNumberResponse';

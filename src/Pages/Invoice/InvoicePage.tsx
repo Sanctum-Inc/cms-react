@@ -48,16 +48,14 @@ const InvoicePage = () => {
     if (showAddModal)
       return (
         <SideModal setShowModal={setShowAddModal} title="New Invoice Item">
-          <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto p-4">
-            <AddInvoiceForm
-              addInvoiceItemRequest={addInvoiceItemRequest}
-              setInvoice={setInvoices}
-              setShowErrorMessage={setErrorAlertMessage}
-              setShowSuccessMessage={setSuccessAlertMessage}
-              buttonCaption="Create"
-              setShowModal={setShowAddModal}
-            />
-          </div>
+          <AddInvoiceForm
+            addInvoiceItemRequest={addInvoiceItemRequest}
+            setInvoice={setInvoices}
+            setShowErrorMessage={setErrorAlertMessage}
+            setShowSuccessMessage={setSuccessAlertMessage}
+            buttonCaption="Create Invoice"
+            setShowModal={setShowAddModal}
+          />
         </SideModal>
       );
     else if (showUpdatemodal)
@@ -66,16 +64,14 @@ const InvoicePage = () => {
           setShowModal={setShowUpdateModal}
           title="Update Invoice Item"
         >
-          <div className="flex h-full min-h-0 w-full flex-col gap-4 overflow-y-auto p-4">
-            <AddInvoiceForm
-              addInvoiceItemRequest={addInvoiceItemRequest}
-              setInvoice={setInvoices}
-              setShowErrorMessage={setErrorAlertMessage}
-              setShowSuccessMessage={setSuccessAlertMessage}
-              buttonCaption="Update"
-              setShowModal={setShowUpdateModal}
-            />
-          </div>
+          <AddInvoiceForm
+            addInvoiceItemRequest={addInvoiceItemRequest}
+            setInvoice={setInvoices}
+            setShowErrorMessage={setErrorAlertMessage}
+            setShowSuccessMessage={setSuccessAlertMessage}
+            buttonCaption="Update"
+            setShowModal={setShowUpdateModal}
+          />
         </SideModal>
       );
   };

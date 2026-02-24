@@ -4,7 +4,7 @@ import Card from "../../Components/Cards/Card";
 import { CourtCaseStatusOptions } from "../../Models/InputOptions/CourtCaseStatusOptions";
 import { CourtCaseTypeOptions } from "../../Models/InputOptions/CourtCaseTypesOptions";
 
-interface courtCaseCardProps {
+interface courtCaseCardProps extends React.HTMLAttributes<HTMLDivElement> {
   id: string;
   caseNumber: string;
   location: string;
@@ -22,6 +22,7 @@ const CourtCaseCard = ({
   type,
   nextDate,
   status,
+  ...restProps
 }: courtCaseCardProps) => {
   const getStatusStyles = (status: number) => {
     if (status === undefined)
@@ -73,7 +74,7 @@ const CourtCaseCard = ({
 
   return (
     <>
-      <Card className="mx-6 my-3 p-6 cursor-pointer">
+      <Card className="mx-6 my-3 p-6 cursor-pointer" {...restProps}>
         <Link to={`/court-case-information?id=${id}`}>
           <div className="grid grid-cols-20 gap-4">
             <div className="col-span-3">{caseNumber}</div>

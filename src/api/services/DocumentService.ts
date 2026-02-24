@@ -72,25 +72,6 @@ export class DocumentService {
     }
     /**
      * @param id
-     * @returns DocumentResponse OK
-     * @throws ApiError
-     */
-    public static getDocumentById(
-        id: string,
-    ): CancelablePromise<DocumentResponse> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/Document/{id}',
-            path: {
-                'id': id,
-            },
-            errors: {
-                404: `Not Found`,
-            },
-        });
-    }
-    /**
-     * @param id
      * @param requestBody
      * @returns void
      * @throws ApiError
