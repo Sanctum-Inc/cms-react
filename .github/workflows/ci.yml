@@ -20,7 +20,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Required by SonarCloud for blame info
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -34,12 +34,14 @@ jobs:
       - name: Run E2E tests (Cypress)
         uses: cypress-io/github-action@v6
         with:
-          start: npm run dev        # or whatever starts your dev server
-          wait-on: 'http://localhost:5173'  # adjust port to match your setup
+          start: npm run dev
+          wait-on: "http://localhost:5173"
           wait-on-timeout: 60
           browser: chrome
         env:
           CYPRESS_BASE_URL: http://localhost:5173
+          VITE_API_URL: http://localhost:5158 
+          VITE_ROUTER_BASENAME: /
 
       - name: Generate coverage report
         run: npm run coverage:report
