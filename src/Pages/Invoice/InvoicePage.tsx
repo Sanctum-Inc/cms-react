@@ -3,10 +3,12 @@ import {
   type AddInvoiceItemRequest,
   InvoiceService,
   type InvoiceStatus,
+  type UpdateInvoiceRequest,
 } from "../../api";
 import ErrorAlert from "../../Components/Feedback/Alerts/ErrorAlert";
 import SuccessAlert from "../../Components/Feedback/Alerts/SuccessAlert";
 import AddInvoiceForm from "../../Components/Forms/AddInvoiceForm";
+import AddInvoiceItemForm from "../../Components/Forms/AddInvoiceItemForm";
 import Header from "../../Components/Header/Header";
 import SortBar from "../../Components/Inputs/SortBar";
 import SideModal from "../../Components/Modal/SideModal";
@@ -21,6 +23,7 @@ const InvoicePage = () => {
   const [sortDesc, setSortDesc] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdatemodal, setShowUpdateModal] = useState(false);
+  const [showUpdateInvoiceModal, setShowUpdateInvoiceModal] = useState(false);
 
   const [invoices, setInvoices] = useState<Invoice[]>([]);
 
@@ -44,18 +47,21 @@ const InvoicePage = () => {
       refference: "",
     });
 
+  const [updateInvoiceRequest, setUpdateInvoiceRequest] =
+    useState<UpdateInvoiceRequest>({} as UpdateInvoiceRequest);
+
   const returnSideModal = () => {
     if (showAddModal)
       return (
         <SideModal setShowModal={setShowAddModal} title="New Invoice Item">
-          <AddInvoiceForm
+          <AddInvoiceItemForm
             addInvoiceItemRequest={addInvoiceItemRequest}
             setInvoice={setInvoices}
             setShowErrorMessage={setErrorAlertMessage}
             setShowSuccessMessage={setSuccessAlertMessage}
-            buttonCaption="Create Invoice"
-            setShowModal={setShowAddModal}
-          />
+            buttonCaption="Update"
+            setShowModal={setShowUpdateInvoiceModal}
+          ></AddInvoiceItemForm>
         </SideModal>
       );
     else if (showUpdatemodal)
@@ -64,7 +70,7 @@ const InvoicePage = () => {
           setShowModal={setShowUpdateModal}
           title="Update Invoice Item"
         >
-          <AddInvoiceForm
+          <AddInvoiceItemForm
             addInvoiceItemRequest={addInvoiceItemRequest}
             setInvoice={setInvoices}
             setShowErrorMessage={setErrorAlertMessage}
@@ -74,6 +80,23 @@ const InvoicePage = () => {
           />
         </SideModal>
       );
+    else if (showUpdateInvoiceModal) {
+      return (
+        <SideModal
+          setShowModal={setShowUpdateInvoiceModal}
+          title="Update Invoice"
+        >
+          <AddInvoiceForm
+            updateInvoiceRequest={updateInvoiceRequest}
+            setInvoice={setInvoices}
+            setShowErrorMessage={setErrorAlertMessage}
+            setShowSuccessMessage={setSuccessAlertMessage}
+            buttonCaption="Update"
+            setShowModal={setShowAddModal}
+          />
+        </SideModal>
+      );
+    }
   };
 
   const filteredInvoices = useMemo(() => {
@@ -192,6 +215,24 @@ const InvoicePage = () => {
     setShowAddModal(show);
   };
 
+  const handleShowUpdateInvoiceModal = (invoices: Invoice) => {
+    console.log(invoices);
+    setUpdateInvoiceRequest({
+      id: invoices.id,
+      status: invoices.status,
+      accountName: invoices.accountName,
+      accountNumber: invoices.accountNumber,
+      bank: invoices.bank,
+      branchCode: invoices.branchCode,
+      caseName: invoices.caseNumber,
+      clientName: invoices.clientName,
+      invoiceDate: invoices.dateCreated,
+      invoiceNumber: invoices.invoiceNumber,
+      reference: invoices.refference,
+    });
+    setShowUpdateInvoiceModal(true);
+  };
+
   useEffect(() => {
     InvoiceService.getAllInvoices()
       .then((response) => {
@@ -204,7 +245,13 @@ const InvoicePage = () => {
           status: invoice.status as InvoiceStatus,
           total: invoice.totalAmount,
           plaintiff: invoice.plaintiff,
+          refference: invoice.reference,
           defendant: invoice.defendant,
+          accountName: invoice.accountName,
+          bank: invoice.bank,
+          branchCode: invoice.branchCode,
+          accountNumber: invoice.accountNumber,
+          dateCreated: invoice.invoiceDate.split("T")[0],
           Items: invoice.items.map((item) => ({
             amount: item.total,
             hours: item.hours,
@@ -278,6 +325,7 @@ const InvoicePage = () => {
         handleShowUpdateModal={handleShowUpdateModal}
         setSortBy={setSortBy}
         setSortDesc={setSortDesc}
+        handleShowUpdateInvoiceModal={handleShowUpdateInvoiceModal}
       />
       {returnSideModal()}
       {renderSuccessmessage()}

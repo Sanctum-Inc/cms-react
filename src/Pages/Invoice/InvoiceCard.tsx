@@ -12,6 +12,7 @@ import { InvoiceItemService, InvoiceService } from "../../api";
 import Card from "../../Components/Cards/Card";
 import ShareFileModal from "../../Components/Modal/ShareFileModal";
 import {
+  getInvoiceStatusLabel,
   getInvoiceStatusOptionsStyles,
   InvoiceStatusOptions,
 } from "../../Models/InputOptions/InvoiceStatusOptions";
@@ -22,6 +23,7 @@ interface InvoiceCardProps extends React.HTMLAttributes<HTMLDivElement> {
   invoices: Invoice;
   openAddModal: (show: boolean, caseNumber: string) => void;
   openUpdateModal: (invoiceItem: InvoiceItemEntry) => void;
+  openUpdateInvoiceModal: (invoice: Invoice) => void;
   setShowErrorMessage: (message: string) => void;
   setShowSuccessMessage: (message: string) => void;
   setInvoiceToPaid: (invoiceId: string, status: number) => void;
@@ -36,6 +38,7 @@ const InvoiceCard = ({
   setShowErrorMessage,
   setShowSuccessMessage,
   setInvoiceToPaid,
+  openUpdateInvoiceModal,
   ...restProps
 }: InvoiceCardProps) => {
   const [showItems, setShowItems] = useState(false);
@@ -235,6 +238,10 @@ const InvoiceCard = ({
     );
   };
 
+  const handleOpenUpdateInvoiceModal = (invoices: Invoice) => {
+    openUpdateInvoiceModal && openUpdateInvoiceModal(invoices);
+  };
+
   return (
     <>
       <Card
@@ -322,17 +329,28 @@ const InvoiceCard = ({
                   </button>
                   <button
                     className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                    onClick={() =>
-                      handleSetToPaid(invoices.id, invoices.status == 2 ? 0 : 2)
-                    }
+                    onClick={() => handleOpenUpdateInvoiceModal(invoices)}
                   >
-                    Set to {invoices.status ? "Unpaid" : "Paid"}
+                    Update
                   </button>
+                  {getInvoiceStatusLabel(invoices.status) === "Paid" ? (
+                    <></>
+                  ) : (
+                    <button
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                      onClick={() =>
+                        handleSetToPaid(
+                          invoices.id,
+                          invoices.status == 2 ? 0 : 2,
+                        )
+                      }
+                    >
+                      Set to Paid
+                    </button>
+                  )}
                   <button
                     className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                    onClick={() =>
-                      downloadPdf(invoices.id, invoices.invoiceNumber)
-                    }
+                    onClick={() => viewPdf(invoices.id)}
                   >
                     View Generated PDF
                   </button>

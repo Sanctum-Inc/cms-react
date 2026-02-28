@@ -21,6 +21,7 @@ interface InvoiceTableProps {
   >;
   setShowAddModal?: React.Dispatch<React.SetStateAction<boolean>>;
   handleShowUpdateModal?: (invoice: Invoice, index: number) => void;
+  handleShowUpdateInvoiceModal: (invoice: Invoice) => void;
   sortBy: "invoiceNumber" | "total" | "status" | "caseNumber";
   setSortBy: React.Dispatch<
     React.SetStateAction<"invoiceNumber" | "total" | "status" | "caseNumber">
@@ -39,6 +40,7 @@ const InvoiceTable = ({
   setAddInvoiceItemRequest,
   setShowAddModal,
   handleShowUpdateModal,
+  handleShowUpdateInvoiceModal,
   sortBy,
   setSortBy,
   setSortDesc,
@@ -171,6 +173,12 @@ const InvoiceTable = ({
           total: invoice.totalAmount,
           plaintiff: invoice.plaintiff,
           defendant: invoice.defendant,
+          refference: invoice.reference,
+          dateCreated: invoice.invoiceDate,
+          accountName: invoice.accountName,
+          bank: invoice.bank,
+          branchCode: invoice.branchCode,
+          accountNumber: invoice.accountNumber,
           Items: invoice.items.map((item) => ({
             amount: item.total,
             hours: item.hours,
@@ -203,6 +211,7 @@ const InvoiceTable = ({
       });
     });
   };
+
   return (
     <>
       <div className="m-6 p-6 mt-5 font-bold text-gray-500 border-b border-gray-300 pb-3">
@@ -292,6 +301,7 @@ const InvoiceTable = ({
           setShowErrorMessage={setErrorAlertMessage}
           setShowSuccessMessage={setSuccessAlertMessage}
           setInvoiceToPaid={SetInvoiceToPaid}
+          openUpdateInvoiceModal={handleShowUpdateInvoiceModal}
           data-testid={`InvoiceCard-${index}`}
         />
       ))}
