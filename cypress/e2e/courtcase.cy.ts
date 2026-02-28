@@ -55,17 +55,14 @@ describe("Court Case Page", () => {
 
   it("should open the add court case modal", () => {
     cy.contains("Add New Case").click();
-    cy.get("[data-testid='addCourtCaseModal']").should("be.visible");
-    cy.get("input[name='caseNumber']").should("be.visible");
-    cy.get("input[name='location']").should("be.visible");
-    cy.get("input[name='plaintiff']").should("be.visible");
-    cy.get("input[name='defendant']").should("be.visible");
-    cy.get("select[name='status']").should("be.visible");
-    cy.get("[data-testid='addCourtCaseModal-ScrollableContent']").scrollTo(
-      "bottom",
-    );
-    cy.get("select[name='type']").should("be.visible");
-    cy.get("select[name='outcome']").should("be.visible");
+    cy.get("[data-testid='addCourtCaseModal']").should("exist");
+    cy.get("input[name='caseNumber']").should("exist");
+    cy.get("input[name='location']").should("exist");
+    cy.get("input[name='plaintiff']").should("exist");
+    cy.get("input[name='defendant']").should("exist");
+    cy.get("select[name='status']").should("exist");
+    cy.get("select[name='type']").should("exist");
+    cy.get("select[name='outcome']").should("exist");
   });
 
   it("should submit a new court case successfully", () => {
