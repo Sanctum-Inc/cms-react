@@ -1,13 +1,13 @@
 name: React Build and Deploy
 
 on:
-    push:
-        branches:
-            - master
-            - develop
-    pull_request:
-        types: [opened, synchronize, reopened]
-    workflow_dispatch:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -30,7 +30,7 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: npm test:e2e
+        run: npm run test:e2e
 
       - name: Build React app
         run: |
