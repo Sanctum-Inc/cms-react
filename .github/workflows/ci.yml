@@ -40,7 +40,7 @@ jobs:
           browser: chrome
         env:
           CYPRESS_BASE_URL: http://localhost:5173
-          VITE_API_URL: http://localhost:5158 
+          VITE_API_URL: http://localhost:5158
           VITE_ROUTER_BASENAME: /
 
       - name: Generate coverage report
@@ -92,6 +92,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master'
 
     steps:
       - name: Download build artifact
