@@ -133,6 +133,7 @@ const CourtCasePage = () => {
           setShowSuccessMessage={setSuccessAlertMessage}
           setShowErrorMessage={setErrorAlertMessage}
           setShowModal={setShowModal}
+          data-testid="addCourtCaseModal"
         />
       </SideModal>
     );
@@ -288,9 +289,10 @@ const CourtCasePage = () => {
               <div className="flex align-center col-span-2"></div>
             </div>
           </div>
-          {filteredCases.map((courtCase) => (
+          {filteredCases.map((courtCase, index) => (
             <CourtCaseCard
               key={`CourtCasePageCard-${courtCase.id}`}
+              data-testid={`CourtCasePageCard-${index}`}
               {...courtCase}
             />
           ))}

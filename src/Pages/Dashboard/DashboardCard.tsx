@@ -15,7 +15,7 @@ interface DashboardCardProps {
 
 const DashboardCard = (props: DashboardCardProps) => {
   return (
-    <Link to={props.linkTo} className="w-1/4">
+    <Link to={props.linkTo} className="w-1/4" {...props}>
       <Card className="w-full h-full p-8 hover:bg-[var(--color-hover-light)] bg-white justify-between">
         <div className="flex justify-between">
           <span className="text-xl font-medium text-gray-400">

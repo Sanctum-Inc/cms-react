@@ -8,7 +8,7 @@ import {
   Users,
 } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { InvoiceService } from "../../api";
+import { InvoiceItemService, InvoiceService } from "../../api";
 import Card from "../../Components/Cards/Card";
 import ShareFileModal from "../../Components/Modal/ShareFileModal";
 import {
@@ -18,7 +18,7 @@ import {
 import { type Invoice, type InvoiceItemEntry } from "../../Models/Invoices";
 import formatMoney from "../../Utils/FormatMoney";
 
-interface InvoiceCardProps {
+interface InvoiceCardProps extends React.HTMLAttributes<HTMLDivElement> {
   invoices: Invoice;
   openAddModal: (show: boolean, caseNumber: string) => void;
   openUpdateModal: (invoiceItem: InvoiceItemEntry) => void;
@@ -36,6 +36,7 @@ const InvoiceCard = ({
   setShowErrorMessage,
   setShowSuccessMessage,
   setInvoiceToPaid,
+  ...restProps
 }: InvoiceCardProps) => {
   const [showItems, setShowItems] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -77,6 +78,16 @@ const InvoiceCard = ({
     setOpenInvoiceItemOptions(Array(invoices.Items.length).fill(false));
   }, [invoices.Items.length]);
 
+  const deleteInvoiceItem = (id: string) => {
+    InvoiceItemService.deleteInvoiceItems(id)
+      .then(() => {
+        setShowSuccessMessage("Invoice item deleted successfully.");
+      })
+      .catch(() => {
+        setShowErrorMessage("Failed to delete invoice item.");
+      });
+  };
+
   const renderInvoiceItems = (items: InvoiceItemEntry[]): ReactNode => {
     return (
       <>
@@ -92,6 +103,7 @@ const InvoiceCard = ({
           <div
             key={index}
             className="grid grid-cols-6 gap-4 odd:bg-white even:bg-gray-50 p-2 py-4 border-b border-gray-200"
+            data-testid={`InvoiceItems-${index}`}
           >
             <div className="font-semibold">{item.date.toDateString()}</div>
             <div className="text-gray-500">{item.description}</div>
@@ -113,6 +125,7 @@ const InvoiceCard = ({
               <button
                 type="button"
                 className="cursor-pointer focus:outline-none"
+                data-testid={`InvoiceItemActionsButton-${index}`}
                 onClick={() =>
                   setOpenInvoiceItemOptions((o) =>
                     o.map((_, i) => (i === index ? !o[i] : false)),
@@ -132,7 +145,7 @@ const InvoiceCard = ({
                   </button>
                   <button
                     className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                    onClick={() => console.log("View PDF")}
+                    onClick={() => deleteInvoiceItem(item.id)}
                   >
                     Delete
                   </button>
@@ -227,6 +240,7 @@ const InvoiceCard = ({
       <Card
         className={`mx-6 my-3 p-6 ${showItems ? "bg-blue-50 " : ""}`}
         hover={true}
+        {...restProps}
       >
         <div className="grid grid-cols-5 gap-4 items-center">
           <div className="flex flex-col">
@@ -292,6 +306,7 @@ const InvoiceCard = ({
               <button
                 type="button"
                 className="cursor-pointer focus:outline-none"
+                data-testid={`InvoiceActionsButton`}
                 onClick={() => setOpenInvoiceOptions((o) => !o)}
                 aria-label="Invoice options menu"
               >

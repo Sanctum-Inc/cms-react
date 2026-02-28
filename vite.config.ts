@@ -1,6 +1,8 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig, loadEnv } from "vite";
+import istanbul from "vite-plugin-istanbul";
+
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
@@ -16,7 +18,22 @@ export default defineConfig(({ mode }) => {
 
   return {
     base,
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      istanbul({
+        include: "src/*",
+        exclude: ["node_modules", "cypress"],
+        extension: [".ts", ".tsx"],
+        requireEnv: false, // important for CI
+      }),
+    ],
+    server: {
+      fs: { strict: false },
+    },
+    build: {
+      rollupOptions: {},
+    },
     test: {
       environment: "jsdom",
       globals: true,

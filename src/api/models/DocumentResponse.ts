@@ -2,14 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { FolderResponse } from './FolderResponse';
 export type DocumentResponse = {
-    id: string;
-    name: string;
-    fileName: string;
-    size: number;
-    created: string;
-    caseId: string;
-    contentType: string;
-    createdBy: string;
+    caseNumber: string;
+    client: string;
+    folders: Array<FolderResponse>;
 };
 

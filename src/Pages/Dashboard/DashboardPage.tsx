@@ -155,6 +155,7 @@ const DashboardPage = () => {
             icon={BriefcaseBusiness}
             color="blue"
             linkTo="/court-case"
+            data-testid="dashboard-total-cases"
           ></DashboardCard>
           <DashboardCard
             description="Pending Invoices"
@@ -162,6 +163,7 @@ const DashboardPage = () => {
             icon={BanknoteX}
             color="orange"
             linkTo="/invoices"
+            data-testid="dashboard-total-invoices"
           ></DashboardCard>
           <DashboardCard
             description="Upcoming Dates"
@@ -169,6 +171,7 @@ const DashboardPage = () => {
             icon={CalendarDays}
             color="green"
             linkTo="/dates"
+            data-testid="dashboard-total-dates"
           ></DashboardCard>
           <DashboardCard
             description="Documents"
@@ -176,6 +179,7 @@ const DashboardPage = () => {
             icon={FolderOpen}
             color="purple"
             linkTo="/documents"
+            data-testid="dashboard-total-documents"
           ></DashboardCard>
         </div>
         <div className="w-full h-full p-3">
@@ -184,6 +188,7 @@ const DashboardPage = () => {
             title="Recent Case Activity"
             size="40"
             cardType="activity"
+            data-testid="dashboard-activity-card"
           />
         </div>
         <div className="w-full h-full p-3">
@@ -193,6 +198,7 @@ const DashboardPage = () => {
             size="25"
             clickable={true}
             cardType="dates"
+            data-testid="dashboard-upcoming-card"
           />
         </div>
         {renderErrorMessage()}

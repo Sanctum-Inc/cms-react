@@ -11,6 +11,7 @@ const Card = ({
   hover,
   removePadding,
   removeBorder,
+  ...rest
 }: cardProps) => {
   // If a background utility (bg-*) is provided in the incoming className,
   // don't force the default `bg-white` so callers can override background.
@@ -24,6 +25,7 @@ const Card = ({
       } items-center rounded-2xl ${defaultBg} ${
         hover ? "hover:shadow-md cursor-pointer" : ""
       } transition-shadow duration-200 ${className}`}
+      {...rest}
     >
       {children}
     </div>

@@ -11,10 +11,13 @@ import AuthenticationProvider from "./Context/Authentication/AuthenticationProvi
 import "./index.css";
 import router from "./Router/Router";
 
-createRoot(document.getElementById("root")!).render(
+
+const app = (
   <AuthenticationProvider>
-    <StrictMode>
-      <RouterProvider router={router} />
-    </StrictMode>
-  </AuthenticationProvider>,
+    <RouterProvider router={router} />
+  </AuthenticationProvider>
+);
+
+createRoot(document.getElementById("root")!).render(
+  window.Cypress ? app : <StrictMode>{app}</StrictMode>,
 );

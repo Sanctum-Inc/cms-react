@@ -11,7 +11,7 @@ import PrimaryButton from "../Buttons/PrimaryButton";
 import PillInput from "../Inputs/PillInput";
 import PillSelect from "../Inputs/PillSelect";
 
-interface AddCourtCaseFormProps {
+interface AddCourtCaseFormProps extends React.HTMLAttributes<HTMLDivElement> {
   setShowSuccessMessage: (message: string) => void;
   setShowErrorMessage: (message: string) => void;
   filteredCases: CourtCaseResponse[];
@@ -23,6 +23,7 @@ const AddCourtCaseForm = ({
   setShowErrorMessage,
   filteredCases,
   setShowModal,
+  ...restProps
 }: AddCourtCaseFormProps) => {
   const [formData, setFormData] = useState<AddCourtCaseRequest>({
     caseNumber: "",
@@ -63,14 +64,15 @@ const AddCourtCaseForm = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative" {...restProps}>
       {/* Scrollable Content */}
       <div
-        className="max-h-[75vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400"
+        className="max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400"
         style={{
           scrollbarWidth: "thin",
           scrollbarColor: "#cbd5e1 transparent",
         }}
+        data-testid="addCourtCaseModal-ScrollableContent"
       >
         <form onSubmit={handleSubmit} className="space-y-5 px-4">
           <PillInput

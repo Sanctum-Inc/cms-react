@@ -96,18 +96,22 @@ const AddInvoiceForm = ({
 
   useEffect(() => {
     // Any side effects or data fetching can be done here
-    CourtCaseService.getAllCaseNumbers().then((response) => {
-      const cases = response.map((caseObj: CourtCaseNumberResponse) => ({
-        key: caseObj.caseId,
-        value: caseObj.caseNumber,
-      }));
+    CourtCaseService.getAllCaseNumbers()
+      .then((response) => {
+        const cases = response.map((caseObj: CourtCaseNumberResponse) => ({
+          key: caseObj.caseId,
+          value: caseObj.caseNumber,
+        }));
 
-      const uniqueCases = Array.from(
-        new Map(cases.map((caseItem) => [caseItem.key, caseItem])).values(),
-      );
+        const uniqueCases = Array.from(
+          new Map(cases.map((caseItem) => [caseItem.key, caseItem])).values(),
+        );
 
-      setCaseNumbers(uniqueCases);
-    });
+        setCaseNumbers(uniqueCases);
+      })
+      .catch(() => {
+        setShowErrorMessage("Failed to fetch case numbers. Please try again.");
+      });
 
     InvoiceService.getAllInvoiceNumbers().then((response) => {
       const invoices = response.map((inv: InvoiceNumberResponse) => ({
@@ -136,83 +140,98 @@ const AddInvoiceForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <PillSelect
-          label="Case Number:"
-          name="caseId"
-          selectOptions={caseNumbers}
-          value={formData.caseId}
-          onChange={(e) => handleChange("caseId", e.target.value)}
-        />
+    <div className="relative">
+      {/* Scrollable Content */}
+      <div
+        className="max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400"
+        style={{
+          scrollbarWidth: "thin",
+          scrollbarColor: "#cbd5e1 transparent",
+        }}
+        data-testid="addInvoiceModal-ScrollableContent"
+      >
+        <form
+          onSubmit={handleSubmit}
+          data-testid="AddInvoiceModal"
+          className="space-y-5 px-4"
+        >
+          <PillSelect
+            label="Case Number:"
+            name="caseId"
+            selectOptions={caseNumbers}
+            value={formData.caseId}
+            onChange={(e) => handleChange("caseId", e.target.value)}
+          />
 
-        <PillSelect
-          label="Invoice Number:"
-          name="invoiceId"
-          selectOptions={invoiceNumbers}
-          value={formData.invoiceId}
-          onChange={handleInvoiceNumberChange}
-        />
+          <PillSelect
+            label="Invoice Number:"
+            name="invoiceId"
+            selectOptions={invoiceNumbers}
+            value={formData.invoiceId}
+            onChange={handleInvoiceNumberChange}
+          />
 
-        {isNewInvoice && (
-          <>
-            <PillInput
-              label="Client Name:"
-              name="clientName"
-              type="text"
-              value={formData.clientName ?? ""}
-              onChange={(e) => handleChange("clientName", e.target.value)}
-            />
+          {isNewInvoice && (
+            <>
+              <PillInput
+                label="Client Name:"
+                name="clientName"
+                type="text"
+                value={formData.clientName ?? ""}
+                onChange={(e) => handleChange("clientName", e.target.value)}
+              />
 
-            <PillInput
-              label="Reference:"
-              name="refference"
-              type="text"
-              value={formData.refference ?? ""}
-              onChange={(e) => handleChange("refference", e.target.value)}
-            />
-          </>
-        )}
+              <PillInput
+                label="Reference:"
+                name="refference"
+                type="text"
+                value={formData.refference ?? ""}
+                onChange={(e) => handleChange("refference", e.target.value)}
+              />
+            </>
+          )}
 
-        <PillInput
-          label="Description:"
-          name="name"
-          type="text"
-          value={formData.name}
-          onChange={(e) => handleChange("name", e.target.value)}
-        />
+          <PillInput
+            label="Description:"
+            name="name"
+            type="text"
+            value={formData.name}
+            onChange={(e) => handleChange("name", e.target.value)}
+          />
 
-        <PillInput
-          label="Date of Service:"
-          name="date"
-          type="date"
-          value={formData.date}
-          onChange={(e) => handleChange("date", e.target.value)}
-        />
+          <PillInput
+            label="Date of Service:"
+            name="date"
+            type="date"
+            value={formData.date}
+            onChange={(e) => handleChange("date", e.target.value)}
+          />
 
-        <PillInput
-          label="Hours:"
-          name="hours"
-          type="number"
-          placeholder="0"
-          value={formData.hours.toString()}
-          onChange={(e) => handleChange("hours", e.target.value)}
-        />
+          <PillInput
+            label="Hours:"
+            name="hours"
+            type="number"
+            placeholder="0"
+            value={formData.hours.toString()}
+            onChange={(e) => handleChange("hours", e.target.value)}
+          />
 
-        <PillInput
-          label="Cost Per Hour:"
-          name="costPerHour"
-          type="number"
-          placeholder="Enter hourly cost"
-          value={formData.costPerHour.toString()}
-          onChange={(e) => handleChange("costPerHour", e.target.value)}
-        />
-
-        <div className="mt-5">
-          <PrimaryButton type="submit">{buttonCaption}</PrimaryButton>
-        </div>
+          <PillInput
+            label="Cost Per Hour:"
+            name="costPerHour"
+            type="number"
+            placeholder="Enter hourly cost"
+            value={formData.costPerHour.toString()}
+            onChange={(e) => handleChange("costPerHour", e.target.value)}
+          />
+        </form>
       </div>
-    </form>
+      <div className="px-4 mt-4">
+        <PrimaryButton type="submit" onClick={handleSubmit}>
+          {buttonCaption}
+        </PrimaryButton>
+      </div>
+    </div>
   );
 };
 

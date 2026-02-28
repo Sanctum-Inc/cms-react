@@ -14,7 +14,9 @@
     "build:staging": "tsc -b && vite build --mode staging",
     "preview:staging": "vite preview --mode staging --port 5174",
     "github-ci": "concurrently \"npm run lint\" \"npm run test\" \"npm run build\"",
-    "generate:client": "npx openapi -c axios -i schema/cms-api.json -o src/api"
+    "generate:client": "npx openapi -c axios -i schema/cms-api.json -o src/api",
+    "test:e2e": "cypress run",
+    "coverage:report": "nyc report --reporter=lcov --report-dir coverage"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.16",
@@ -28,23 +30,29 @@
     "tailwindcss": "^4.1.16"
   },
   "devDependencies": {
+    "@cypress/code-coverage": "^4.0.0",
     "@eslint/js": "^9.36.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.6.0",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.4",
+    "babel-plugin-istanbul": "^7.0.1",
     "concurrently": "^9.2.1",
+    "cypress": "^15.10.0",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
     "jsdom": "^27.1.0",
+    "nyc": "^17.1.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.45.0",
     "vite": "npm:rolldown-vite@7.1.14",
+    "vite-plugin-istanbul": "^7.2.1",
     "vitest": "^4.0.8"
   },
   "overrides": {
