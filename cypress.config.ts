@@ -13,6 +13,10 @@ export default defineConfig({
 
   e2e: {
     baseUrl: "http://localhost:5173",
+    env: {
+      VITE_API_URL: "http://localhost:5158",
+      VITE_ROUTER_BASENAME: "",
+    },
     setupNodeEvents(on, config) {
       codeCoverageTask(on, config);
       return config;
