@@ -1,13 +1,12 @@
 import { useEffect, useState, type SetStateAction } from "react";
 import {
   CourtCaseService,
-  InvoiceItemService,
   InvoiceService,
-  type AddInvoiceItemRequest,
   type CourtCaseNumberResponse,
-  type InvoiceNumberResponse,
+  type UpdateInvoiceRequest,
 } from "../../api";
 import type { KeyValue } from "../../Models/InputItem";
+import { InvoiceStatusOptions } from "../../Models/InputOptions/InvoiceStatusOptions";
 import type { Invoice } from "../../Models/Invoices";
 import PrimaryButton from "../Buttons/PrimaryButton";
 import PillInput from "../Inputs/PillInput";
@@ -18,7 +17,7 @@ interface AddInvoiceFormProps {
   setShowErrorMessage: (message: string) => void;
   setInvoice?: (invoice: SetStateAction<Invoice[]>) => void;
   setShowModal: (show: boolean) => void;
-  addInvoiceItemRequest?: AddInvoiceItemRequest;
+  updateInvoiceRequest?: UpdateInvoiceRequest;
   buttonCaption: string;
 }
 
@@ -27,26 +26,29 @@ const AddInvoiceForm = ({
   setShowErrorMessage,
   setInvoice,
   setShowModal,
-  addInvoiceItemRequest,
+  updateInvoiceRequest,
   buttonCaption,
 }: AddInvoiceFormProps) => {
-  const [formData, setFormData] = useState<AddInvoiceItemRequest>({
-    caseId: addInvoiceItemRequest?.caseId || "",
-    invoiceId: addInvoiceItemRequest?.invoiceId || "",
-    name: addInvoiceItemRequest?.name || "",
-    date: addInvoiceItemRequest?.date || "",
-    hours: addInvoiceItemRequest?.hours || 0,
-    costPerHour: addInvoiceItemRequest?.costPerHour || 0,
-    clientName: addInvoiceItemRequest?.clientName || "",
-    refference: addInvoiceItemRequest?.refference || "",
+  const [formData, setFormData] = useState<UpdateInvoiceRequest>({
+    id: updateInvoiceRequest?.id || "",
+    accountName: updateInvoiceRequest?.accountName || "",
+    bank: updateInvoiceRequest?.bank || "",
+    branchCode: updateInvoiceRequest?.branchCode || "",
+    accountNumber: updateInvoiceRequest?.accountNumber || "",
+    caseName: updateInvoiceRequest?.caseName || "",
+    clientName: updateInvoiceRequest?.clientName || "",
+    invoiceDate: updateInvoiceRequest?.invoiceDate || "",
+    invoiceNumber: updateInvoiceRequest?.invoiceNumber || "",
+    reference: updateInvoiceRequest?.reference || "",
+    status: updateInvoiceRequest?.status ?? 0,
   });
-  const [caseNumbers, setCaseNumbers] = useState<KeyValue[]>([]);
-  const [invoiceNumbers, setInvoiceNumbers] = useState<KeyValue[]>([
-    { key: "new", value: "Add New Invoice" },
-  ]);
-  const [isNewInvoice, setIsNewInvoice] = useState<boolean>(false);
 
-  const handleChange = (name: string, value: string) => {
+  const [caseNumbers, setCaseNumbers] = useState<KeyValue[]>([]);
+
+  const handleChange = (
+    name: keyof UpdateInvoiceRequest,
+    value: string | number,
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -56,176 +58,124 @@ const AddInvoiceForm = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    InvoiceItemService.createInvoiceItems(formData)
+    // Switched to InvoiceService as we are now updating an Invoice, not an Item
+    InvoiceService.updateInvoices(formData.id, formData)
       .then(() => {
-        setShowSuccessMessage("Invoice item created successfully!");
-
-        if (setInvoice) {
-          setInvoice((prevInvoices: Invoice[]) =>
-            prevInvoices.map((inv) =>
-              inv.id === formData.invoiceId
-                ? {
-                    ...inv,
-                    Items: [
-                      ...inv.Items,
-                      {
-                        id: formData.invoiceId, // ToDo: fix id assignment
-                        caseId: formData.caseId,
-                        invoiceId: formData.invoiceId,
-                        date: new Date(formData.date),
-                        hours: formData.hours,
-                        costPerHour: formData.costPerHour,
-                        amount: formData.hours * formData.costPerHour,
-                        description: formData.name,
-                      },
-                    ],
-                    total: inv.total + formData.hours * formData.costPerHour,
-                  }
-                : inv,
-            ),
-          );
-        }
-
+        setShowSuccessMessage("Invoice updated successfully!");
+        // Logic for updating local state if necessary
         setShowModal(false);
       })
       .catch((error) => {
-        console.error("Error creating invoice item:", error);
-        setShowErrorMessage("Failed to create invoice item. Please try again.");
+        console.error("Error updating invoice:", error);
+        setShowErrorMessage("Failed to update invoice. Please try again.");
       });
   };
 
   useEffect(() => {
-    // Any side effects or data fetching can be done here
     CourtCaseService.getAllCaseNumbers()
       .then((response) => {
         const cases = response.map((caseObj: CourtCaseNumberResponse) => ({
           key: caseObj.caseId,
           value: caseObj.caseNumber,
         }));
-
-        const uniqueCases = Array.from(
-          new Map(cases.map((caseItem) => [caseItem.key, caseItem])).values(),
-        );
-
-        setCaseNumbers(uniqueCases);
+        setCaseNumbers(cases);
       })
       .catch(() => {
-        setShowErrorMessage("Failed to fetch case numbers. Please try again.");
+        setShowErrorMessage("Failed to fetch case numbers.");
       });
-
-    InvoiceService.getAllInvoiceNumbers().then((response) => {
-      const invoices = response.map((inv: InvoiceNumberResponse) => ({
-        key: inv.invoiceId,
-        value: inv.invoiceNumber,
-      }));
-
-      setInvoiceNumbers(() => [
-        { key: "new", value: "Add New Invoice" },
-        ...invoices,
-      ]);
-    });
   }, []);
-
-  const handleInvoiceNumberChange = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const selectedValue = e.target.value;
-    if (selectedValue === "new") {
-      setIsNewInvoice(true);
-    } else {
-      setIsNewInvoice(false);
-    }
-
-    handleChange("invoiceId", selectedValue);
-  };
 
   return (
     <div className="relative">
-      {/* Scrollable Content */}
       <div
-        className="max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400"
-        style={{
-          scrollbarWidth: "thin",
-          scrollbarColor: "#cbd5e1 transparent",
-        }}
+        className="max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 px-4"
         data-testid="addInvoiceModal-ScrollableContent"
       >
-        <form
-          onSubmit={handleSubmit}
-          data-testid="AddInvoiceModal"
-          className="space-y-5 px-4"
-        >
-          <PillSelect
-            label="Case Number:"
-            name="caseId"
-            selectOptions={caseNumbers}
-            value={formData.caseId}
-            onChange={(e) => handleChange("caseId", e.target.value)}
-          />
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <h3 className="font-semibold text-gray-700">General Information</h3>
 
-          <PillSelect
+          <PillInput
             label="Invoice Number:"
-            name="invoiceId"
-            selectOptions={invoiceNumbers}
-            value={formData.invoiceId}
-            onChange={handleInvoiceNumberChange}
-          />
-
-          {isNewInvoice && (
-            <>
-              <PillInput
-                label="Client Name:"
-                name="clientName"
-                type="text"
-                value={formData.clientName ?? ""}
-                onChange={(e) => handleChange("clientName", e.target.value)}
-              />
-
-              <PillInput
-                label="Reference:"
-                name="refference"
-                type="text"
-                value={formData.refference ?? ""}
-                onChange={(e) => handleChange("refference", e.target.value)}
-              />
-            </>
-          )}
-
-          <PillInput
-            label="Description:"
-            name="name"
+            name="invoiceNumber"
             type="text"
-            value={formData.name}
-            onChange={(e) => handleChange("name", e.target.value)}
+            value={formData.invoiceNumber}
+            onChange={(e) => handleChange("invoiceNumber", e.target.value)}
+            disabled
           />
 
           <PillInput
-            label="Date of Service:"
-            name="date"
+            label="Invoice Date:"
+            name="invoiceDate"
             type="date"
-            value={formData.date}
-            onChange={(e) => handleChange("date", e.target.value)}
+            value={formData.invoiceDate}
+            onChange={(e) => handleChange("invoiceDate", e.target.value)}
+            disabled
           />
 
           <PillInput
-            label="Hours:"
-            name="hours"
-            type="number"
-            placeholder="0"
-            value={formData.hours.toString()}
-            onChange={(e) => handleChange("hours", e.target.value)}
+            label="Client Name:"
+            name="clientName"
+            type="text"
+            value={formData.clientName}
+            onChange={(e) => handleChange("clientName", e.target.value)}
           />
 
           <PillInput
-            label="Cost Per Hour:"
-            name="costPerHour"
-            type="number"
-            placeholder="Enter hourly cost"
-            value={formData.costPerHour.toString()}
-            onChange={(e) => handleChange("costPerHour", e.target.value)}
+            label="Reference:"
+            name="reference"
+            type="text"
+            value={formData.reference}
+            onChange={(e) => handleChange("reference", e.target.value)}
+          />
+
+          <PillSelect
+            label="Status:"
+            name="status"
+            selectOptions={InvoiceStatusOptions}
+            value={formData.status.toString()}
+            onChange={(e) => handleChange("status", Number(e.target.value))}
+          />
+
+          <hr className="my-4" />
+          <h3 className="font-semibold text-gray-700">Banking Details</h3>
+
+          <PillInput
+            label="Account Name:"
+            name="accountName"
+            type="text"
+            value={formData.accountName}
+            onChange={(e) => handleChange("accountName", e.target.value)}
+            disabled
+          />
+
+          <PillInput
+            label="Bank:"
+            name="bank"
+            type="text"
+            value={formData.bank}
+            onChange={(e) => handleChange("bank", e.target.value)}
+            disabled
+          />
+
+          <PillInput
+            label="Account Number:"
+            name="accountNumber"
+            type="text"
+            value={formData.accountNumber}
+            onChange={(e) => handleChange("accountNumber", e.target.value)}
+            disabled
+          />
+          <PillInput
+            label="Branch Code:"
+            name="branchCode"
+            type="text"
+            value={formData.branchCode}
+            onChange={(e) => handleChange("branchCode", e.target.value)}
+            disabled
           />
         </form>
       </div>
+
       <div className="px-4 mt-4">
         <PrimaryButton type="submit" onClick={handleSubmit}>
           {buttonCaption}
