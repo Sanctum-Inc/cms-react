@@ -13,7 +13,51 @@ permissions:
   contents: write
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required by SonarCloud for blame info
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run E2E tests (Cypress)
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm run dev        # or whatever starts your dev server
+          wait-on: 'http://localhost:5173'  # adjust port to match your setup
+          wait-on-timeout: 60
+          browser: chrome
+        env:
+          CYPRESS_BASE_URL: http://localhost:5173
+
+      - name: Generate coverage report
+        run: npm run coverage:report
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   build:
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
@@ -28,9 +72,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Run tests
-        run: npm run test:e2e
 
       - name: Build React app
         run: |
@@ -63,8 +104,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: dist/
-          # Optional: set custom domain here if needed via CNAME file
-          # cname: dev.lexcase.co.za
 
       - name: Deploy to FTP Production (for master)
         if: github.ref == 'refs/heads/master'
