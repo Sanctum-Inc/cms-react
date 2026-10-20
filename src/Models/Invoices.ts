@@ -21,4 +21,11 @@ export interface Invoice {
   plaintiff: string;
   defendant: string;
   status: InvoiceStatus;
+  refference: string;
+  clientName: string;
+  dateCreated: string;
+  accountName: string;
+  bank: string;
+  branchCode: string;
+  accountNumber: string;
 }

@@ -8,7 +8,7 @@ vi.mock("../Components/Navigation/Navigation", () => ({
   default: () => <div data-testid="navigation">Navigation Mock</div>,
 }));
 
-vi.mock("../Pages/DashboardPage", () => ({
+vi.mock("../Pages/Dashboard/DashboardPage", () => ({
   default: () => <div data-testid="dashboard-page">Dashboard Mock</div>,
 }));
 

@@ -22,13 +22,17 @@ const Navigation = () => {
 
   useEffect(() => {
     // Any side effects or data fetching can be done here
-    UserService.getById("current").then((response) => {
-      setUser({
-        name: response.name,
-        surname: response.surname,
-        email: response.email,
+    UserService.getById("current")
+      .then((response) => {
+        setUser({
+          name: response.name,
+          surname: response.surname,
+          email: response.email,
+        });
+      })
+      .catch(() => {
+        // Keep the default empty user when the request fails or is aborted
       });
-    });
   }, []);
 
   return (

@@ -95,7 +95,7 @@ describe("Invoice Management Page", () => {
     cy.get("input[name='hours']").type("3");
     cy.get("input[name='costPerHour']").type("1500");
 
-    cy.contains("Create Invoice").click();
+    cy.contains("Create").click();
 
     cy.wait("@createInvoiceItem");
 
@@ -116,7 +116,7 @@ describe("Invoice Management Page", () => {
     cy.get("input[name='hours']").type("3");
     cy.get("input[name='costPerHour']").type("1500");
 
-    cy.contains("Create Invoice").click();
+    cy.contains("Create").click();
 
     cy.wait("@createInvoiceItem");
 

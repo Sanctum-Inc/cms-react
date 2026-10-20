@@ -10,6 +10,13 @@ export const InvoiceStatusOptions: KeyValue[] = [
   { key: "6", value: "Draft" },
 ] as const;
 
+export const getInvoiceStatusLabel = (status: string | number): string => {
+  return (
+    InvoiceStatusOptions.find((o) => o.key === status.toString())?.value ||
+    "Unknown"
+  );
+};
+
 export const getInvoiceStatusOptionsStyles = (status: number) => {
   switch (status) {
     case 0: // Pending
