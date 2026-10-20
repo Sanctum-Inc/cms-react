@@ -1,5 +1,11 @@
 import { jwtDecode } from "jwt-decode";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { isTokenExpired } from "../../Utils/AuthUtils";
 import { AuthenticationContext } from "./AuthenticationContext";
 import type { JwtPayload } from "./JwtPayload";
@@ -15,31 +21,41 @@ export const AuthenticationProvider = ({
 
   const logoutTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const clearLogoutTimer = () => {
+  const clearLogoutTimer = useCallback(() => {
     if (logoutTimer.current) {
       clearTimeout(logoutTimer.current);
       logoutTimer.current = null;
     }
-  };
+  }, []);
 
-  const scheduleAutoLogout = (decoded: JwtPayload) => {
+  const logout = useCallback(() => {
     clearLogoutTimer();
+    localStorage.removeItem("accessToken");
+    setToken(null);
+    setUser(null);
+  }, [clearLogoutTimer]);
 
-    if (!decoded.exp) {
-      logout();
-      return;
-    }
-    const expiresInMs = decoded.exp * 1000 - Date.now();
+  const scheduleAutoLogout = useCallback(
+    (decoded: JwtPayload) => {
+      clearLogoutTimer();
 
-    if (expiresInMs <= 0) {
-      logout();
-      return;
-    }
+      if (!decoded.exp) {
+        logout();
+        return;
+      }
+      const expiresInMs = decoded.exp * 1000 - Date.now();
 
-    logoutTimer.current = setTimeout(() => {
-      logout();
-    }, expiresInMs);
-  };
+      if (expiresInMs <= 0) {
+        logout();
+        return;
+      }
+
+      logoutTimer.current = setTimeout(() => {
+        logout();
+      }, expiresInMs);
+    },
+    [clearLogoutTimer, logout],
+  );
 
   useEffect(() => {
     const storedToken = localStorage.getItem("accessToken");
@@ -58,7 +74,7 @@ export const AuthenticationProvider = ({
     return () => {
       clearLogoutTimer();
     };
-  }, []);
+  }, [clearLogoutTimer, scheduleAutoLogout]);
 
   const login = (jwt: string) => {
     try {
@@ -79,13 +95,6 @@ export const AuthenticationProvider = ({
     }
   };
 
-  const logout = () => {
-    clearLogoutTimer();
-    localStorage.removeItem("accessToken");
-    setToken(null);
-    setUser(null);
-  };
-
   // Optional safety check every 30s (covers system sleep / tab inactive cases)
   useEffect(() => {
     if (!token) return;
@@ -97,7 +106,7 @@ export const AuthenticationProvider = ({
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [token]);
+  }, [token, logout]);
 
   return (
     <AuthenticationContext.Provider

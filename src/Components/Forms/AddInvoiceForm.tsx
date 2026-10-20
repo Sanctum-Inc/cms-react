@@ -40,7 +40,7 @@ const AddInvoiceForm = ({
     status: updateInvoiceRequest?.status ?? 0,
   });
 
-  const [_, setCaseNumbers] = useState<KeyValue[]>([]);
+  const [, setCaseNumbers] = useState<KeyValue[]>([]);
 
   const handleChange = (
     name: keyof UpdateInvoiceRequest,
@@ -80,7 +80,7 @@ const AddInvoiceForm = ({
       .catch(() => {
         setShowErrorMessage("Failed to fetch case numbers.");
       });
-  }, []);
+  }, [setShowErrorMessage]);
 
   return (
     <div className="relative">

@@ -239,7 +239,9 @@ const InvoiceCard = ({
   };
 
   const handleOpenUpdateInvoiceModal = (invoices: Invoice) => {
-    openUpdateInvoiceModal && openUpdateInvoiceModal(invoices);
+    if (openUpdateInvoiceModal) {
+      openUpdateInvoiceModal(invoices);
+    }
   };
 
   return (

@@ -3,7 +3,8 @@ describe("Dashboard - fully mocked API", () => {
   beforeEach(() => {
     // installs all intercepts and visits app with mocked auth
     cy.mockLoginAndVisit("/dashboard");
-    // wait for dashboard API to be requested (mocked)
+    // wait for the layout/dashboard requests to settle before the test ends
+    cy.wait("@getUserById");
     cy.wait("@getDashboard");
   });
 

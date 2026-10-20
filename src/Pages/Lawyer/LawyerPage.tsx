@@ -18,11 +18,6 @@ const LawyerPage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCasesModal, setShowCasesModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [sortBy] = useState<
-    "id" | "email" | "mobileNumber" | "name" | "surname" | "speciality"
-  >("email");
-
-  const [sortDesc] = useState(false); // earliest first by default
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [successAlertMessage, setSuccessAlertMessage] = useState<string | null>(
@@ -67,7 +62,7 @@ const LawyerPage = () => {
     );
 
     return filtered;
-  }, [searchQuery, statusFilter, sortBy, sortDesc, lawyers]);
+  }, [searchQuery, statusFilter, lawyers]);
 
   useEffect(() => {
     LawyerService.getAllLawyers()

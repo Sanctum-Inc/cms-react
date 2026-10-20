@@ -124,7 +124,7 @@ const AddInvoiceItemForm = ({
         ...invoices,
       ]);
     });
-  }, []);
+  }, [setShowErrorMessage]);
 
   const handleInvoiceNumberChange = (
     e: React.ChangeEvent<HTMLSelectElement>,
