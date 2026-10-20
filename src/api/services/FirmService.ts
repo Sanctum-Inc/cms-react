@@ -4,19 +4,25 @@
 /* eslint-disable */
 import type { AddFirmRequest } from '../models/AddFirmRequest';
 import type { FirmResponse } from '../models/FirmResponse';
+import type { GetFirmRequest } from '../models/GetFirmRequest';
 import type { UpdateFirmRequest } from '../models/UpdateFirmRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class FirmService {
     /**
+     * @param requestBody
      * @returns FirmResponse OK
      * @throws ApiError
      */
-    public static getFirmById(): CancelablePromise<FirmResponse> {
+    public static getFirmById(
+        requestBody: GetFirmRequest,
+    ): CancelablePromise<FirmResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Firm',
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 404: `Not Found`,
             },

@@ -3,8 +3,8 @@ import {
   CourtCaseService,
   InvoiceService,
   type CourtCaseNumberResponse,
-  type UpdateInvoiceRequest,
 } from "../../api";
+import type { UpdateInvoiceRequest } from "../../api/models/UpdateInvoiceRequest";
 import type { KeyValue } from "../../Models/InputItem";
 import { InvoiceStatusOptions } from "../../Models/InputOptions/InvoiceStatusOptions";
 import PrimaryButton from "../Buttons/PrimaryButton";

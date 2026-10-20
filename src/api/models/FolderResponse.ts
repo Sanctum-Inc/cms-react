@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type FolderResponse = {
+    id: string;
     description: string;
     contentType: string;
     version: string;

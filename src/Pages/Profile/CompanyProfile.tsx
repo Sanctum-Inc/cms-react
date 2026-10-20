@@ -86,7 +86,9 @@ const CompanyProfile = () => {
   ];
 
   useEffect(() => {
-    FirmService.getFirmById().then((response: FirmResponse) => {
+    FirmService.getFirmById({
+      id: null,
+    }).then((response: FirmResponse) => {
       setForm({
         firmname: response.name,
         address: response.address,
