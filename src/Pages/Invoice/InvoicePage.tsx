@@ -59,8 +59,8 @@ const InvoicePage = () => {
             setInvoice={setInvoices}
             setShowErrorMessage={setErrorAlertMessage}
             setShowSuccessMessage={setSuccessAlertMessage}
-            buttonCaption="Update"
-            setShowModal={setShowUpdateInvoiceModal}
+            buttonCaption="Create"
+            setShowModal={setShowAddModal}
           ></AddInvoiceItemForm>
         </SideModal>
       );
@@ -88,11 +88,10 @@ const InvoicePage = () => {
         >
           <AddInvoiceForm
             updateInvoiceRequest={updateInvoiceRequest}
-            setInvoice={setInvoices}
             setShowErrorMessage={setErrorAlertMessage}
             setShowSuccessMessage={setSuccessAlertMessage}
             buttonCaption="Update"
-            setShowModal={setShowAddModal}
+            setShowModal={setShowUpdateInvoiceModal}
           />
         </SideModal>
       );

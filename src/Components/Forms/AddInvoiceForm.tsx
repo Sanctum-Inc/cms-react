@@ -1,4 +1,4 @@
-import { useEffect, useState, type SetStateAction } from "react";
+import { useEffect, useState } from "react";
 import {
   CourtCaseService,
   InvoiceService,
@@ -7,7 +7,6 @@ import {
 } from "../../api";
 import type { KeyValue } from "../../Models/InputItem";
 import { InvoiceStatusOptions } from "../../Models/InputOptions/InvoiceStatusOptions";
-import type { Invoice } from "../../Models/Invoices";
 import PrimaryButton from "../Buttons/PrimaryButton";
 import PillInput from "../Inputs/PillInput";
 import PillSelect from "../Inputs/PillSelect";
@@ -15,7 +14,6 @@ import PillSelect from "../Inputs/PillSelect";
 interface AddInvoiceFormProps {
   setShowSuccessMessage: (message: string) => void;
   setShowErrorMessage: (message: string) => void;
-  setInvoice?: (invoice: SetStateAction<Invoice[]>) => void;
   setShowModal: (show: boolean) => void;
   updateInvoiceRequest?: UpdateInvoiceRequest;
   buttonCaption: string;
@@ -24,7 +22,6 @@ interface AddInvoiceFormProps {
 const AddInvoiceForm = ({
   setShowSuccessMessage,
   setShowErrorMessage,
-  setInvoice,
   setShowModal,
   updateInvoiceRequest,
   buttonCaption,
@@ -43,7 +40,7 @@ const AddInvoiceForm = ({
     status: updateInvoiceRequest?.status ?? 0,
   });
 
-  const [caseNumbers, setCaseNumbers] = useState<KeyValue[]>([]);
+  const [_, setCaseNumbers] = useState<KeyValue[]>([]);
 
   const handleChange = (
     name: keyof UpdateInvoiceRequest,
